@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Revenus extends Model
+class Depense extends Model
 {
     protected $fillable = [
         'date',
@@ -16,13 +16,13 @@ class Revenus extends Model
 
     protected $with = ["category"];
 
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 }

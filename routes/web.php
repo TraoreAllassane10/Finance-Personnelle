@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RevenusController;
 use Illuminate\Foundation\Application;
@@ -26,6 +27,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/revenus/{revenu}', [RevenusController::class, 'edit'])->name('revenus.edit');
     Route::put("/revenus/{revenu}", [RevenusController::class, 'update'])->name('revenus.update');
     Route::delete('/revenus/{revenu}', [RevenusController::class, 'destroy'])->name('revenus.delete');
+
+    Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses');
+    Route::post('/depenses', [DepenseController::class, 'store'])->name('depenses.store');
+    Route::get('/depenses/{depense}', [DepenseController::class, 'edit'])->name('depenses.edit');
+    Route::put("/depenses/{depense}", [DepenseController::class, 'update'])->name('depenses.update');
+    Route::delete('/depenses/{depense}', [DepenseController::class, 'destroy'])->name('depenses.delete');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

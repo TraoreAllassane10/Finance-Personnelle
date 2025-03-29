@@ -27,8 +27,8 @@ import { Edit, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Textarea } from "@/Components/ui/textarea";
 
-export default function Revenus() {
-    const revenus = usePage().props.revenus || [];
+const Depense = () => {
+    const depenses = usePage().props.depenses || [];
     const categories = usePage().props.categories || [];
 
     const mois = [
@@ -60,14 +60,14 @@ export default function Revenus() {
     const [selectedAmount, setSelectedAmount] = useState("")
     const [selectedCategory, setSelectedCategory] = useState("")
 
-    const fileredRevenus = revenus.filter(revenu => {
+    const fileredDepenses = depenses.filter(depense => {
         //Filtrer par mois
-        if (selectedMonth && getMonthRegisterRevenus(revenu.date) !== Number(selectedMonth)) {
+        if (selectedMonth && getMonthRegisterdepenses(depense.date) !== Number(selectedMonth)) {
             return false
         }
 
         //Filtrer par ctegorie
-        if (selectedCategory && revenu.category?.id !== Number(selectedCategory)) {
+        if (selectedCategory && depense.category?.id !== Number(selectedCategory)) {
             return false;
         }
 
@@ -83,7 +83,7 @@ export default function Revenus() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        post(route("revenus.store"), {
+        post(route("depenses.store"), {
             onSuccess: () => {
                 reset()
             }
@@ -91,7 +91,7 @@ export default function Revenus() {
     }
 
     const handleDelete = (id) => {
-        router.delete(route('revenus.delete', id), {
+        router.delete(route('depenses.delete', id), {
             onSuccess: () => {
 
             }
@@ -107,10 +107,11 @@ export default function Revenus() {
     return (
         <div>
             <AuthenticatedLayout>
-                <Head title="Revenus" />
+                <Head title="Depenses" />
+
                 <div className="flex justify-between place-items-center">
                     <h2 className="text-2xl text-gray-700 font-semibold p-6">
-                        Mes Revenus
+                        Mes Depenses
                     </h2>
 
                     {/* Le modal d'enregistrement et son bouton */}
@@ -120,12 +121,12 @@ export default function Revenus() {
                                 variant="outline"
                                 className="bg-indigo-500 text-white mb-2"
                             >
-                                Ajouter un revenu
+                                Ajouter une depense
                             </Button>
                         </SheetTrigger>
                         <SheetContent onKeyDown={(e) => e.stopPropagation()}>
                             <SheetHeader>
-                                <SheetTitle>Ajouter un revenu</SheetTitle>
+                                <SheetTitle>Ajouter une depense</SheetTitle>
                                 {/* <SheetDescription>
                                 Make changes to your profile here. Click save
                                 when you're done.
@@ -201,7 +202,7 @@ export default function Revenus() {
                             </div>
                             <SheetFooter>
                                 <SheetClose asChild>
-                                    <Button type="submit" onClick={handleSubmit} className="bg-indigo-500" disabled={processing}>{processing ? "Ajout en cours" : "Ajouter un revenu"}</Button>
+                                    <Button type="submit" onClick={handleSubmit} className="bg-indigo-500" disabled={processing}>{processing ? "Ajout en cours" : "Ajouter une depense"}</Button>
                                 </SheetClose>
                             </SheetFooter>
                         </SheetContent>
@@ -276,20 +277,20 @@ export default function Revenus() {
                                 <TableHead>Actions</TableHead>
                             </TableRow>
 
-                            {fileredRevenus.map((revenu) => (
-                                <TableRow key={revenu.id}>
-                                    <TableCell>{revenu.id}</TableCell>
-                                    <TableCell>{revenu.date}</TableCell>
-                                    <TableCell>{revenu.montant}</TableCell>
+                            {fileredDepenses.map((depense) => (
+                                <TableRow key={depense.id}>
+                                    <TableCell>{depense.id}</TableCell>
+                                    <TableCell>{depense.date}</TableCell>
+                                    <TableCell>{depense.montant}</TableCell>
                                     <TableCell>
-                                        {revenu.category?.name}
+                                        {depense.category?.name}
                                     </TableCell>
-                                    <TableCell>{revenu.description}</TableCell>
+                                    <TableCell>{depense.description}</TableCell>
                                     <TableCell className="flex gap-4">
-                                        <Link href={route('revenus.edit', revenu.id)}>
+                                        <Link href={route('depenses.edit', depense.id)}>
                                             <Edit className="text-indigo-500" />
                                         </Link>
-                                        <Link onClick={() => handleDelete(revenu.id)}>
+                                        <Link onClick={() => handleDelete(depense.id)}>
                                             <Trash2 className="text-red-500" />
                                         </Link>
                                     </TableCell>
@@ -300,15 +301,13 @@ export default function Revenus() {
                 </Card>
             </AuthenticatedLayout>
         </div>
-    );
+    )
 }
 
+export default Depense
 
 //Cette function , pour chaque revenus , recupere le mois de son enregitrement
-const getMonthRegisterRevenus = (dateRevenus) => {
-    const date = new Date(dateRevenus)
+const getMonthRegisterdepenses = (dateDepense) => {
+    const date = new Date(dateDepense)
     return date.getMonth()
 }
-
-
-

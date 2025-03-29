@@ -27,7 +27,7 @@ export const Nav = () => {
 
                     <div className="flex gap-2 px-10 py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
                         <LucideBadgeDollarSign className="text-gray-700"/>
-                        <a href="" className="text-xl text-gray-800 hover:text-indigo-800">Depenses</a>
+                        <Link href={route('depenses')}  className="text-xl text-gray-800 hover:text-indigo-800">Depenses</Link>
                     </div>
 
                     <div className="flex gap-2 px-10 py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
