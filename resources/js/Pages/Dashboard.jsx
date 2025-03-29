@@ -27,8 +27,8 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-                <div className="flex justify-between place-items-center py-6 bg-white shadow-sm rounded-lg">
+            <div className="grid grid-cols-3 gap-4">
+                <div className="flex justify-between place-items-center py-6 bg-white shadow-md rounded-lg">
                     <div className="flex flex-col p-6 gap-4">
                         <h3 className="text-2xl text-indigo-800 font-semibold">Revenus</h3>
                         <p className="text-lg text-gray-700">200 000 XOF</p>
@@ -39,7 +39,7 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                <div className="flex justify-between place-items-center py-6 bg-white shadow-sm rounded-lg">
+                <div className="flex justify-between place-items-center py-6 bg-white shadow-md rounded-lg">
                     <div className="flex flex-col p-6 gap-4">
                         <h3 className="text-2xl text-indigo-800 font-semibold">Depenses</h3>
                         <p className="text-lg text-gray-700">100 000 XOF</p>
@@ -47,6 +47,17 @@ export default function Dashboard() {
 
                     <div className="p-6">
                         <Banknote size={80} className="bg-red-500 text-red-500 bg-opacity-15 rounded-lg"/>
+                    </div>
+                </div>
+
+                <div className="flex justify-between place-items-center py-6 bg-white shadow-md rounded-lg">
+                    <div className="flex flex-col p-6 gap-4">
+                        <h3 className="text-2xl text-indigo-800 font-semibold">Total</h3>
+                        <p className="text-lg text-gray-700">100 000 XOF</p>
+                    </div>
+
+                    <div className="p-6">
+                        <Banknote size={80} className="bg-gray-800 text-gray-800 bg-opacity-15 rounded-lg"/>
                     </div>
                 </div>
             </div>

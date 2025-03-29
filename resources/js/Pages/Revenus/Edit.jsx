@@ -1,0 +1,103 @@
+import { Card } from '@/Components/ui/card'
+import { Input } from '@/Components/ui/input'
+import { Label } from '@/Components/ui/label'
+import { Textarea } from '@/Components/ui/textarea'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
+import { useForm, usePage } from '@inertiajs/react'
+import React from 'react'
+
+const Edit = () => {
+    const revenu = usePage().props.revenu
+    const categories = usePage().props.categories
+
+    const { data, setData, put, processing, errors, reset } = useForm({
+        date: revenu.date,
+        montant: revenu.montant,
+        category_id: revenu.category_id,
+        description: revenu.description
+    })
+
+    const handleUpdate = (e) => {
+        e.preventDefault();
+
+        put(route("revenus.update", revenu.id), {})
+    }
+
+    return (
+        <AuthenticatedLayout>
+            <Card className="flex flex-col items-center justify-center relative top-44 ">
+                <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="name" className="text-right">
+                            Date
+                        </Label>
+                        <Input
+                            type="date"
+                            id="date"
+                            value={data.date}
+                            className="col-span-3"
+                            onChange={(e) => setData('date', e.target.value)}
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label
+                            htmlFor="montant"
+                            className="text-right"
+                        >
+                            Montant
+                        </Label>
+                        <Input
+                            type="text"
+                            id="montant"
+                            value={data.montant}
+                            className="col-span-3"
+                            onChange={(e) => setData('montant', e.target.value)}
+                        />
+                    </div>
+
+
+                    <div className="flex items-center gap-4">
+                        <label htmlFor="categorie" className="block text-sm font-medium text-gray-900">
+                            Catégorie
+                        </label>
+                        <select
+                            id="categorie"
+                            value={data.category_id}
+                            onChange={(e) => setData('category_id', e.target.value)}
+                            className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                        >
+                            <option value="" disabled>Choisissez une categorie</option>
+                            {categories.map((categorie) => (
+                                <option key={categorie.id} value={categorie.id}>
+                                    {categorie.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label
+                            htmlFor="username"
+                            className="text-right"
+                        >
+                            Description
+                        </Label>
+                        <Textarea
+                            id="description"
+                            value={data.description}
+                            className="col-span-3"
+                            onChange={(e) => setData('description', e.target.value)}
+                        />
+                    </div>
+
+                    <button onClick={handleUpdate} className='p-1 bg-indigo-500 text-white rounded-md hover:bg-indigo-700' disabled={processing}>
+                        {processing ? "Modification..." : "Modifier"}
+                    </button>
+                </div>
+            </Card>
+        </AuthenticatedLayout>
+    )
+}
+
+export default Edit
