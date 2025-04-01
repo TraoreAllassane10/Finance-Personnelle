@@ -3,7 +3,12 @@ import { Head, usePage } from "@inertiajs/react";
 import { Banknote, Bell, Moon } from "lucide-react";
 
 export default function Dashboard() {
+
     const user = usePage().props.auth.user;
+    const totalRevenus = usePage().props.totalRevenus;
+    const totalDepenses = usePage().props.totalDepenses
+    const total = usePage().props.total
+
     return (
         <AuthenticatedLayout>
             <Head title="Dashboard" />
@@ -31,7 +36,7 @@ export default function Dashboard() {
                 <div className="flex justify-between place-items-center py-6 bg-white shadow-md rounded-lg">
                     <div className="flex flex-col p-6 gap-4">
                         <h3 className="text-2xl text-indigo-800 font-semibold">Revenus</h3>
-                        <p className="text-lg text-gray-700">200 000 XOF</p>
+                        <p className="text-lg text-gray-700">{totalRevenus} XOF</p>
                     </div>
 
                     <div className="p-6">
@@ -42,7 +47,7 @@ export default function Dashboard() {
                 <div className="flex justify-between place-items-center py-6 bg-white shadow-md rounded-lg">
                     <div className="flex flex-col p-6 gap-4">
                         <h3 className="text-2xl text-indigo-800 font-semibold">Depenses</h3>
-                        <p className="text-lg text-gray-700">100 000 XOF</p>
+                        <p className="text-lg text-gray-700">{totalDepenses} XOF</p>
                     </div>
 
                     <div className="p-6">
@@ -53,7 +58,7 @@ export default function Dashboard() {
                 <div className="flex justify-between place-items-center py-6 bg-white shadow-md rounded-lg">
                     <div className="flex flex-col p-6 gap-4">
                         <h3 className="text-2xl text-indigo-800 font-semibold">Total</h3>
-                        <p className="text-lg text-gray-700">100 000 XOF</p>
+                        <p className="text-lg text-gray-700">{total} XOF</p>
                     </div>
 
                     <div className="p-6">

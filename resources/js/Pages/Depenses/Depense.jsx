@@ -268,7 +268,7 @@ const Depense = () => {
                 <Card className='shadow-md'>
                     <Table>
                         <TableHeader>
-                            <TableRow>
+                            <TableRow >
                                 <TableHead>ID</TableHead>
                                 <TableHead>Date</TableHead>
                                 <TableHead>Montant</TableHead>
@@ -281,7 +281,7 @@ const Depense = () => {
                                 <TableRow key={depense.id}>
                                     <TableCell>{depense.id}</TableCell>
                                     <TableCell>{depense.date}</TableCell>
-                                    <TableCell>{depense.montant}</TableCell>
+                                    <TableCell>{depense.montant} XOF</TableCell>
                                     <TableCell>
                                         {depense.category?.name}
                                     </TableCell>
@@ -299,6 +299,7 @@ const Depense = () => {
                         </TableHeader>
                     </Table>
                 </Card>
+
             </AuthenticatedLayout>
         </div>
     )

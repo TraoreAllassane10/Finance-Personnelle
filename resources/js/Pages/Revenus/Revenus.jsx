@@ -26,6 +26,7 @@ import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import { Edit, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Textarea } from "@/Components/ui/textarea";
+import RevenusChart from "@/Components/RevenusChart";
 
 export default function Revenus() {
     const revenus = usePage().props.revenus || [];
@@ -108,6 +109,7 @@ export default function Revenus() {
         <div>
             <AuthenticatedLayout>
                 <Head title="Revenus" />
+
                 <div className="flex justify-between place-items-center">
                     <h2 className="text-2xl text-gray-700 font-semibold p-6">
                         Mes Revenus
@@ -264,7 +266,7 @@ export default function Revenus() {
                 </Card>
 
                 {/* Affichage des revenus */}
-                <Card className='shadow-md'>
+                <Card className='shadow-md mb-8 p-6'>
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -280,7 +282,7 @@ export default function Revenus() {
                                 <TableRow key={revenu.id}>
                                     <TableCell>{revenu.id}</TableCell>
                                     <TableCell>{revenu.date}</TableCell>
-                                    <TableCell>{revenu.montant}</TableCell>
+                                    <TableCell>{revenu.montant} XOF</TableCell>
                                     <TableCell>
                                         {revenu.category?.name}
                                     </TableCell>
@@ -297,6 +299,10 @@ export default function Revenus() {
                             ))}
                         </TableHeader>
                     </Table>
+                </Card>
+
+                <Card className='p-6'>
+                    <RevenusChart />
                 </Card>
             </AuthenticatedLayout>
         </div>

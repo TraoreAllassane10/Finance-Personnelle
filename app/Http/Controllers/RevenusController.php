@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Revenus;
 use App\Repositories\Eloquent\RevenusRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -14,7 +15,24 @@ class RevenusController extends Controller
 
     public function index()
     {
-        return Inertia::render('Revenus/Revenus', ["revenus" => Revenus::where('user_id', Auth::id())->get(), "categories" => Category::all()]);
+        $categories = Category::all();
+        $revenus = Revenus::where('user_id', Auth::id())->get();
+
+        $revenusParDate = $revenus->groupBy(function($revenu) {
+            return Carbon::parse($revenu->date)->format("Y-m");
+        })->map(function ($items, $mois){
+            return [
+                'mois' => Carbon::parse($mois)->translatedFormat("F Y"), // Ex : Avril 2025
+                "total" => $items->sum('montant')
+            ];
+        })->values();
+
+
+        return Inertia::render('Revenus/Revenus', [
+            "revenus" => $revenus,
+            "revenusChart" => $revenusParDate,
+            "categories" => $categories
+        ]);
     }
 
     public function store(Request $request)
