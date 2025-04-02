@@ -23,7 +23,7 @@ const RevenusChart = () => {
             {
                 label: "Evolutions des revénus",
                 data: dataValues,
-                borderColor: "rbg(75,192,192)",
+                borderColor: "rbg(15, 157, 232)",
                 backgroundColor: "rbg(75,192,192,0.2)"
             }
         ]

@@ -26,6 +26,7 @@ import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import { Edit, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Textarea } from "@/Components/ui/textarea";
+import DepensesChart from "@/Components/DepensesChart";
 
 const Depense = () => {
     const depenses = usePage().props.depenses || [];
@@ -265,7 +266,7 @@ const Depense = () => {
                 </Card>
 
                 {/* Affichage des revenus */}
-                <Card className='shadow-md'>
+                <Card className='shadow-md mb-8 p-6'>
                     <Table>
                         <TableHeader>
                             <TableRow >
@@ -298,6 +299,10 @@ const Depense = () => {
                             ))}
                         </TableHeader>
                     </Table>
+                </Card>
+
+                <Card className='p-6'>
+                    <DepensesChart/>
                 </Card>
 
             </AuthenticatedLayout>

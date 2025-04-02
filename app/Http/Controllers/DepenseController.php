@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Depense;
 use App\Models\Category;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,23 @@ class DepenseController extends Controller
 
     public function index()
     {
-        return Inertia::render('Depenses/Depense', ["depenses" => Depense::where('user_id', Auth::id())->get(), "categories" => Category::all()]);
+        $depenses = Depense::where('user_id', Auth::id())->get();
+        $categories = Category::all();
+
+        $depensesParDate = $depenses->groupBy(function($depense) {
+            return Carbon::parse($depense->date)->format('Y-m');
+        })->map(function($items, $mois){
+            return [
+                "mois" => Carbon::parse($mois)->translatedFormat('F Y'),
+                "total" => $items->sum('montant')
+            ];
+        })->values();
+
+        return Inertia::render('Depenses/Depense', [
+            "depenses" => $depenses,
+            "categories" => $categories,
+            "depensesChart" => $depensesParDate
+        ]);
     }
 
     public function store(Request $request)
