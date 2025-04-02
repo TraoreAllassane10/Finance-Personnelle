@@ -1,6 +1,9 @@
+import DepensesChart from "@/Components/DepensesChart";
+import RevenusChart from "@/Components/RevenusChart";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
 import { Banknote, Bell, Moon } from "lucide-react";
+import { Card } from "@/Components/ui/card";
 
 export default function Dashboard() {
 
@@ -40,7 +43,7 @@ export default function Dashboard() {
                     </div>
 
                     <div className="p-6">
-                        <Banknote size={80} className="bg-green-500 text-green-500 bg-opacity-15 rounded-lg"/>
+                        <Banknote size={80} className="bg-green-500 text-green-500 bg-opacity-15 rounded-lg" />
                     </div>
                 </div>
 
@@ -51,7 +54,7 @@ export default function Dashboard() {
                     </div>
 
                     <div className="p-6">
-                        <Banknote size={80} className="bg-red-500 text-red-500 bg-opacity-15 rounded-lg"/>
+                        <Banknote size={80} className="bg-red-500 text-red-500 bg-opacity-15 rounded-lg" />
                     </div>
                 </div>
 
@@ -62,10 +65,19 @@ export default function Dashboard() {
                     </div>
 
                     <div className="p-6">
-                        <Banknote size={80} className="bg-gray-800 text-gray-800 bg-opacity-15 rounded-lg"/>
+                        <Banknote size={80} className="bg-gray-800 text-gray-800 bg-opacity-15 rounded-lg" />
                     </div>
                 </div>
             </div>
+
+            <Card className='my-8'>
+                <RevenusChart />
+            </Card>
+
+            <Card>
+                <DepensesChart />
+            </Card>
+
         </AuthenticatedLayout>
     );
 }
