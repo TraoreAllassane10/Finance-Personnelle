@@ -28,6 +28,8 @@ import React, { useState } from "react";
 import { Textarea } from "@/Components/ui/textarea";
 import RevenusChart from "@/Components/RevenusChart";
 
+
+
 export default function Revenus() {
     const revenus = usePage().props.revenus || [];
     const categories = usePage().props.categories || [];
@@ -116,98 +118,84 @@ export default function Revenus() {
                     </h2>
 
                     {/* Le modal d'enregistrement et son bouton */}
-                    <Sheet className='py-6'>
+                    <Sheet>
                         <SheetTrigger asChild>
-                            <Button
-                                variant="outline"
-                                className="bg-indigo-500 text-white mb-2"
-                            >
-                                Ajouter un revenu
+                            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg shadow-md transition">
+                                + Ajouter un revenu
                             </Button>
                         </SheetTrigger>
-                        <SheetContent onKeyDown={(e) => e.stopPropagation()}>
+
+                        <SheetContent onKeyDown={(e) => e.stopPropagation()} className="p-6">
                             <SheetHeader>
-                                <SheetTitle>Ajouter un revenu</SheetTitle>
-                                {/* <SheetDescription>
-                                Make changes to your profile here. Click save
-                                when you're done.
-                            </SheetDescription> */}
+                                <SheetTitle className="text-xl font-semibold text-gray-900">Ajouter un revenu</SheetTitle>
                             </SheetHeader>
-                            <div className="grid gap-4 py-4">
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="name" className="text-right">
-                                        Date
-                                    </Label>
+
+                            <div className="space-y-4 mt-4">
+                                {/* Date */}
+                                <div>
+                                    <Label htmlFor="date">Date</Label>
                                     <Input
                                         type="date"
                                         id="date"
                                         value={data.date}
-                                        className="col-span-3"
-                                        onChange={(e) => setData('date', e.target.value)}
+                                        onChange={(e) => setData("date", e.target.value)}
                                     />
+                                    {errors?.date && <p className="text-sm text-red-500 mt-1">{errors.date}</p>}
                                 </div>
-                                <span className="mx-8 italic text-red-400 font-light">{errors?.date}</span>
 
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label
-                                        htmlFor="montant"
-                                        className="text-right"
-                                    >
-                                        Montant
-                                    </Label>
+                                {/* Montant */}
+                                <div>
+                                    <Label htmlFor="montant">Montant</Label>
                                     <Input
-                                        type="text"
+                                        type="number"
                                         id="montant"
                                         value={data.montant}
-                                        className="col-span-3"
-                                        onChange={(e) => setData('montant', e.target.value)}
+                                        onChange={(e) => setData("montant", e.target.value)}
                                     />
+                                    {errors?.montant && <p className="text-sm text-red-500 mt-1">{errors.montant}</p>}
                                 </div>
-                                <span className="mx-8 italic text-red-400 font-light">{errors?.montant}</span>
 
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <div className="relative flex place-items-center gap-6 w-[180px]">
-                                        <label htmlFor="categorie" className="block text-sm font-medium text-gray-900">
-                                            Catégorie
-                                        </label>
-                                        <select
-                                            id="categorie"
-                                            value={data.category_id}
-                                            onChange={(e) => setData('category_id', e.target.value)}
-                                            className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                        >
-                                            <option value="" disabled>Choisissez une categorie</option>
-                                            {categories.map((categorie) => (
-                                                <option key={categorie.id} value={categorie.id}>
-                                                    {categorie.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label
-                                        htmlFor="username"
-                                        className="text-right"
+                                {/* Catégorie */}
+                                <div>
+                                    <Label htmlFor="categorie">Catégorie</Label>
+                                    <select
+                                        id="categorie"
+                                        value={data.category_id}
+                                        onChange={(e) => setData("category_id", e.target.value)}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                                     >
-                                        Description
-                                    </Label>
+                                        <option value="" disabled>Choisissez une catégorie</option>
+                                        {categories.map((categorie) => (
+                                            <option key={categorie.id} value={categorie.id}>
+                                                {categorie.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                {/* Description */}
+                                <div>
+                                    <Label htmlFor="description">Description</Label>
                                     <Textarea
                                         id="description"
                                         value={data.description}
-                                        className="col-span-3"
-                                        onChange={(e) => setData('description', e.target.value)}
+                                        onChange={(e) => setData("description", e.target.value)}
                                     />
+                                    {errors?.description && <p className="text-sm text-red-500 mt-1">{errors.description}</p>}
                                 </div>
-                                <span className="mx-8 italic text-red-400 font-light">{errors?.description}</span>
                             </div>
-                            <SheetFooter>
+
+                            <SheetFooter className="mt-6 flex justify-end">
                                 <SheetClose asChild>
-                                    <Button type="submit" onClick={handleSubmit} className="bg-indigo-500" disabled={processing}>{processing ? "Ajout en cours" : "Ajouter un revenu"}</Button>
+                                    <Button onClick={handleSubmit} className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-md transition" disabled={processing}>
+                                        {processing ? "Ajout en cours..." : "Ajouter"}
+                                    </Button>
                                 </SheetClose>
                             </SheetFooter>
                         </SheetContent>
                     </Sheet>
+
+
 
                 </div>
 
@@ -309,12 +297,13 @@ export default function Revenus() {
     );
 }
 
-
-//Cette function , pour chaque revenus , recupere le mois de son enregitrement
+//Cette function , pour chaque Revenus , recupere le mois de son enregitrement
 const getMonthRegisterRevenus = (dateRevenus) => {
     const date = new Date(dateRevenus)
     return date.getMonth()
 }
+
+
 
 
 
