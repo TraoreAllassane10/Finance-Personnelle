@@ -44,14 +44,14 @@ export const Nav = () => {
                         <Link href={route('depenses')} className="text-xl text-gray-800 hover:text-indigo-800">Dépenses</Link>
                     </div>
 
-                    <div className="flex gap-2 px-10 py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
+                    {/* <div className="flex gap-2 px-10 py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
                         <FileBarChart2 className="text-gray-700" />
-                        <a href="" className="text-xl text-gray-800 hover:text-indigo-800">Budgets</a>
-                    </div>
+                        <a href={route('budgets')} className="text-xl text-gray-800 hover:text-indigo-800">Budgets</a>
+                    </div> */}
 
                     <div className="flex gap-2 px-10 py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
                         <ClipboardCheck className="text-gray-700" />
-                        <a href="" className="text-xl text-gray-800 hover:text-indigo-800">Épargnes</a>
+                        <Link href={route('epargnes')} className="text-xl text-gray-800 hover:text-indigo-800">Épargnes</Link>
                     </div>
                 </div>
 
@@ -60,7 +60,7 @@ export const Nav = () => {
                 <div className="flex flex-col gap-4 mt-4">
                     <div className="flex gap-2 px-10 py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
                         <Settings className="text-gray-700" />
-                        <a href="" className="text-xl text-gray-800 hover:text-indigo-800">Paramètres</a>
+                        <Link href="" className="text-xl text-gray-800 hover:text-indigo-800">Paramètres</Link>
                     </div>
 
                     <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 text-white rounded-md p-1 mx-6 transition">

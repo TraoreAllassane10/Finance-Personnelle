@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RevenusController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EpargneController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -32,6 +34,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/depenses/{depense}', [DepenseController::class, 'edit'])->name('depenses.edit');
     Route::put("/depenses/{depense}", [DepenseController::class, 'update'])->name('depenses.update');
     Route::delete('/depenses/{depense}', [DepenseController::class, 'destroy'])->name('depenses.delete');
+
+    Route::get('/epargnes', [EpargneController::class, 'index'])->name('epargnes');
+    Route::post('/epargnes', [EpargneController::class, 'store'])->name('epargnes.store');
+    Route::get('/epargnes/{epargne}', [EpargneController::class, 'edit'])->name('epargnes.edit');
+    Route::put("/epargnes/{epargne}", [EpargneController::class, 'update'])->name('epargnes.update');
+    Route::delete('/epargnes/{epargne}', [EpargneController::class, 'destroy'])->name('epargnes.delete');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -11,6 +11,10 @@ export default function Dashboard() {
     const totalDepenses = usePage().props.totalDepenses;
     const total = usePage().props.total;
 
+    const FormatFCFA = (montant) => {
+        return montant.toLocaleString('fr-CI', {style: "currency", currency: "XOF"})
+    }
+
     return (
         <AuthenticatedLayout>
             <Head title="Dashboard" />
@@ -31,17 +35,17 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                 {[{
                     title: "Revenus",
-                    amount: totalRevenus,
+                    amount: FormatFCFA(totalRevenus),
                     color: "bg-green-100 text-green-700",
                     iconColor: "bg-green-500 text-white",
                 }, {
                     title: "Dépenses",
-                    amount: totalDepenses,
+                    amount: FormatFCFA(totalDepenses),
                     color: "bg-red-100 text-red-700",
                     iconColor: "bg-red-500 text-white",
                 }, {
                     title: "Total",
-                    amount: total,
+                    amount: FormatFCFA(total),
                     color: "bg-blue-100 text-blue-700",
                     iconColor: "bg-blue-500 text-white",
                 }].map((card, index) => (
@@ -49,7 +53,9 @@ export default function Dashboard() {
                         <div className="flex justify-between items-center">
                             <div className="flex flex-col gap-2">
                                 <h3 className="text-2xl font-semibold">{card.title}</h3>
-                                <p className="text-lg font-medium">{card.amount} XOF</p>
+                                <p className="text-lg font-medium">
+                                    {card.amount}
+                                    </p>
                             </div>
                             <div className={`p-4 rounded-lg ${card.iconColor}`}>
                                 <Banknote size={50} />

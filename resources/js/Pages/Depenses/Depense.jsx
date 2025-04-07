@@ -15,7 +15,6 @@ import {
     Sheet,
     SheetClose,
     SheetContent,
-    SheetDescription,
     SheetFooter,
     SheetHeader,
     SheetTitle,
@@ -250,6 +249,10 @@ const Depense = () => {
                 </Card>
 
                 {/* Affichage des revenus */}
+                <div className="flex justify-end gap-3 mb-2">
+                    <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-2 rounded-sm transition">PDF</button>
+                    <button className="bg-green-600 hover:bg-green-700 text-white px-2 rounded-sm transition">CSV</button>
+                </div>
                 <Card className='shadow-md mb-8 p-6'>
                     <Table>
                         <TableHeader>
@@ -266,7 +269,7 @@ const Depense = () => {
                                 <TableRow key={depense.id}>
                                     <TableCell>{depense.id}</TableCell>
                                     <TableCell>{depense.date}</TableCell>
-                                    <TableCell>{depense.montant} XOF</TableCell>
+                                    <TableCell>{depense.montant.toLocaleString('fr-CI', {style: "currency", currency: "XOF"})}</TableCell>
                                     <TableCell>
                                         {depense.category?.name}
                                     </TableCell>

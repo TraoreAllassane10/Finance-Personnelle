@@ -194,9 +194,6 @@ export default function Revenus() {
                             </SheetFooter>
                         </SheetContent>
                     </Sheet>
-
-
-
                 </div>
 
                 {/* Filtre */}
@@ -254,6 +251,10 @@ export default function Revenus() {
                 </Card>
 
                 {/* Affichage des revenus */}
+                <div className="flex justify-end gap-3 mb-2">
+                    <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-2 rounded-sm transition">PDF</button>
+                    <button className="bg-green-600 hover:bg-green-700 text-white px-2 rounded-sm transition">CSV</button>
+                </div>
                 <Card className='shadow-md mb-8 p-6'>
                     <Table>
                         <TableHeader>
@@ -270,7 +271,7 @@ export default function Revenus() {
                                 <TableRow key={revenu.id}>
                                     <TableCell>{revenu.id}</TableCell>
                                     <TableCell>{revenu.date}</TableCell>
-                                    <TableCell>{revenu.montant} XOF</TableCell>
+                                    <TableCell>{revenu.montant.toLocaleString('fr-CI', {style: "currency", currency: "XOF"})}</TableCell>
                                     <TableCell>
                                         {revenu.category?.name}
                                     </TableCell>
@@ -289,6 +290,7 @@ export default function Revenus() {
                     </Table>
                 </Card>
 
+                {/* Graphique */}
                 <Card className='p-6'>
                     <RevenusChart />
                 </Card>
