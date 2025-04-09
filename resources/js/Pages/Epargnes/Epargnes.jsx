@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sheet";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, FileSpreadsheet, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Textarea } from "@/Components/ui/textarea";
 
@@ -98,6 +98,11 @@ const Epargnes = () => {
         setSelectedAmount("")
         setSelectedCategory("")
     }
+
+    const handleExcel = () => {
+        window.location.href = route('epargnes.excel');
+    }
+
     return (
         <AuthenticatedLayout>
             <Head title="Depenses" />
@@ -222,8 +227,10 @@ const Epargnes = () => {
 
             {/* Affichage des revenus */}
             <div className="flex justify-end gap-3 mb-2">
-                <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-2 rounded-sm transition">PDF</button>
-                <button className="bg-green-600 hover:bg-green-700 text-white px-2 rounded-sm transition">CSV</button>
+                <button onClick={handleExcel} className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-md transition flex gap-1">
+                    <FileSpreadsheet/>
+                    Fichier Excel
+                </button>
             </div>
             <Card className='shadow-md mb-8 p-6'>
                 <Table>

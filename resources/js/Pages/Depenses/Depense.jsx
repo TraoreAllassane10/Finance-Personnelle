@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sheet";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, FileSpreadsheet, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Textarea } from "@/Components/ui/textarea";
 import DepensesChart from "@/Components/DepensesChart";
@@ -102,6 +102,10 @@ const Depense = () => {
         setSelectedMonth("")
         setSelectedAmount("")
         setSelectedCategory("")
+    }
+
+    const handleExcel = () => {
+        window.location.href = route('depenses.excel');
     }
 
     return (
@@ -250,8 +254,10 @@ const Depense = () => {
 
                 {/* Affichage des revenus */}
                 <div className="flex justify-end gap-3 mb-2">
-                    <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-2 rounded-sm transition">PDF</button>
-                    <button className="bg-green-600 hover:bg-green-700 text-white px-2 rounded-sm transition">CSV</button>
+                    <button onClick={handleExcel} className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-md transition flex gap-1">
+                         <FileSpreadsheet />
+                         <span>Fichier Excel</span>
+                        </button>
                 </div>
                 <Card className='shadow-md mb-8 p-6'>
                     <Table>
@@ -269,7 +275,7 @@ const Depense = () => {
                                 <TableRow key={depense.id}>
                                     <TableCell>{depense.id}</TableCell>
                                     <TableCell>{depense.date}</TableCell>
-                                    <TableCell>{depense.montant.toLocaleString('fr-CI', {style: "currency", currency: "XOF"})}</TableCell>
+                                    <TableCell>{depense.montant.toLocaleString('fr-CI', { style: "currency", currency: "XOF" })}</TableCell>
                                     <TableCell>
                                         {depense.category?.name}
                                     </TableCell>

@@ -8,6 +8,8 @@ use App\Models\Category;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class DepenseController extends Controller
 {
@@ -88,5 +90,52 @@ class DepenseController extends Controller
             $depense->delete();
             return redirect()->back()->with('success', "Revenu supprimé");
         }
+    }
+
+    public function excel()
+    {
+        $depenses = Depense::all();
+
+        //Creer un objet Spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Ajouter les en-têtes des colonnes
+        $coloumns = ["ID", "Montant", "Catégorie", "Date", "Description"];
+        $sheet->fromArray($coloumns, NULL, 'A1');
+
+        // Ajouter les donnes des depenses
+        $rowNumber = 2; // Commence par les en-têtes
+        foreach($depenses as $depense){
+            $sheet->setCellValue("A$rowNumber", $depense->id);
+            $sheet->setCellValue("B$rowNumber", $depense->montant);
+            $sheet->setCellValue("C$rowNumber", $depense->category->name);
+            $sheet->setCellValue("D$rowNumber", $depense->date);
+            $sheet->setCellValue("E$rowNumber", $depense->description);
+
+            $rowNumber++;
+        }
+
+        //Creer le nom du fichier
+        $filename = "Depenses_". now()->format('Y-m-d_H:i'). '.xlsx';
+
+        //Ajouter les en-têtes pour le telechargement
+        $headers = [
+            "Content-Type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "Content-Disposition" => "attachment; filename={$filename}",
+            "Cache-Control" => "max-age=0",
+        ];
+
+        //Créer l'ecrivain Excel
+        $writer = new Xlsx($spreadsheet);
+
+        //Retourner le fichier en reponse
+        return response()->stream(
+            function() use ($writer){
+                $writer->save('php://output');
+            },
+            200,
+            $headers
+        );
     }
 }

@@ -20,6 +20,9 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/revenus/excel', [RevenusController::class, 'excel'])->name('revenus.excel');
+Route::get('/depenses/excel', [DepenseController::class, 'excel'])->name('depenses.excel');
+Route::get('/epargnes/excel', [EpargneController::class, 'excel'])->name('epargnes.excel');
 
 Route::middleware('auth')->group(function () {
 
@@ -28,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/revenus/{revenu}', [RevenusController::class, 'edit'])->name('revenus.edit');
     Route::put("/revenus/{revenu}", [RevenusController::class, 'update'])->name('revenus.update');
     Route::delete('/revenus/{revenu}', [RevenusController::class, 'destroy'])->name('revenus.delete');
+
 
     Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses');
     Route::post('/depenses', [DepenseController::class, 'store'])->name('depenses.store');

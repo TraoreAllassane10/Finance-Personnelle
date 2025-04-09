@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Epargne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class EpargneController extends Controller
 {
@@ -56,8 +58,7 @@ class EpargneController extends Controller
             'projet' => 'required'
         ]);
 
-        if($epargne && $epargne->user_id == Auth::id())
-        {
+        if ($epargne && $epargne->user_id == Auth::id()) {
             $epargne->date = $validated['date'];
             $epargne->montant = $validated['montant'];
             $epargne->compte = $validated['compte'];
@@ -71,10 +72,56 @@ class EpargneController extends Controller
 
     public function destroy(Epargne $epargne)
     {
-        if($epargne)
-        {
+        if ($epargne) {
             $epargne->delete();
             return redirect()->back()->with('success', "Epargne supprimé");
         }
+    }
+
+    public function excel()
+    {
+        $epargnes = Epargne::all();
+
+        //Creer un objet Spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        //Ajouter les en-têtes des colonnes
+        $coloumns = ["ID", "Montant", "Compte d'epargne", "Date", "Projet"];
+        $sheet->fromArray($coloumns, NULL, 'A1');
+
+        //Ajouter les données des epargnes
+        $rowNumber = 2; // Commence par les en-têtes
+        foreach ($epargnes as $epargne) {
+            $sheet->setCellValue("A$rowNumber", $epargne->id);
+            $sheet->setCellValue("B$rowNumber", $epargne->montant);
+            $sheet->setCellValue("C$rowNumber", $epargne->compte);
+            $sheet->setCellValue("D$rowNumber", $epargne->date);
+            $sheet->setCellValue("E$rowNumber", $epargne->projets);
+
+            $rowNumber++;
+        }
+
+          //Creer le nom du fichier
+          $filename = "Epargnes_". now()->format('Y-m-d_H:i'). '.xlsx';
+
+          //Ajouter les en-têtes pour le telechargement
+          $headers = [
+              "Content-Type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+              "Content-Disposition" => "attachment; filename={$filename}",
+              "Cache-Control" => "max-age=0",
+          ];
+
+          //Créer l'ecrivain Excel
+          $writer = new Xlsx($spreadsheet);
+
+          //Retourner le fichier en reponse
+          return response()->stream(
+              function() use ($writer){
+                  $writer->save('php://output');
+              },
+              200,
+              $headers
+          );
     }
 }
