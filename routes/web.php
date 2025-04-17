@@ -4,6 +4,8 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RevenusController;
@@ -44,6 +46,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/epargnes/{epargne}', [EpargneController::class, 'edit'])->name('epargnes.edit');
     Route::put("/epargnes/{epargne}", [EpargneController::class, 'update'])->name('epargnes.update');
     Route::delete('/epargnes/{epargne}', [EpargneController::class, 'destroy'])->name('epargnes.delete');
+
+    Route::get("/parametres", [ConfigurationController::class, 'index'])->name('parametres');
+    Route::put("parametres/{user}", [ConfigurationController::class, 'user'])->name('user.infos');
+
+    Route::post('/categorie', [CategoryController::class, 'store'])->name('categorie.store');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
