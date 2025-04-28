@@ -43,13 +43,13 @@ class DepenseRepository implements DepenseRepositoryInterface
 
         if($depense)
         {
-            $this->model->date = $data['date'];
-            $this->model->montant = $data['montant'];
-            $this->model->category_id = $data['category_id'];
-            $this->model->description = $data['description'];
-            $this->model->user_id = Auth::id();
+            $depense->date = $data['date'];
+            $depense->montant = $data['montant'];
+            $depense->category_id = $data['category_id'];
+            $depense->description = $data['description'];
+            $depense->user_id = Auth::id();
 
-            return $this->model->save();
+            return $depense->save();
         }
 
         return null;
