@@ -25,9 +25,11 @@ const Edit = () => {
 
     return (
         <AuthenticatedLayout>
-            <Card className="flex flex-col items-center justify-center relative top-44 ">
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
+            <Card className="flex flex-col justify-center relative top-24 w-1/2 mx-auto">
+                <div className="flex flex-col gap-4 p-8">
+                    <h3 className='text-xl text-center text-gray-800 font-semibold '>Modification d'un revenus</h3>
+                    <hr className='text-center' />
+                    <div>
                         <Label htmlFor="name" className="text-right">
                             Date
                         </Label>
@@ -39,7 +41,7 @@ const Edit = () => {
                             onChange={(e) => setData('date', e.target.value)}
                         />
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
+                    <div>
                         <Label
                             htmlFor="montant"
                             className="text-right"
@@ -56,7 +58,7 @@ const Edit = () => {
                     </div>
 
 
-                    <div className="flex items-center gap-4">
+                    <div>
                         <label htmlFor="categorie" className="block text-sm font-medium text-gray-900">
                             Catégorie
                         </label>
@@ -76,7 +78,7 @@ const Edit = () => {
                     </div>
 
 
-                    <div className="grid grid-cols-4 items-center gap-4">
+                    <div>
                         <Label
                             htmlFor="username"
                             className="text-right"
