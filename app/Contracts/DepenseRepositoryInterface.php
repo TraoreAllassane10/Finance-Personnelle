@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repositories\Contracts;
+namespace App\Contracts;
 
-interface RevenusRepositoryInterface
+interface DepenseRepositoryInterface
 {
-    public function all();
+    public function allForUser(int $id);
     public function find($id);
     public function create(array $data);
     public function update($id, array $data);

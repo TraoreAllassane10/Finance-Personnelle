@@ -2,33 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\RevenusRepositoryInterface;
 use App\Models\Category;
 use App\Models\Revenus;
-use App\Repositories\Eloquent\RevenusRepository;
-use Carbon\Carbon;
+use App\Services\Chart\GroupByDate;
+use App\Services\Excel\Excel;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class RevenusController extends Controller
 {
+    protected $revenuRepository;
+
+    public function __construct(RevenusRepositoryInterface $revenuRepository)
+    {
+        $this->revenuRepository = $revenuRepository;
+    }
 
     public function index()
     {
         $categories = Category::all();
-        $revenus = Revenus::where('user_id', Auth::id())->get();
 
-        $revenusParDate = $revenus->groupBy(function ($revenu) {
-            return Carbon::parse($revenu->date)->format("Y-m");
-        })->map(function ($items, $mois) {
-            return [
-                'mois' => Carbon::parse($mois)->translatedFormat("F Y"), // Ex : Avril 2025
-                "total" => $items->sum('montant')
-            ];
-        })->values();
+        $revenus = $this->revenuRepository->allForUser(Auth::id());
 
+        $revenusParDate = (new GroupByDate())->group($revenus);
 
         return Inertia::render('Revenus/Revenus', [
             "revenus" => $revenus,
@@ -47,15 +47,7 @@ class RevenusController extends Controller
             "description" => "required",
         ]);
 
-        $revenus = new Revenus();
-
-        $revenus->date = $validated["date"];
-        $revenus->montant = $validated["montant"];
-        $revenus->category_id = $validated["category_id"];
-        $revenus->description = $validated["description"];
-        $revenus->user_id = Auth::id();
-
-        $revenus->save();
+        $this->revenuRepository->create($validated);
 
         return redirect()->back()->with('success', 'Un revenus ajouté');
     }
@@ -75,69 +67,30 @@ class RevenusController extends Controller
         ]);
 
         if ($revenu && $revenu->user_id == Auth::id()) {
-            $revenu->date = $validated['date'];
-            $revenu->montant =  $validated['montant'];
-            $revenu->category_id = $validated['category_id'];
-            $revenu->description =  $validated['description'];
 
-            $revenu->save();
-
+            $this->revenuRepository->update($revenu->id ,$validated);
             return redirect()->route("revenus");
         }
     }
 
     public function destroy(Revenus $revenu)
     {
-        if ($revenu) {
-            $revenu->delete();
+        try
+        {
+            $this->revenuRepository->delete($revenu->id);
             return redirect()->back()->with('success', "Revenu supprimé");
+        }
+        catch(Exception $e)
+        {
+            echo $e->getMessage();
         }
     }
 
     public function excel()
     {
         $revenus = Revenus::all();
-
-        //Creer un objet Spreadsheet
         $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
 
-        // Ajouter les en-têtes de colonnes
-        $columns = ["ID", "Montant", "Catégorie", "Date", "Description"];
-        $sheet->fromArray($columns, NULL, 'A1');
-
-        //Ajouter les données des revenus
-        $rowNumber = 2; // Commence par les en-têtes
-        foreach ($revenus as $revenu){
-            $sheet->setCellValue("A$rowNumber", $revenu->id);
-            $sheet->setCellValue("B$rowNumber", $revenu->montant);
-            $sheet->setCellValue("C$rowNumber", $revenu->category->name);
-            $sheet->setCellValue("D$rowNumber", $revenu->date);
-            $sheet->setCellValue("E$rowNumber", $revenu->description);
-
-            $rowNumber++;
-        }
-
-        // Créer le nom du fichier
-        $filename = "Revenus_". now()->format('Y-m-d_H:i'). '.xlsx';
-
-        //Ajouter les en-têtes pour le téléchargement
-        $headers = [
-            "Content-Type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "Content-Disposition" => "attachment; filename={$filename}",
-            "Cache-Control" => "max-age=0",
-        ];
-
-        // Créer l'ecrivain Excel
-        $writer = new Xlsx($spreadsheet);
-
-        //Retouner le fichier en reponse
-        return response()->stream(
-            function () use($writer){
-                $writer->save('php://output');
-            },
-            200,
-            $headers
-        );
+        return (new Excel($spreadsheet))->download($revenus, "Revenus");
     }
 }
