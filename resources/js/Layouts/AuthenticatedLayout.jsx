@@ -12,7 +12,7 @@ export default function AuthenticatedLayout({ header, children }) {
     return (
         <div className="min-h-screen bg-gray-100">
             <Nav/>
-            <main className='ml-[16.666667%] px-10'>{children}</main>
+            <main className='ml-[16.666667%] p-10'>{children}</main>
         </div>
     );
 }
