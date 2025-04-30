@@ -261,7 +261,12 @@ export default function Revenus() {
                             </button>
                         </div>
 
-
+                        <div>
+                            <button onClick={handleExcel} className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-md transition flex gap-1">
+                                <FileSpreadsheet />
+                                EXCEL
+                            </button>
+                        </div>
                     </div>
 
                     {/* Table et graphique*/}

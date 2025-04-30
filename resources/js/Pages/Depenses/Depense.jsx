@@ -203,7 +203,7 @@ const Depense = () => {
                         </Sheet>
                     </div>
 
-                    {/* Filtres et total de revenus du mois*/}
+                    {/* Filtres et bouton d'export*/}
                     <div className="flex justify-between place-items-center mb-5">
                         <div className="flex gap-4">
                             <div className="relative flex place-items-center gap-6 w-[180px]">
@@ -253,6 +253,13 @@ const Depense = () => {
 
                             <button onClick={resetFiltrer}>
                                 Actualiser
+                            </button>
+                        </div>
+
+                        <div>
+                            <button onClick={handleExcel} className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-md transition flex gap-1">
+                                <FileSpreadsheet />
+                               EXCEL
                             </button>
                         </div>
                     </div>
