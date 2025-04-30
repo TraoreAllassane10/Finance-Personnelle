@@ -119,11 +119,10 @@ export default function Revenus() {
             <AuthenticatedLayout>
                 <Head title="Revenus" />
 
-                {/* Nouvelle interface */}
                 <section className="w-full bg-white p-8 rounded-xl">
 
                     {/* Titre et Bouton */}
-                    <div className="flex justify-between place-items-center mb-4">
+                    <div className="flex justify-between place-items-center mb-5">
                         <h2 className="text-2xl text-gray-700 font-semibold">
                             Mes Revenus
                         </h2>
@@ -210,7 +209,7 @@ export default function Revenus() {
                     </div>
 
                     {/* Filtres et total de revenus du mois*/}
-                    <div className="flex justify-between place-items-center mb-6">
+                    <div className="flex justify-between place-items-center mb-5">
                         <div className="flex gap-4">
                             <div className="relative flex place-items-center gap-6 w-[180px]">
                                 <select
@@ -262,10 +261,7 @@ export default function Revenus() {
                             </button>
                         </div>
 
-                        <div className="flex flex-col gap-1 border rounded-md p-5">
-                            <span className="text-gray-600">Total des revenus de ce mois</span>
-                            <span className="text-slate-900 font-semibold text-2xl">1 225 200 fcfa</span>
-                        </div>
+
                     </div>
 
                     {/* Table et graphique*/}
@@ -310,7 +306,12 @@ export default function Revenus() {
 
                         </div>
 
-                        <div className="w-1/4">
+                        <div className="w-1/4 flex flex-col gap-2">
+                            <div className="flex flex-col gap-1 border rounded-md p-5">
+                                <span className="text-gray-600">Total des revenus de ce mois</span>
+                                <span className="text-slate-900 font-semibold text-2xl">1 225 200 fcfa</span>
+                            </div>
+
                             <Card className='p-8'>
                                 <RevenusChart />
                             </Card>
