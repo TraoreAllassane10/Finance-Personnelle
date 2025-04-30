@@ -33,6 +33,7 @@ import RevenusChart from "@/Components/RevenusChart";
 export default function Revenus() {
     const revenus = usePage().props.revenus || [];
     const categories = usePage().props.categories || [];
+    const [showModal, SetShowModal] = useState(false)
 
     const mois = [
         { nb: 0, nom: "Janvier" },
@@ -88,7 +89,8 @@ export default function Revenus() {
         e.preventDefault()
         post(route("revenus.store"), {
             onSuccess: () => {
-                reset()
+                reset(),
+                SetShowModal(false)
             }
         })
     }
@@ -107,7 +109,7 @@ export default function Revenus() {
         setSelectedCategory("")
     }
 
-    const handleExcel= () => {
+    const handleExcel = () => {
         window.location.href = route("revenus.excel");
     }
 
@@ -124,79 +126,81 @@ export default function Revenus() {
                     {/* Le modal d'enregistrement et son bouton */}
                     <Sheet>
                         <SheetTrigger asChild>
-                            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg shadow-md transition">
+                            <Button onClick={() => SetShowModal(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg shadow-md transition">
                                 + Ajouter un revenu
                             </Button>
                         </SheetTrigger>
 
-                        <SheetContent onKeyDown={(e) => e.stopPropagation()} className="p-6">
-                            <SheetHeader>
-                                <SheetTitle className="text-xl font-semibold text-gray-900">Ajouter un revenu</SheetTitle>
-                            </SheetHeader>
+                        {showModal && (
+                            <SheetContent onKeyDown={(e) => e.stopPropagation()} className="p-6">
+                                <SheetHeader>
+                                    <SheetTitle className="text-xl font-semibold text-gray-900">Ajouter un revenu</SheetTitle>
+                                </SheetHeader>
 
-                            <div className="space-y-4 mt-4">
-                                {/* Date */}
-                                <div>
-                                    <Label htmlFor="date">Date</Label>
-                                    <Input
-                                        type="date"
-                                        id="date"
-                                        value={data.date}
-                                        onChange={(e) => setData("date", e.target.value)}
-                                    />
-                                    {errors?.date && <p className="text-sm text-red-500 mt-1">{errors.date}</p>}
+                                <div className="space-y-4 mt-4">
+                                    {/* Date */}
+                                    <div>
+                                        <Label htmlFor="date">Date</Label>
+                                        <Input
+                                            type="date"
+                                            id="date"
+                                            value={data.date}
+                                            onChange={(e) => setData("date", e.target.value)}
+                                        />
+                                        {errors?.date && <p className="text-sm text-red-500 mt-1">{errors.date}</p>}
+                                    </div>
+
+                                    {/* Montant */}
+                                    <div>
+                                        <Label htmlFor="montant">Montant</Label>
+                                        <Input
+                                            type="number"
+                                            id="montant"
+                                            value={data.montant}
+                                            onChange={(e) => setData("montant", e.target.value)}
+                                        />
+                                        {errors?.montant && <p className="text-sm text-red-500 mt-1">{errors.montant}</p>}
+                                    </div>
+
+                                    {/* Catégorie */}
+                                    <div>
+                                        <Label htmlFor="categorie">Catégorie</Label>
+                                        <select
+                                            id="categorie"
+                                            value={data.category_id}
+                                            onChange={(e) => setData("category_id", e.target.value)}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                                        >
+                                            <option value="" disabled>Choisissez une catégorie</option>
+                                            {categories.map((categorie) => (
+                                                <option key={categorie.id} value={categorie.id}>
+                                                    {categorie.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    {/* Description */}
+                                    <div>
+                                        <Label htmlFor="description">Description</Label>
+                                        <Textarea
+                                            id="description"
+                                            value={data.description}
+                                            onChange={(e) => setData("description", e.target.value)}
+                                        />
+                                        {errors?.description && <p className="text-sm text-red-500 mt-1">{errors.description}</p>}
+                                    </div>
                                 </div>
 
-                                {/* Montant */}
-                                <div>
-                                    <Label htmlFor="montant">Montant</Label>
-                                    <Input
-                                        type="number"
-                                        id="montant"
-                                        value={data.montant}
-                                        onChange={(e) => setData("montant", e.target.value)}
-                                    />
-                                    {errors?.montant && <p className="text-sm text-red-500 mt-1">{errors.montant}</p>}
-                                </div>
-
-                                {/* Catégorie */}
-                                <div>
-                                    <Label htmlFor="categorie">Catégorie</Label>
-                                    <select
-                                        id="categorie"
-                                        value={data.category_id}
-                                        onChange={(e) => setData("category_id", e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                                    >
-                                        <option value="" disabled>Choisissez une catégorie</option>
-                                        {categories.map((categorie) => (
-                                            <option key={categorie.id} value={categorie.id}>
-                                                {categorie.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                {/* Description */}
-                                <div>
-                                    <Label htmlFor="description">Description</Label>
-                                    <Textarea
-                                        id="description"
-                                        value={data.description}
-                                        onChange={(e) => setData("description", e.target.value)}
-                                    />
-                                    {errors?.description && <p className="text-sm text-red-500 mt-1">{errors.description}</p>}
-                                </div>
-                            </div>
-
-                            <SheetFooter className="mt-6 flex justify-end">
-                                <SheetClose asChild>
-                                    <Button onClick={handleSubmit} className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-md transition" disabled={processing}>
-                                        {processing ? "Ajout en cours..." : "Ajouter"}
-                                    </Button>
-                                </SheetClose>
-                            </SheetFooter>
-                        </SheetContent>
+                                <SheetFooter className="mt-6 flex justify-end">
+                                    <SheetClose asChild>
+                                        <Button onClick={handleSubmit} className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-md transition" disabled={processing}>
+                                            {processing ? "Ajout en cours..." : "Ajouter"}
+                                        </Button>
+                                    </SheetClose>
+                                </SheetFooter>
+                            </SheetContent>
+                        )}
                     </Sheet>
                 </div>
 
@@ -257,7 +261,7 @@ export default function Revenus() {
                 {/* Affichage des revenus */}
                 <div className="flex justify-end gap-3 mb-2">
                     <button onClick={handleExcel} className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-md transition flex gap-1">
-                        <FileSpreadsheet/>
+                        <FileSpreadsheet />
                         Fichier Excel
                     </button>
                 </div>
@@ -277,7 +281,7 @@ export default function Revenus() {
                                 <TableRow key={revenu.id}>
                                     <TableCell>{revenu.id}</TableCell>
                                     <TableCell>{revenu.date}</TableCell>
-                                    <TableCell>{revenu.montant.toLocaleString('fr-CI', {style: "currency", currency: "XOF"})}</TableCell>
+                                    <TableCell>{revenu.montant.toLocaleString('fr-CI', { style: "currency", currency: "XOF" })}</TableCell>
                                     <TableCell>
                                         {revenu.category?.name}
                                     </TableCell>

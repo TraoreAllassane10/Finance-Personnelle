@@ -30,6 +30,7 @@ import { Textarea } from "@/Components/ui/textarea";
 const Epargnes = () => {
 
     const { epargnes } = usePage().props || [];
+    const [showModal, SetShowModal] = useState(false)
 
     const mois = [
         { nb: 0, nom: "Janvier" },
@@ -80,7 +81,8 @@ const Epargnes = () => {
         e.preventDefault()
         post(route("epargnes.store"), {
             onSuccess: () => {
-                reset()
+                reset(),
+                    SetShowModal(false)
             }
         })
     }
@@ -115,73 +117,77 @@ const Epargnes = () => {
                 {/* Le modal d'enregistrement et son bouton */}
                 <Sheet className="py-6">
                     <SheetTrigger asChild>
-                        <Button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-md transition">
+                        <Button onClick={() => SetShowModal(true)} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-md transition">
                             + Ajouter une epargnes
                         </Button>
                     </SheetTrigger>
 
-                    <SheetContent onKeyDown={(e) => e.stopPropagation()} className="p-6">
-                        <SheetHeader>
-                            <SheetTitle className="text-xl font-semibold text-gray-900">Ajouter une epargnes</SheetTitle>
-                        </SheetHeader>
+                    {
+                        showModal && (
+                            <SheetContent onKeyDown={(e) => e.stopPropagation()} className="p-6">
+                                <SheetHeader>
+                                    <SheetTitle className="text-xl font-semibold text-gray-900">Ajouter une epargnes</SheetTitle>
+                                </SheetHeader>
 
-                        <div className="space-y-4 mt-4">
-                            {/* Date */}
-                            <div>
-                                <Label htmlFor="date">Date</Label>
-                                <Input
-                                    type="date"
-                                    id="date"
-                                    value={data.date}
-                                    onChange={(e) => setData("date", e.target.value)}
-                                />
-                                {errors?.date && <p className="text-sm text-red-500 mt-1">{errors.date}</p>}
-                            </div>
+                                <div className="space-y-4 mt-4">
+                                    {/* Date */}
+                                    <div>
+                                        <Label htmlFor="date">Date</Label>
+                                        <Input
+                                            type="date"
+                                            id="date"
+                                            value={data.date}
+                                            onChange={(e) => setData("date", e.target.value)}
+                                        />
+                                        {errors?.date && <p className="text-sm text-red-500 mt-1">{errors.date}</p>}
+                                    </div>
 
-                            {/* Montant */}
-                            <div>
-                                <Label htmlFor="montant">Montant</Label>
-                                <Input
-                                    type="number"
-                                    id="montant"
-                                    value={data.montant}
-                                    onChange={(e) => setData("montant", e.target.value)}
-                                />
-                                {errors?.montant && <p className="text-sm text-red-500 mt-1">{errors.montant}</p>}
-                            </div>
+                                    {/* Montant */}
+                                    <div>
+                                        <Label htmlFor="montant">Montant</Label>
+                                        <Input
+                                            type="number"
+                                            id="montant"
+                                            value={data.montant}
+                                            onChange={(e) => setData("montant", e.target.value)}
+                                        />
+                                        {errors?.montant && <p className="text-sm text-red-500 mt-1">{errors.montant}</p>}
+                                    </div>
 
-                            {/* Compte */}
-                            <div>
-                                <Label htmlFor="compte">Compte d'epargnes</Label>
-                                <Input
-                                    type="text"
-                                    id="compte"
-                                    value={data.compte}
-                                    onChange={(e) => setData("compte", e.target.value)}
-                                />
-                                {errors?.compte && <p className="text-sm text-red-500 mt-1">{errors.compte}</p>}
-                            </div>
+                                    {/* Compte */}
+                                    <div>
+                                        <Label htmlFor="compte">Compte d'epargnes</Label>
+                                        <Input
+                                            type="text"
+                                            id="compte"
+                                            value={data.compte}
+                                            onChange={(e) => setData("compte", e.target.value)}
+                                        />
+                                        {errors?.compte && <p className="text-sm text-red-500 mt-1">{errors.compte}</p>}
+                                    </div>
 
-                            {/* Description */}
-                            <div>
-                                <Label htmlFor="projet">Projet</Label>
-                                <Textarea
-                                    id="projet"
-                                    value={data.projet}
-                                    onChange={(e) => setData("projet", e.target.value)}
-                                />
-                                {errors?.projet && <p className="text-sm text-red-500 mt-1">{errors.projet}</p>}
-                            </div>
-                        </div>
+                                    {/* Description */}
+                                    <div>
+                                        <Label htmlFor="projet">Projet</Label>
+                                        <Textarea
+                                            id="projet"
+                                            value={data.projet}
+                                            onChange={(e) => setData("projet", e.target.value)}
+                                        />
+                                        {errors?.projet && <p className="text-sm text-red-500 mt-1">{errors.projet}</p>}
+                                    </div>
+                                </div>
 
-                        <SheetFooter className="mt-6 flex justify-end">
-                            <SheetClose asChild>
-                                <Button onClick={handleSubmit} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-md transition" disabled={processing}>
-                                    {processing ? "Ajout en cours..." : "Ajouter"}
-                                </Button>
-                            </SheetClose>
-                        </SheetFooter>
-                    </SheetContent>
+                                <SheetFooter className="mt-6 flex justify-end">
+                                    <SheetClose asChild>
+                                        <Button onClick={handleSubmit} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-md transition" disabled={processing}>
+                                            {processing ? "Ajout en cours..." : "Ajouter"}
+                                        </Button>
+                                    </SheetClose>
+                                </SheetFooter>
+                            </SheetContent>
+                        )
+                    }
                 </Sheet>
 
             </div>
@@ -228,7 +234,7 @@ const Epargnes = () => {
             {/* Affichage des revenus */}
             <div className="flex justify-end gap-3 mb-2">
                 <button onClick={handleExcel} className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-md transition flex gap-1">
-                    <FileSpreadsheet/>
+                    <FileSpreadsheet />
                     Fichier Excel
                 </button>
             </div>
@@ -248,7 +254,7 @@ const Epargnes = () => {
                             <TableRow key={epargne.id}>
                                 <TableCell>{epargne.id}</TableCell>
                                 <TableCell>{epargne.date}</TableCell>
-                                <TableCell>{epargne.montant.toLocaleString('fr-CI', {style: "currency", currency: "XOF"})}</TableCell>
+                                <TableCell>{epargne.montant.toLocaleString('fr-CI', { style: "currency", currency: "XOF" })}</TableCell>
                                 <TableCell>
                                     {epargne.compte}
                                 </TableCell>
