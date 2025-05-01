@@ -26,11 +26,13 @@ import { Edit, FileSpreadsheet, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Textarea } from "@/Components/ui/textarea";
 import DepensesChart from "@/Components/DepensesChart";
+import Notification from "@/Components/Notification";
 
 const Depense = () => {
     const depenses = usePage().props.depenses || [];
     const categories = usePage().props.categories || [];
-    const [showModal, SetShowModal] = useState(false)
+    const [showModal, SetShowModal] = useState(false);
+    const [notify, setNotify] = useState(false);
 
     const mois = [
         { nb: 0, nom: "Janvier" },
@@ -45,20 +47,20 @@ const Depense = () => {
         { nb: 9, nom: "Octobre" },
         { nb: 10, nom: "Novembre" },
         { nb: 11, nom: "Decembre" },
-    ]
+    ];
 
     const { data, setData, post, processing, errors, reset } = useForm({
         date: '',
         montant: '',
         category_id: '',
         description: ''
-    })
+    });
 
 
     //Etats pour les filtres
-    const [selectedMonth, setSelectedMonth] = useState("")
-    const [selectedAmount, setSelectedAmount] = useState("")
-    const [selectedCategory, setSelectedCategory] = useState("")
+    const [selectedMonth, setSelectedMonth] = useState("");
+    const [selectedAmount, setSelectedAmount] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
 
     const fileredDepenses = depenses.filter(depense => {
         //Filtrer par mois
@@ -86,7 +88,8 @@ const Depense = () => {
         post(route("depenses.store"), {
             onSuccess: () => {
                 reset(),
-                    SetShowModal(false)
+                SetShowModal(false);
+                setNotify(true)
             }
         })
     }
@@ -100,9 +103,10 @@ const Depense = () => {
     }
 
     const resetFiltrer = () => {
-        setSelectedMonth("")
-        setSelectedAmount("")
-        setSelectedCategory("")
+        setSelectedMonth("");
+        setSelectedAmount("");
+        setSelectedCategory("");
+        setNotify(false);
     }
 
     const handleExcel = () => {
@@ -203,6 +207,8 @@ const Depense = () => {
                         </Sheet>
                     </div>
 
+                    {notify && <Notification message={"Une depense a été ajoutée"} />}
+
                     {/* Filtres et bouton d'export*/}
                     <div className="flex justify-between place-items-center mb-5">
                         <div className="flex gap-4">
@@ -224,19 +230,6 @@ const Depense = () => {
 
                             <div className="relative flex place-items-center gap-6 w-[180px]">
                                 <select
-                                    onChange={(e) => setSelectedAmount(e.target.value)}
-                                    id="montant"
-                                    value={selectedAmount}
-                                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                >
-                                    <option value="" disabled>Trier</option>
-                                    <option value="0">Moins élévé</option>
-                                    <option value="1">Plus élévé</option>
-                                </select>
-                            </div>
-
-                            <div className="relative flex place-items-center gap-6 w-[180px]">
-                                <select
                                     onChange={(e) => setSelectedCategory(e.target.value)}
                                     id="categorie"
                                     value={selectedCategory}
@@ -251,6 +244,19 @@ const Depense = () => {
                                 </select>
                             </div>
 
+                            <div className="relative flex place-items-center gap-6 w-[180px]">
+                                <select
+                                    onChange={(e) => setSelectedAmount(e.target.value)}
+                                    id="montant"
+                                    value={selectedAmount}
+                                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                >
+                                    <option value="" disabled>Trier</option>
+                                    <option value="0">Moins élévé</option>
+                                    <option value="1">Plus élévé</option>
+                                </select>
+                            </div>
+
                             <button onClick={resetFiltrer}>
                                 Actualiser
                             </button>
@@ -259,7 +265,7 @@ const Depense = () => {
                         <div>
                             <button onClick={handleExcel} className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-md transition flex gap-1">
                                 <FileSpreadsheet />
-                               EXCEL
+                                EXCEL
                             </button>
                         </div>
                     </div>

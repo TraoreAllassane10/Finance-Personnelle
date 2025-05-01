@@ -37,7 +37,7 @@ const Parametres = () => {
 
     return (
         <AuthenticatedLayout>
-            <h2 className="text-2xl text-gray-700 font-semibold p-6">
+            <h2 className="text-2xl text-gray-700 font-semibold">
                 Parametres
             </h2>
 
@@ -90,8 +90,7 @@ const Parametres = () => {
                     </div>
 
                     {/* Limite de Depenses */}
-                    <div className='border border-gray-200 p-6 rounded-lg'>
-
+                    {/* <div className='border border-gray-200 p-6 rounded-lg'>
                         <form action="">
                             <Label>Definir une nouvelle limite</Label>
                             <div className='flex gap-2'>
@@ -99,13 +98,13 @@ const Parametres = () => {
                                 <Button className='bg-indigo-500 hover:bg-indigo-700 transition'>Sauvegarder</Button>
                             </div>
                         </form>
-                    </div>
+                    </div> */}
 
                     {/* Ajout de nouvelle categorie */}
                     <div className='border border-gray-200 p-6 rounded-lg'>
 
                         <form onSubmit={handleRegisterCategorie}>
-                            <Label>Ajouter une nouvelle limite</Label>
+                            <Label>Ajouter une nouvelle categorie</Label>
                             <div className='flex gap-2'>
                                 <Input name='categorie' value={categorie} onChange={(e) => setCategorie(e.target.value)}/>
                                 <Button className='bg-green-500 hover:bg-green-700 transition'>Sauvegarder</Button>

@@ -19,7 +19,7 @@ export default function Dashboard() {
         <AuthenticatedLayout>
             <Head title="Dashboard" />
 
-            <div className="py-8 flex justify-between items-center">
+            <div className=" flex justify-between items-center">
                 <div className="flex flex-col gap-1">
                     <h2 className="text-3xl font-bold text-gray-800">
                         Bienvenue sur <span className="text-indigo-600">TraoreBank</span>

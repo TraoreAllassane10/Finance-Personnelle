@@ -28,13 +28,15 @@ import { Edit, FileSpreadsheet, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Textarea } from "@/Components/ui/textarea";
 import RevenusChart from "@/Components/RevenusChart";
+import Notification from "@/Components/Notification";
 
 
 
 export default function Revenus() {
     const revenus = usePage().props.revenus || [];
     const categories = usePage().props.categories || [];
-    const [showModal, SetShowModal] = useState(false)
+    const [showModal, SetShowModal] = useState(false);
+    const [notify, setNotify] = useState(false);
 
     const mois = [
         { nb: 0, nom: "Janvier" },
@@ -91,7 +93,8 @@ export default function Revenus() {
         post(route("revenus.store"), {
             onSuccess: () => {
                 reset(),
-                    SetShowModal(false)
+                    SetShowModal(false),
+                    setNotify(true)
             }
         })
     }
@@ -105,9 +108,10 @@ export default function Revenus() {
     }
 
     const resetFiltrer = () => {
-        setSelectedMonth("")
-        setSelectedAmount("")
-        setSelectedCategory("")
+        setSelectedMonth("");
+        setSelectedAmount("");
+        setSelectedCategory("");
+        setNotify(false);
     }
 
     const handleExcel = () => {
@@ -118,7 +122,6 @@ export default function Revenus() {
         <div>
             <AuthenticatedLayout>
                 <Head title="Revenus" />
-
                 <section className="w-full bg-white p-8 rounded-xl">
 
                     {/* Titre et Bouton */}
@@ -208,6 +211,8 @@ export default function Revenus() {
                         </Sheet>
                     </div>
 
+                    {notify && <Notification message={"Un revenu a été ajouté"} />}
+
                     {/* Filtres et total de revenus du mois*/}
                     <div className="flex justify-between place-items-center mb-5">
                         <div className="flex gap-4">
@@ -229,19 +234,6 @@ export default function Revenus() {
 
                             <div className="relative flex place-items-center gap-6 w-[180px]">
                                 <select
-                                    onChange={(e) => setSelectedAmount(e.target.value)}
-                                    id="montant"
-                                    value={selectedAmount}
-                                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                >
-                                    <option value="" disabled>Trier</option>
-                                    <option value="0">Moins élévé</option>
-                                    <option value="1">Plus élévé</option>
-                                </select>
-                            </div>
-
-                            <div className="relative flex place-items-center gap-6 w-[180px]">
-                                <select
                                     onChange={(e) => setSelectedCategory(e.target.value)}
                                     id="categorie"
                                     value={selectedCategory}
@@ -253,6 +245,19 @@ export default function Revenus() {
                                             <option value={category.id} key={category.id}>{category.name}</option>
                                         ))
                                     }
+                                </select>
+                            </div>
+
+                            <div className="relative flex place-items-center gap-6 w-[180px]">
+                                <select
+                                    onChange={(e) => setSelectedAmount(e.target.value)}
+                                    id="montant"
+                                    value={selectedAmount}
+                                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                >
+                                    <option value="" disabled>Trier</option>
+                                    <option value="0">Moins élévé</option>
+                                    <option value="1">Plus élévé</option>
                                 </select>
                             </div>
 
@@ -322,6 +327,7 @@ export default function Revenus() {
                             </Card>
                         </div>
                     </div>
+
                 </section>
 
             </AuthenticatedLayout>

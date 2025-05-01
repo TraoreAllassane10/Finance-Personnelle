@@ -25,12 +25,14 @@ import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import { Edit, FileSpreadsheet, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Textarea } from "@/Components/ui/textarea";
+import Notification from "@/Components/Notification";
 
 
 const Epargnes = () => {
 
     const { epargnes } = usePage().props || [];
-    const [showModal, SetShowModal] = useState(false)
+    const [showModal, SetShowModal] = useState(false);
+    const [notify, setNotify] = useState(false);
 
     const mois = [
         { nb: 0, nom: "Janvier" },
@@ -82,7 +84,8 @@ const Epargnes = () => {
         post(route("epargnes.store"), {
             onSuccess: () => {
                 reset(),
-                    SetShowModal(false)
+                SetShowModal(false)
+                setNotify(true)
             }
         })
     }
@@ -96,9 +99,10 @@ const Epargnes = () => {
     }
 
     const resetFiltrer = () => {
-        setSelectedMonth("")
-        setSelectedAmount("")
-        setSelectedCategory("")
+        setSelectedMonth("");
+        setSelectedAmount("");
+        setSelectedCategory("");
+        setNotify(false);
     }
 
     const handleExcel = () => {
@@ -194,6 +198,8 @@ const Epargnes = () => {
                     </Sheet>
                 </div>
 
+                {notify && <Notification message="Une epargne a été ajoutée" />}
+
                 {/* Filtres*/}
                 <div className="flex justify-between place-items-center mb-5">
                     <div className="flex gap-4">
@@ -204,7 +210,7 @@ const Epargnes = () => {
                                 value={selectedMonth}
                                 className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                             >
-                                <option value="" disabled>Choisissez un mois</option>
+                                <option value="" disabled>Mois</option>
                                 {
                                     mois.map((mois) => (
                                         <option value={mois.nb} key={mois.nb}>{mois.nom}</option>
@@ -220,7 +226,7 @@ const Epargnes = () => {
                                 value={selectedAmount}
                                 className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                             >
-                                <option value="" disabled>Classez par montant</option>
+                                <option value="" disabled>Trier</option>
                                 <option value="0">Moins élévé</option>
                                 <option value="1">Plus élévé</option>
                             </select>
