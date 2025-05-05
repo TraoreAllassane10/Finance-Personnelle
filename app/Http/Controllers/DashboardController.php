@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Inertia\Inertia;
 use App\Models\Depense;
 use App\Models\Revenus;
-use Illuminate\Http\Request;
+use App\Services\Chart\GroupByDate;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -30,24 +30,10 @@ class DashboardController extends Controller
         }
 
         //Graphique de revenus
-        $revenusParDate = $revenus->groupBy(function($revenu) {
-            return Carbon::parse($revenu->date)->format("Y-m");
-        })->map(function ($items, $mois){
-            return [
-                'mois' => Carbon::parse($mois)->translatedFormat("F Y"), // Ex : Avril 2025
-                "total" => $items->sum('montant')
-            ];
-        })->values();
+        $revenusParDate = (new GroupByDate())->group($revenus);
 
         //Graphique de depense
-        $depensesParDate = $depenses->groupBy(function($depense) {
-            return Carbon::parse($depense->date)->format('Y-m');
-        })->map(function($items, $mois){
-            return [
-                "mois" => Carbon::parse($mois)->translatedFormat('F Y'),
-                "total" => $items->sum('montant')
-            ];
-        })->values();
+        $depensesParDate = (new GroupByDate())->group($depenses);
 
         return Inertia::render('Dashboard', [
             "totalRevenus" =>  $totalRevenus,

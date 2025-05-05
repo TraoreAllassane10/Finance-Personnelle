@@ -32,16 +32,17 @@ const Parametres = () => {
     //Ajout d'une categorie
     const handleRegisterCategorie = (e) => {
         e.preventDefault();
-        router.post(route('categorie.store'), {categorie});
+        router.post(route('categorie.store'), { categorie });
     }
 
     return (
         <AuthenticatedLayout>
-            <h2 className="text-2xl text-gray-700 font-semibold">
-                Parametres
-            </h2>
 
             <section className='bg-white p-10 rounded-xl'>
+                <h2 className="text-2xl text-gray-700 font-semibold mb-5">
+                    Parametres
+                </h2>
+
                 <div className='grid grid-cols-2 gap-4'>
                     {/* Informations personnelles */}
                     <div className='border border-gray-200 p-6 rounded-lg'>
@@ -79,7 +80,7 @@ const Parametres = () => {
                             </select>
 
                             <Label>Langues</Label>
-                            <select name="" onChange={(e) => setLangue(e.target.value)}  className='flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm'>
+                            <select name="" onChange={(e) => setLangue(e.target.value)} className='flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm'>
                                 <option value="">Français</option>
                                 <option value="">Anglais</option>
                                 <option value="">Espanole</option>
@@ -106,7 +107,7 @@ const Parametres = () => {
                         <form onSubmit={handleRegisterCategorie}>
                             <Label>Ajouter une nouvelle categorie</Label>
                             <div className='flex gap-2'>
-                                <Input name='categorie' value={categorie} onChange={(e) => setCategorie(e.target.value)}/>
+                                <Input name='categorie' value={categorie} onChange={(e) => setCategorie(e.target.value)} />
                                 <Button className='bg-green-500 hover:bg-green-700 transition'>Sauvegarder</Button>
                             </div>
                         </form>

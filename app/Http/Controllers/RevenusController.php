@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Revenus;
 use App\Services\Chart\GroupByDate;
 use App\Services\Excel\Excel;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,12 +29,19 @@ class RevenusController extends Controller
 
         $revenus = $this->revenuRepository->allForUser(Auth::id());
 
+        //Calcule le total des revenus de ce mois
+        $totalRevenus = $revenus->map(function($revenu) {
+            return Carbon::parse($revenu['date'])->month == now()->month ? $revenu : null;
+        })->sum('montant');
+
         $revenusParDate = (new GroupByDate())->group($revenus);
+
 
         return Inertia::render('Revenus/Revenus', [
             "revenus" => $revenus,
             "revenusChart" => $revenusParDate,
-            "categories" => $categories
+            "categories" => $categories,
+            "totalRevenus" => $totalRevenus
         ]);
     }
 
@@ -88,7 +96,7 @@ class RevenusController extends Controller
 
     public function excel()
     {
-        $revenus = Revenus::all();
+        $revenus = Revenus::where('user_id', Auth::id())->get();
         $spreadsheet = new Spreadsheet();
 
         return (new Excel($spreadsheet))->download($revenus, "Revenus");

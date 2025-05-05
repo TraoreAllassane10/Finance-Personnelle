@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\EpargneRepositoryInterface;
-use App\Models\Depense;
+use Carbon\Carbon;
 use Inertia\Inertia;
+use App\Models\Depense;
 use App\Models\Epargne;
-use App\Services\Excel\Excel;
-use App\Services\Excel\ExcelEpargne;
 use Illuminate\Http\Request;
+use App\Services\Excel\Excel;
+use PhpParser\Node\Stmt\Return_;
+use App\Services\Excel\ExcelEpargne;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpParser\Node\Stmt\Return_;
+use App\Contracts\EpargneRepositoryInterface;
 
 class EpargneController extends Controller
 {
@@ -27,8 +28,14 @@ class EpargneController extends Controller
     {
         $epargnes = $this->epargneRepository->allForUser(Auth::id());
 
+        //Calcule le total des epargnes de ce mois
+        $totalEpargne = $epargnes->map(function ($epargne) {
+            return Carbon::parse($epargne['date'])->month == now()->month ? $epargne : null;
+        })->sum('montant');
+
         return Inertia::render('Epargnes/Epargnes', [
-            'epargnes' => $epargnes
+            'epargnes' => $epargnes,
+            'totalEpargne' => $totalEpargne
         ]);
     }
 
@@ -77,7 +84,7 @@ class EpargneController extends Controller
 
     public function excel()
     {
-        $epargnes = Epargne::all();
+        $epargnes = Epargne::where('user_id', Auth::id())->get();
         $spreadsheet = new Spreadsheet();
 
         return (new ExcelEpargne($spreadsheet))->download($epargnes, "Epargnes");

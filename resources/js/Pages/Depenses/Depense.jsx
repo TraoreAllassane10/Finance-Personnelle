@@ -30,6 +30,7 @@ import Notification from "@/Components/Notification";
 
 const Depense = () => {
     const depenses = usePage().props.depenses || [];
+    const totalDepense = usePage().props.totalDepense;
     const categories = usePage().props.categories || [];
     const [showModal, SetShowModal] = useState(false);
     const [notify, setNotify] = useState(false);
@@ -311,8 +312,8 @@ const Depense = () => {
 
                         <div className="w-1/4 flex flex-col gap-2">
                             <div className="flex flex-col gap-1 border rounded-md p-5">
-                                <span className="text-gray-600">Total des revenus de ce mois</span>
-                                <span className="text-slate-900 font-semibold text-2xl">1 225 200 fcfa</span>
+                                <span className="text-gray-600">Total des depenses de ce mois</span>
+                                <span className="text-slate-900 font-semibold text-2xl">{totalDepense.toLocaleString('fr-CI', {style: 'currency', currency: 'XOF'})}</span>
                             </div>
 
                             <Card className='p-8'>
