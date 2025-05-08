@@ -89,7 +89,7 @@ const Depense = () => {
         post(route("depenses.store"), {
             onSuccess: () => {
                 reset(),
-                SetShowModal(false);
+                    SetShowModal(false);
                 setNotify(true)
             }
         })
@@ -114,31 +114,35 @@ const Depense = () => {
         window.location.href = route('depenses.excel');
     }
 
+
+
     return (
         <div>
             <AuthenticatedLayout>
                 <Head title="Depenses" />
 
-                <section className="w-full bg-white p-8 rounded-xl">
+                <section className="w-full bg-white p-8 rounded-2xl shadow-xl transition-all duration-300">
 
                     {/* Titre et Bouton */}
-                    <div className="flex justify-between place-items-center mb-5">
-                        <h2 className="text-2xl text-gray-700 font-semibold ">
-                            Mes Depenses
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-3xl font-bold text-gray-800 tracking-wide">
+                            Mes Dépenses
                         </h2>
 
-                        {/* Le modal d'enregistrement et son bouton */}
-                        <Sheet className="py-6">
+                        <Sheet>
                             <SheetTrigger asChild>
-                                <Button onClick={() => SetShowModal(true)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-md transition">
+                                <Button
+                                    onClick={() => SetShowModal(true)}
+                                    className="bg-red-600 hover:bg-red-700 text-white py-2 px-5 rounded-full shadow-lg transition-all duration-300"
+                                >
                                     + Ajouter une dépense
                                 </Button>
                             </SheetTrigger>
 
-                            {
-                                showModal && <SheetContent onKeyDown={(e) => e.stopPropagation()} className="p-6">
+                            {showModal && (
+                                <SheetContent onKeyDown={(e) => e.stopPropagation()} className="p-6">
                                     <SheetHeader>
-                                        <SheetTitle className="text-xl font-semibold text-gray-900">Ajouter une dépense</SheetTitle>
+                                        <SheetTitle className="text-lg font-semibold text-slate-800">Ajouter une dépense</SheetTitle>
                                     </SheetHeader>
 
                                     <div className="space-y-4 mt-4">
@@ -198,109 +202,107 @@ const Depense = () => {
 
                                     <SheetFooter className="mt-6 flex justify-end">
                                         <SheetClose asChild>
-                                            <Button onClick={handleSubmit} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-md transition" disabled={processing}>
+                                            <Button
+                                                onClick={handleSubmit}
+                                                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl shadow-sm transition"
+                                                disabled={processing}
+                                            >
                                                 {processing ? "Ajout en cours..." : "Ajouter"}
                                             </Button>
                                         </SheetClose>
                                     </SheetFooter>
                                 </SheetContent>
-                            }
+                            )}
                         </Sheet>
                     </div>
 
-                    {notify && <Notification message={"Une depense a été ajoutée"} />}
+                    {notify && <Notification message={"Une dépense a été ajoutée"} />}
 
-                    {/* Filtres et bouton d'export*/}
-                    <div className="flex justify-between place-items-center mb-5">
-                        <div className="flex gap-4">
-                            <div className="relative flex place-items-center gap-6 w-[180px]">
+                    {/* Filtres et bouton export */}
+                    <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
+                        <div className="flex gap-4 flex-wrap">
+                            <div className="w-44">
                                 <select
                                     onChange={(e) => setSelectedMonth(e.target.value)}
-                                    id="categorie"
                                     value={selectedMonth}
-                                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    className="w-full rounded-lg border-gray-300 py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                                 >
                                     <option value="" disabled>Mois</option>
-                                    {
-                                        mois.map((mois) => (
-                                            <option value={mois.nb} key={mois.nb}>{mois.nom}</option>
-                                        ))
-                                    }
+                                    {mois.map((mois) => (
+                                        <option value={mois.nb} key={mois.nb}>{mois.nom}</option>
+                                    ))}
                                 </select>
                             </div>
 
-                            <div className="relative flex place-items-center gap-6 w-[180px]">
+                            <div className="w-44">
                                 <select
                                     onChange={(e) => setSelectedCategory(e.target.value)}
-                                    id="categorie"
                                     value={selectedCategory}
-                                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    className="w-full rounded-lg border-gray-300 py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                                 >
-                                    <option value="" disabled>Categorie</option>
-                                    {
-                                        categories.map((category) => (
-                                            <option value={category.id} key={category.id}>{category.name}</option>
-                                        ))
-                                    }
+                                    <option value="" disabled>Catégorie</option>
+                                    {categories.map((category) => (
+                                        <option value={category.id} key={category.id}>{category.name}</option>
+                                    ))}
                                 </select>
                             </div>
 
-                            <div className="relative flex place-items-center gap-6 w-[180px]">
+                            <div className="w-44">
                                 <select
                                     onChange={(e) => setSelectedAmount(e.target.value)}
-                                    id="montant"
                                     value={selectedAmount}
-                                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    className="w-full rounded-lg border-gray-300 py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                                 >
                                     <option value="" disabled>Trier</option>
-                                    <option value="0">Moins élévé</option>
-                                    <option value="1">Plus élévé</option>
+                                    <option value="0">Moins élevé</option>
+                                    <option value="1">Plus élevé</option>
                                 </select>
                             </div>
 
-                            <button onClick={resetFiltrer}>
+                            <button
+                                onClick={resetFiltrer}
+                                className="text-sm text-indigo-600 hover:underline"
+                            >
                                 Actualiser
                             </button>
                         </div>
 
-                        <div>
-                            <button onClick={handleExcel} className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-md transition flex gap-1">
-                                <FileSpreadsheet />
-                                EXCEL
-                            </button>
-                        </div>
+                        <button
+                            onClick={handleExcel}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2"
+                        >
+                            <FileSpreadsheet className="w-5 h-5" />
+                            EXCEL
+                        </button>
                     </div>
 
-                    {/* Table et graphique*/}
-                    <div className="flex gap-4">
-                        <div className="w-3/4">
-                            <Card className='shadow-md mb-8 p-6'>
+                    {/* Table et graphique */}
+                    <div className="flex gap-4 flex-col lg:flex-row">
+                        <div className="w-full lg:w-3/4">
+                            <Card className="shadow-lg mb-8 p-6 border border-gray-100 rounded-xl transition-all duration-300">
                                 <Table>
                                     <TableHeader>
-                                        <TableRow >
+                                        <TableRow>
                                             <TableHead>ID</TableHead>
                                             <TableHead>Date</TableHead>
                                             <TableHead>Montant</TableHead>
-                                            <TableHead>Categorie</TableHead>
+                                            <TableHead>Catégorie</TableHead>
                                             <TableHead>Description</TableHead>
                                             <TableHead>Actions</TableHead>
                                         </TableRow>
-
                                         {fileredDepenses.map((depense) => (
                                             <TableRow key={depense.id}>
                                                 <TableCell>{depense.id}</TableCell>
                                                 <TableCell>{depense.date}</TableCell>
                                                 <TableCell>{depense.montant.toLocaleString('fr-CI', { style: "currency", currency: "XOF" })}</TableCell>
-                                                <TableCell>
-                                                    {depense.category?.name}
-                                                </TableCell>
+                                                <TableCell>{depense.category?.name}</TableCell>
                                                 <TableCell>{depense.description}</TableCell>
-                                                <TableCell className="flex gap-4">
+                                                <TableCell className="flex gap-2">
                                                     <Link href={route('depenses.edit', depense.id)}>
-                                                        <Edit className="text-indigo-500" />
+                                                        <Edit className="text-indigo-500 w-5 h-5" />
                                                     </Link>
                                                     <Link onClick={() => handleDelete(depense.id)}>
-                                                        <Trash2 className="text-red-500" />
+                                                        <Trash2 className="text-red-500 w-5 h-5" />
                                                     </Link>
                                                 </TableCell>
                                             </TableRow>
@@ -310,22 +312,23 @@ const Depense = () => {
                             </Card>
                         </div>
 
-                        <div className="w-1/4 flex flex-col gap-2">
-                            <div className="flex flex-col gap-1 border rounded-md p-5">
+                        <div className="w-full lg:w-1/4 flex flex-col gap-4">
+                            <div className="flex flex-col gap-2 bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-sm">
                                 <span className="text-gray-600">Total des depenses de ce mois</span>
-                                <span className="text-slate-900 font-semibold text-2xl">{totalDepense.toLocaleString('fr-CI', {style: 'currency', currency: 'XOF'})}</span>
+                                <span className="text-slate-900 font-semibold text-2xl">{totalDepense.toLocaleString('fr-CI', { style: 'currency', currency: 'XOF' })}</span>
                             </div>
 
-                            <Card className='p-8'>
+                            <Card className="p-6 shadow-sm rounded-xl">
                                 <DepensesChart />
                             </Card>
                         </div>
                     </div>
                 </section>
-
             </AuthenticatedLayout>
         </div>
     )
+
+
 }
 
 export default Depense

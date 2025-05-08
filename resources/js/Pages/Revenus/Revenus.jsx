@@ -123,18 +123,17 @@ export default function Revenus() {
         <div>
             <AuthenticatedLayout>
                 <Head title="Revenus" />
-                <section className="w-full bg-white p-8 rounded-xl">
+                <section className="w-full bg-white p-8 rounded-2xl shadow-xl transition-all duration-300">
 
                     {/* Titre et Bouton */}
-                    <div className="flex justify-between place-items-center mb-5">
-                        <h2 className="text-2xl text-gray-700 font-semibold">
+                    <div className="flex justify-between items-center mb-5">
+                        <h2 className="text-3xl font-bold text-gray-800 tracking-wide">
                             Mes Revenus
                         </h2>
 
-                        {/* Le modal d'enregistrement et son bouton */}
                         <Sheet>
                             <SheetTrigger asChild>
-                                <Button onClick={() => SetShowModal(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg shadow-md transition">
+                                <Button onClick={() => SetShowModal(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-full shadow-lg transition-all duration-300">
                                     + Ajouter un revenu
                                 </Button>
                             </SheetTrigger>
@@ -146,7 +145,6 @@ export default function Revenus() {
                                     </SheetHeader>
 
                                     <div className="space-y-4 mt-4">
-                                        {/* Date */}
                                         <div>
                                             <Label htmlFor="date">Date</Label>
                                             <Input
@@ -154,11 +152,11 @@ export default function Revenus() {
                                                 id="date"
                                                 value={data.date}
                                                 onChange={(e) => setData("date", e.target.value)}
+                                                className="block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                             />
                                             {errors?.date && <p className="text-sm text-red-500 mt-1">{errors.date}</p>}
                                         </div>
 
-                                        {/* Montant */}
                                         <div>
                                             <Label htmlFor="montant">Montant</Label>
                                             <Input
@@ -166,18 +164,18 @@ export default function Revenus() {
                                                 id="montant"
                                                 value={data.montant}
                                                 onChange={(e) => setData("montant", e.target.value)}
+                                                className="block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                             />
                                             {errors?.montant && <p className="text-sm text-red-500 mt-1">{errors.montant}</p>}
                                         </div>
 
-                                        {/* Catégorie */}
                                         <div>
                                             <Label htmlFor="categorie">Catégorie</Label>
                                             <select
                                                 id="categorie"
                                                 value={data.category_id}
                                                 onChange={(e) => setData("category_id", e.target.value)}
-                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                                                className="block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                             >
                                                 <option value="" disabled>Choisissez une catégorie</option>
                                                 {categories.map((categorie) => (
@@ -188,13 +186,13 @@ export default function Revenus() {
                                             </select>
                                         </div>
 
-                                        {/* Description */}
                                         <div>
                                             <Label htmlFor="description">Description</Label>
                                             <Textarea
                                                 id="description"
                                                 value={data.description}
                                                 onChange={(e) => setData("description", e.target.value)}
+                                                className="block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                             />
                                             {errors?.description && <p className="text-sm text-red-500 mt-1">{errors.description}</p>}
                                         </div>
@@ -214,94 +212,84 @@ export default function Revenus() {
 
                     {notify && <Notification message={"Un revenu a été ajouté"} />}
 
-                    {/* Filtres et total de revenus du mois*/}
-                    <div className="flex justify-between place-items-center mb-5">
+                    {/* Filtres et export */}
+                    <div className="flex justify-between items-center mb-5">
                         <div className="flex gap-4">
-                            <div className="relative flex place-items-center gap-6 w-[180px]">
+                            <div className="relative flex items-center w-[180px]">
                                 <select
                                     onChange={(e) => setSelectedMonth(e.target.value)}
-                                    id="categorie"
                                     value={selectedMonth}
-                                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 >
                                     <option value="" disabled>Mois</option>
-                                    {
-                                        mois.map((mois) => (
-                                            <option value={mois.nb} key={mois.nb}>{mois.nom}</option>
-                                        ))
-                                    }
+                                    {mois.map((mois) => (
+                                        <option value={mois.nb} key={mois.nb}>{mois.nom}</option>
+                                    ))}
                                 </select>
                             </div>
 
-                            <div className="relative flex place-items-center gap-6 w-[180px]">
+                            <div className="relative flex items-center w-[180px]">
                                 <select
                                     onChange={(e) => setSelectedCategory(e.target.value)}
-                                    id="categorie"
                                     value={selectedCategory}
-                                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 >
-                                    <option value="" disabled>Categorie</option>
-                                    {
-                                        categories.map((category) => (
-                                            <option value={category.id} key={category.id}>{category.name}</option>
-                                        ))
-                                    }
+                                    <option value="" disabled>Catégorie</option>
+                                    {categories.map((category) => (
+                                        <option value={category.id} key={category.id}>{category.name}</option>
+                                    ))}
                                 </select>
                             </div>
 
-                            <div className="relative flex place-items-center gap-6 w-[180px]">
+                            <div className="relative flex items-center w-[180px]">
                                 <select
                                     onChange={(e) => setSelectedAmount(e.target.value)}
-                                    id="montant"
                                     value={selectedAmount}
-                                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    className="block w-full rounded-md border border-gray-300 bg-white py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 >
                                     <option value="" disabled>Trier</option>
-                                    <option value="0">Moins élévé</option>
-                                    <option value="1">Plus élévé</option>
+                                    <option value="0">Moins élevé</option>
+                                    <option value="1">Plus élevé</option>
                                 </select>
                             </div>
 
-                            <button onClick={resetFiltrer}>
+                            <button onClick={resetFiltrer} className="text-indigo-600 hover:underline text-sm">
                                 Actualiser
                             </button>
                         </div>
 
                         <div>
-                            <button onClick={handleExcel} className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-md transition flex gap-1">
+                            <button onClick={handleExcel} className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2">
                                 <FileSpreadsheet />
                                 EXCEL
                             </button>
                         </div>
                     </div>
 
-                    {/* Table et graphique*/}
+                    {/* Tableau et graphique */}
                     <div className="flex gap-4">
                         <div className="w-3/4">
-                            <Card className='shadow-md mb-8 p-6'>
+                            <Card className="shadow-lg mb-8 p-6 border border-gray-100 rounded-xl transition-all duration-300">
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
                                             <TableHead>ID</TableHead>
                                             <TableHead>Date</TableHead>
                                             <TableHead>Montant</TableHead>
-                                            <TableHead>Categorie</TableHead>
+                                            <TableHead>Catégorie</TableHead>
                                             <TableHead>Description</TableHead>
                                             <TableHead>Actions</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-
                                         {fileredRevenus.map((revenu) => (
-                                            <TableRow key={revenu.id}>
+                                            <TableRow key={revenu.id} className="hover:bg-gray-50 transition">
                                                 <TableCell>{revenu.id}</TableCell>
                                                 <TableCell>{revenu.date}</TableCell>
                                                 <TableCell>{revenu.montant.toLocaleString('fr-CI', { style: "currency", currency: "XOF" })}</TableCell>
-                                                <TableCell>
-                                                    {revenu.category?.name}
-                                                </TableCell>
+                                                <TableCell>{revenu.category?.name}</TableCell>
                                                 <TableCell>{revenu.description}</TableCell>
-                                                <TableCell className="flex gap-4">
+                                                <TableCell className="flex gap-3 items-center">
                                                     <Link href={route('revenus.edit', revenu.id)}>
                                                         <Edit className="text-indigo-500" />
                                                     </Link>
@@ -314,26 +302,24 @@ export default function Revenus() {
                                     </TableBody>
                                 </Table>
                             </Card>
-
                         </div>
 
                         <div className="w-1/4 flex flex-col gap-2">
-                            <div className="flex flex-col gap-1 border rounded-md p-5">
+                            <div className="flex flex-col gap-2 bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-sm">
                                 <span className="text-gray-600">Total des revenus de ce mois</span>
-                                <span className="text-slate-900 font-semibold text-2xl">{totalRevenus.toLocaleString('fr-CI', {style: 'currency', currency: 'XOF'})}</span>
+                                <span className="text-slate-900 font-semibold text-2xl">{totalRevenus.toLocaleString('fr-CI', { style: 'currency', currency: 'XOF' })}</span>
                             </div>
 
-                            <Card className='p-8'>
+                            <Card className="p-8 shadow-md rounded-xl bg-white">
                                 <RevenusChart />
                             </Card>
                         </div>
                     </div>
 
                 </section>
-
             </AuthenticatedLayout>
         </div>
-    );
+    )
 }
 
 //Cette function , pour chaque Revenus , recupere le mois de son enregitrement
