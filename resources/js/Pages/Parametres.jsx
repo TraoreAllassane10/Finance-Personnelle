@@ -8,6 +8,7 @@ import React, { useState } from 'react'
 const Parametres = () => {
 
     const { user } = usePage().props.auth;
+    const configuration = usePage().props.configuration
 
     //Les données personnnelles
     const { data, setData, put, processing, errors, reset } = useForm({
@@ -16,10 +17,9 @@ const Parametres = () => {
         password: ''
     })
 
-    const [devise, setDevise] = useState("")
-    const [theme, setTheme] = useState("")
-    const [langue, setLangue] = useState("")
-    const [limite, setLimite] = useState("")
+    const [devise, setDevise] = useState(configuration[0].devise)
+    const [theme, setTheme] = useState(configuration[0].theme)
+    const [langue, setLangue] = useState(configuration[0].langue)
     const [categorie, setCategorie] = useState("")
 
 
@@ -33,6 +33,12 @@ const Parametres = () => {
     const handleRegisterCategorie = (e) => {
         e.preventDefault();
         router.post(route('categorie.store'), { categorie });
+    }
+
+    const handleConfig = () =>
+    {
+        e.preventDefault();
+        router.put(route('preferences'));
     }
 
     return (
@@ -63,30 +69,30 @@ const Parametres = () => {
 
                     {/* Preferences */}
                     <div className='border border-gray-200 p-6 rounded-lg'>
-                        <form action="" className='flex flex-col gap-2'>
+                        <form onSubmit={handleConfig} className='flex flex-col gap-2'>
                             <legend className='text-lg mb-2'>Preferences</legend>
 
                             <Label>Devise</Label>
-                            <select name="devise" onChange={(e) => setDevise(e.target.value)} id="" className='flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm'>
-                                <option value="">FCFA</option>
-                                <option value="">EURO</option>
-                                <option value="">USD</option>
+                            <select name="devise" value={devise} onChange={(e) => setDevise(e.target.value)} id="" className='flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm'>
+                                <option value="fcfa">FCFA</option>
+                                <option value="euro">EURO</option>
+                                <option value="usd">USD</option>
                             </select>
 
                             <Label>Theme</Label>
-                            <select name="" onChange={(e) => setTheme(e.target.value)} className='flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm'>
+                            <select name="" value={theme} onChange={(e) => setTheme(e.target.value)} className='flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm'>
                                 <option value="">Clair</option>
                                 <option value="">Sombre</option>
                             </select>
 
                             <Label>Langues</Label>
-                            <select name="" onChange={(e) => setLangue(e.target.value)} className='flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm'>
+                            <select name="" value={langue} onChange={(e) => setLangue(e.target.value)} className='flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm'>
                                 <option value="">Français</option>
                                 <option value="">Anglais</option>
                                 <option value="">Espanole</option>
                             </select>
 
-                            <Button className='bg-green-500 hover:bg-green-700 transition'>Enregistrer</Button>
+                            <Button type='submit' className='bg-green-500 hover:bg-green-700 transition'>Enregistrer</Button>
                         </form>
                     </div>
 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('devise')->default('fcfa');
             $table->string('theme')->default('clair');
             $table->string('langue')->default('francais');
-            $table->integer('limite_depense')->nullable();
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }

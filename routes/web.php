@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get("/parametres", [ConfigurationController::class, 'index'])->name('parametres');
     Route::put("parametres/{user}", [ConfigurationController::class, 'user'])->name('user.infos');
+    Route::put("/configuration", [ConfigurationController::class, 'updateConfig'])->name('preferences');
 
     Route::post('/categorie', [CategoryController::class, 'store'])->name('categorie.store');
 

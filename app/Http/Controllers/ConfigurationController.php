@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Configuration;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -11,10 +12,10 @@ class ConfigurationController extends Controller
 {
     public function index()
     {
-        // N'oublie pas de d'ajouter le user_id a la configuration car chaque user à sa configuration à part
-        // et aussi apres chaque ajout d'un nouveau user , on doit creer sa coonfig de base
-
-        return Inertia::render('Parametres');
+        $configuration = Configuration::where('user_id', Auth::id())->get();
+        return Inertia::render('Parametres', [
+            'configuration' => $configuration
+        ]);
     }
 
     public function user(Request $request, User $user)
@@ -39,5 +40,18 @@ class ConfigurationController extends Controller
 
             return redirect('/');
         }
+    }
+
+    public function updateConfig(Request $request)
+    {
+        $configuration = Configuration::where('user_id', Auth::id());
+
+        $configuration->devise = $request->devise;
+        $configuration->theme = $request->theme;
+        $configuration->langue = $request->langue;
+
+        $configuration->save();
+
+        return redirect()->back();
     }
 }
