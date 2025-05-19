@@ -1,22 +1,12 @@
 import { Button } from "@/Components/ui/button";
 import { Card } from "@/Components/ui/card";
 
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/Components/ui/table";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
     Sheet,
     SheetClose,
     SheetContent,
-    SheetDescription,
     SheetFooter,
     SheetHeader,
     SheetTitle,
@@ -24,12 +14,13 @@ import {
 } from "@/components/ui/sheet";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
-import { Edit, FileSpreadsheet, Trash2 } from "lucide-react";
+import { FileSpreadsheet } from "lucide-react";
 import React, { useState } from "react";
 import { Textarea } from "@/Components/ui/textarea";
 import RevenusChart from "@/Components/RevenusChart";
 import Notification from "@/Components/Notification";
-
+import { CardTable } from "@/Components/CardTable";
+import { getMonthRegister } from "@/services/helpers";
 
 
 export default function Revenus() {
@@ -61,8 +52,6 @@ export default function Revenus() {
         description: ''
     })
 
-
-
     //Etats pour les filtres
     const [selectedMonth, setSelectedMonth] = useState("")
     const [selectedAmount, setSelectedAmount] = useState("")
@@ -70,7 +59,7 @@ export default function Revenus() {
 
     const fileredRevenus = revenus.filter(revenu => {
         //Filtrer par mois
-        if (selectedMonth && getMonthRegisterRevenus(revenu.date) !== Number(selectedMonth)) {
+        if (selectedMonth && getMonthRegister(revenu.date) !== Number(selectedMonth)) {
             return false
         }
 
@@ -100,13 +89,6 @@ export default function Revenus() {
         })
     }
 
-    const handleDelete = (id) => {
-        router.delete(route('revenus.delete', id), {
-            onSuccess: () => {
-
-            }
-        })
-    }
 
     const resetFiltrer = () => {
         setSelectedMonth("");
@@ -269,39 +251,7 @@ export default function Revenus() {
                     {/* Tableau et graphique */}
                     <div className="flex gap-4">
                         <div className="w-3/4">
-                            <Card className="shadow-lg mb-8 p-6 border border-gray-100 rounded-xl transition-all duration-300">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>ID</TableHead>
-                                            <TableHead>Date</TableHead>
-                                            <TableHead>Montant</TableHead>
-                                            <TableHead>Catégorie</TableHead>
-                                            <TableHead>Description</TableHead>
-                                            <TableHead>Actions</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {fileredRevenus.map((revenu) => (
-                                            <TableRow key={revenu.id} className="hover:bg-gray-50 transition">
-                                                <TableCell>{revenu.id}</TableCell>
-                                                <TableCell>{revenu.date}</TableCell>
-                                                <TableCell>{revenu.montant.toLocaleString('fr-CI', { style: "currency", currency: "XOF" })}</TableCell>
-                                                <TableCell>{revenu.category?.name}</TableCell>
-                                                <TableCell>{revenu.description}</TableCell>
-                                                <TableCell className="flex gap-3 items-center">
-                                                    <Link href={route('revenus.edit', revenu.id)}>
-                                                        <Edit className="text-indigo-500" />
-                                                    </Link>
-                                                    <Link onClick={() => handleDelete(revenu.id)}>
-                                                        <Trash2 className="text-red-500" />
-                                                    </Link>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </Card>
+                            <CardTable datas={fileredRevenus} name="revenus"/>
                         </div>
 
                         <div className="w-1/4 flex flex-col gap-2">
@@ -321,13 +271,6 @@ export default function Revenus() {
         </div>
     )
 }
-
-//Cette function , pour chaque Revenus , recupere le mois de son enregitrement
-const getMonthRegisterRevenus = (dateRevenus) => {
-    const date = new Date(dateRevenus)
-    return date.getMonth()
-}
-
 
 
 

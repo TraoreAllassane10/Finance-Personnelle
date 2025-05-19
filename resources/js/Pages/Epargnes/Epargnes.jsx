@@ -26,6 +26,7 @@ import { Edit, FileSpreadsheet, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Textarea } from "@/Components/ui/textarea";
 import Notification from "@/Components/Notification";
+import { getMonthRegister } from "@/services/helpers";
 
 
 const Epargnes = () => {
@@ -66,7 +67,7 @@ const Epargnes = () => {
 
     const fileredEpargnes = epargnes.filter(epargne => {
         //Filtrer par mois
-        if (selectedMonth && getMonthRegisterEpargnes(epargne.date) !== Number(selectedMonth)) {
+        if (selectedMonth && getMonthRegister(epargne.date) !== Number(selectedMonth)) {
             return false
         }
 
@@ -245,7 +246,6 @@ const Epargnes = () => {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>ID</TableHead>
                                         <TableHead>Date</TableHead>
                                         <TableHead>Montant</TableHead>
                                         <TableHead>Compte d'épargnes</TableHead>
@@ -256,7 +256,6 @@ const Epargnes = () => {
 
                                 {fileredEpargnes.map((epargne) => (
                                     <TableRow key={epargne.id}>
-                                        <TableCell>{epargne.id}</TableCell>
                                         <TableCell>{epargne.date}</TableCell>
                                         <TableCell>{epargne.montant.toLocaleString('fr-CI', { style: "currency", currency: "XOF" })}</TableCell>
                                         <TableCell>{epargne.compte}</TableCell>
@@ -290,9 +289,5 @@ const Epargnes = () => {
 
 export default Epargnes
 
-//Cette function , pour chaque epargne , recupere le mois de son enregitrement
-const getMonthRegisterEpargnes = (dateEpargne) => {
-    const date = new Date(dateEpargne)
-    return date.getMonth()
-}
+
 

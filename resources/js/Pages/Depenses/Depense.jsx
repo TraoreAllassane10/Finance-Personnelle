@@ -1,14 +1,6 @@
 import { Button } from "@/Components/ui/button";
 import { Card } from "@/Components/ui/card";
 
-import {
-    Table,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/Components/ui/table";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -21,12 +13,14 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
-import { Edit, FileSpreadsheet, Trash2 } from "lucide-react";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { FileSpreadsheet } from "lucide-react";
 import React, { useState } from "react";
 import { Textarea } from "@/Components/ui/textarea";
 import DepensesChart from "@/Components/DepensesChart";
 import Notification from "@/Components/Notification";
+import { CardTable } from "@/Components/CardTable";
+import { getMonthRegister } from "@/services/helpers";
 
 const Depense = () => {
     const depenses = usePage().props.depenses || [];
@@ -65,7 +59,7 @@ const Depense = () => {
 
     const fileredDepenses = depenses.filter(depense => {
         //Filtrer par mois
-        if (selectedMonth && getMonthRegisterdepenses(depense.date) !== Number(selectedMonth)) {
+        if (selectedMonth && getMonthRegister(depense.date) !== Number(selectedMonth)) {
             return false
         }
 
@@ -95,13 +89,6 @@ const Depense = () => {
         })
     }
 
-    const handleDelete = (id) => {
-        router.delete(route('depenses.delete', id), {
-            onSuccess: () => {
-
-            }
-        })
-    }
 
     const resetFiltrer = () => {
         setSelectedMonth("");
@@ -279,37 +266,7 @@ const Depense = () => {
                     {/* Table et graphique */}
                     <div className="flex gap-4 flex-col lg:flex-row">
                         <div className="w-full lg:w-3/4">
-                            <Card className="shadow-lg mb-8 p-6 border border-gray-100 rounded-xl transition-all duration-300">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>ID</TableHead>
-                                            <TableHead>Date</TableHead>
-                                            <TableHead>Montant</TableHead>
-                                            <TableHead>Catégorie</TableHead>
-                                            <TableHead>Description</TableHead>
-                                            <TableHead>Actions</TableHead>
-                                        </TableRow>
-                                        {fileredDepenses.map((depense) => (
-                                            <TableRow key={depense.id}>
-                                                <TableCell>{depense.id}</TableCell>
-                                                <TableCell>{depense.date}</TableCell>
-                                                <TableCell>{depense.montant.toLocaleString('fr-CI', { style: "currency", currency: "XOF" })}</TableCell>
-                                                <TableCell>{depense.category?.name}</TableCell>
-                                                <TableCell>{depense.description}</TableCell>
-                                                <TableCell className="flex gap-2">
-                                                    <Link href={route('depenses.edit', depense.id)}>
-                                                        <Edit className="text-indigo-500 w-5 h-5" />
-                                                    </Link>
-                                                    <Link onClick={() => handleDelete(depense.id)}>
-                                                        <Trash2 className="text-red-500 w-5 h-5" />
-                                                    </Link>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableHeader>
-                                </Table>
-                            </Card>
+                            <CardTable datas={fileredDepenses} name="depense"/>
                         </div>
 
                         <div className="w-full lg:w-1/4 flex flex-col gap-4">
@@ -333,8 +290,3 @@ const Depense = () => {
 
 export default Depense
 
-//Cette function , pour chaque revenus , recupere le mois de son enregitrement
-const getMonthRegisterdepenses = (dateDepense) => {
-    const date = new Date(dateDepense)
-    return date.getMonth()
-}
