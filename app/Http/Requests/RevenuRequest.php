@@ -28,4 +28,14 @@ class RevenuRequest extends FormRequest
             "description" => "required",
         ];
     }
+
+    public function messages()
+    {
+       return [
+            "date.required" => "Choisissez une date",
+            "montant.required" => "Saisissez un montant",
+            "category_id.required" => "Choisissez une catégorie",
+            "description.required" => "Saisissez une description",
+        ];
+    }
 }
