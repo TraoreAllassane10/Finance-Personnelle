@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Revenus;
 use App\Services\Chart\GroupByDate;
 use App\Services\Excel\Excel;
+use App\Services\RevenuServices;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -25,23 +26,32 @@ class RevenusController extends Controller
 
     public function index()
     {
+        $revenuService = (new RevenuServices())->all();
+        // dd();
         $categories = Category::all();
 
-        $revenus = $this->revenuRepository->allForUser(Auth::id());
+        // $revenus = $this->revenuRepository->allForUser(Auth::id());
 
-        //Calcule le total des revenus de ce mois
-        $totalRevenus = $revenus->map(function($revenu) {
-            return Carbon::parse($revenu['date'])->month == now()->month ? $revenu : null;
-        })->sum('montant');
+        // //Calcule le total des revenus de ce mois
+        // $totalRevenus = $revenus->map(function($revenu) {
+        //     return Carbon::parse($revenu['date'])->month == now()->month ? $revenu : null;
+        // })->sum('montant');
 
-        $revenusParDate = (new GroupByDate())->group($revenus);
+        // $revenusParDate = (new GroupByDate())->group($revenus);
 
+
+        // return Inertia::render('Revenus/Revenus', [
+        //     "revenus" => $revenus,
+        //     "revenusChart" => $revenusParDate,
+        //     "categories" => $categories,
+        //     "totalRevenus" => $totalRevenus
+        // ]);
 
         return Inertia::render('Revenus/Revenus', [
-            "revenus" => $revenus,
-            "revenusChart" => $revenusParDate,
-            "categories" => $categories,
-            "totalRevenus" => $totalRevenus
+            "revenus" => $revenuService[0],
+            "revenusChart" => $revenuService[1],
+            "categories" => $revenuService[2],
+            "totalRevenus" => $revenuService[3]
         ]);
     }
 
