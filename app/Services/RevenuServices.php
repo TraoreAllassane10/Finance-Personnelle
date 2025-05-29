@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use Carbon\Carbon;
-use App\Models\Revenus;
 use App\Models\Category;
 use App\Services\Chart\GroupByDate;
 use Illuminate\Support\Facades\Auth;
-use App\Repositories\RevenusRepository;
+use App\Contracts\RevenusRepositoryInterface;
+use App\Http\Requests\RevenuRequest;
+use App\Models\Revenus;
 
 class RevenuServices
 {
@@ -22,34 +23,49 @@ class RevenuServices
     {
         $categories = Category::all();
 
-        // $revenus = $this->revenuRepository->allForUser(Auth::id());
-        $revenus = (new RevenusRepository(new Revenus()))->allForUser(Auth::id());
+        $revenus = $this->revenuRepository->allForUser(Auth::id());
+
         //Calcule le total des revenus de ce mois
-        $totalRevenus = $revenus->map(function($revenu) {
+        $totalRevenus = $revenus->map(function ($revenu) {
             return Carbon::parse($revenu['date'])->month == now()->month ? $revenu : null;
         })->sum('montant');
 
         $revenusParDate = (new GroupByDate())->group($revenus);
 
-        return [$revenus,$revenusParDate, $categories, $totalRevenus];
+        return [$revenus, $revenusParDate, $categories, $totalRevenus];
     }
 
-    public function find()
-    {
+    public function find() {}
 
+    public function create(RevenuRequest $request)
+    {
+        $data = [
+            "date" => $request->date,
+            "montant" => $request->montant,
+            "category_id" => $request->category_id,
+            "description" => $request->description
+        ];
+
+        $this->revenuRepository->create($data);
     }
 
-    public function create()
+    public function update(Revenus $revenu, RevenuRequest $request)
     {
+        if ($revenu && $revenu->user_id == Auth::id()) {
 
+            $data = [
+                "date" => $request->date,
+                "montant" => $request->montant,
+                "category_id" => $request->category_id,
+                "description" => $request->description
+            ];
+
+            $this->revenuRepository->update($revenu->id, $data);
+        }
     }
-    public function update()
+
+    public function delete($id)
     {
-
-    }
-
-    public function delete()
-    {
-
+        $this->revenuRepository->delete($id);
     }
 }

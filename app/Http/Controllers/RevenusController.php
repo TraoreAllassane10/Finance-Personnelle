@@ -2,50 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\RevenusRepositoryInterface;
+use App\Http\Requests\RevenuRequest;
 use App\Models\Category;
 use App\Models\Revenus;
-use App\Services\Chart\GroupByDate;
 use App\Services\Excel\Excel;
 use App\Services\RevenuServices;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class RevenusController extends Controller
 {
-    protected $revenuRepository;
+    protected $revenuService;
 
-    public function __construct(RevenusRepositoryInterface $revenuRepository)
+    public function __construct(RevenuServices $revenuService)
     {
-        $this->revenuRepository = $revenuRepository;
+        $this->revenuService = $revenuService;
     }
 
     public function index()
     {
-        $revenuService = (new RevenuServices())->all();
-        // dd();
-        $categories = Category::all();
 
-        // $revenus = $this->revenuRepository->allForUser(Auth::id());
-
-        // //Calcule le total des revenus de ce mois
-        // $totalRevenus = $revenus->map(function($revenu) {
-        //     return Carbon::parse($revenu['date'])->month == now()->month ? $revenu : null;
-        // })->sum('montant');
-
-        // $revenusParDate = (new GroupByDate())->group($revenus);
-
-
-        // return Inertia::render('Revenus/Revenus', [
-        //     "revenus" => $revenus,
-        //     "revenusChart" => $revenusParDate,
-        //     "categories" => $categories,
-        //     "totalRevenus" => $totalRevenus
-        // ]);
+        $revenuService = $this->revenuService->all();
 
         return Inertia::render('Revenus/Revenus', [
             "revenus" => $revenuService[0],
@@ -55,17 +33,10 @@ class RevenusController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(RevenuRequest $request)
     {
 
-        $validated = $request->validate([
-            "date" => "required",
-            "montant" => "required",
-            "category_id" => "required",
-            "description" => "required",
-        ]);
-
-        $this->revenuRepository->create($validated);
+        $this->revenuService->create($request);
 
         return redirect()->back()->with('success', 'Un revenus ajouté');
     }
@@ -75,33 +46,19 @@ class RevenusController extends Controller
         return Inertia::render('Revenus/Edit', ["revenu" => $revenu, "categories" => Category::all()]);
     }
 
-    public function update(Request $request, Revenus $revenu)
+    public function update(RevenuRequest $request, Revenus $revenu)
     {
-        $validated = $request->validate([
-            "date" => "required",
-            "montant" => "required",
-            "category_id" => "required",
-            "description" => "required",
-        ]);
 
-        if ($revenu && $revenu->user_id == Auth::id()) {
+        $this->revenuService->update($revenu, $request);
 
-            $this->revenuRepository->update($revenu->id ,$validated);
-            return redirect()->route("revenus");
-        }
+        return redirect()->route("revenus");
     }
 
     public function destroy(Revenus $revenu)
     {
-        try
-        {
-            $this->revenuRepository->delete($revenu->id);
-            return redirect()->back()->with('success', "Revenu supprimé");
-        }
-        catch(Exception $e)
-        {
-            echo $e->getMessage();
-        }
+        $this->revenuService->delete($revenu->id);
+
+        return redirect()->back()->with('success', "Revenu supprimé");
     }
 
     public function excel()
