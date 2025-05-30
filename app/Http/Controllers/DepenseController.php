@@ -2,59 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use Inertia\Inertia;
 use App\Models\Depense;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Services\Excel\Excel;
-use App\Services\Chart\GroupByDate;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use App\Contracts\DepenseRepositoryInterface;
+use App\Http\Requests\DepenseRequest;
+use App\Services\DepenseServices;
 
 class DepenseController extends Controller
 {
-    private $depenseRepository;
+    protected $depenseService;
 
-    public function __construct(DepenseRepositoryInterface $depenseRepository)
+    public function __construct(DepenseServices $depenseService)
     {
-        $this->depenseRepository = $depenseRepository;
+        $this->depenseService = $depenseService;
     }
 
     public function index()
     {
-        $categories = Category::all();
-
-        $depenses = $this->depenseRepository->allForUser(Auth::id());
-
-        //Calcule le total des depenses de ce mois
-        $totalDepense = $depenses->map(function($depense) {
-            return Carbon::parse($depense['date'])->month == now()->month ? $depense : null;
-        })->sum('montant');
-
-
-        $depensesParDate = (new GroupByDate())->group($depenses);
+        $depenseService = $this->depenseService->all();
 
         return Inertia::render('Depenses/Depense', [
-            "depenses" => $depenses,
-            "categories" => $categories,
-            "depensesChart" => $depensesParDate,
-            "totalDepense" => $totalDepense
+            "depenses" => $depenseService[0],
+            "categories" => $depenseService[1],
+            "depensesChart" => $depenseService[2],
+            "totalDepense" => $depenseService[3]
         ]);
     }
 
-    public function store(Request $request)
+    public function store(DepenseRequest $request)
     {
 
-        $validated = $request->validate([
-            "date" => "required",
-            "montant" => "required",
-            "category_id" => "required",
-            "description" => "required",
-        ]);
-
-        $this->depenseRepository->create($validated);
+        $this->depenseService->create($request);
 
         return redirect()->back()->with('success', 'Un revenus ajouté');
     }
@@ -64,26 +45,15 @@ class DepenseController extends Controller
         return Inertia::render('Depenses/Edit', ["depense" => $depense, "categories" => Category::all()]);
     }
 
-    public function update(Request $request, Depense $depense)
+    public function update(DepenseRequest $request, Depense $depense)
     {
-        $validated = $request->validate([
-            "date" => "required",
-            "montant" => "required",
-            "category_id" => "required",
-            "description" => "required",
-        ]);
-
-        if ($depense && $depense->user_id == Auth::id()) {
-
-            $this->depenseRepository->update($depense->id, $validated);
-
-            return redirect()->route("depenses");
-        }
+        $this->depenseService->update($depense, $request);
+        return redirect()->route("depenses");
     }
 
     public function destroy(Depense $depense)
     {
-        $this->depenseRepository->delete($depense->id);
+        $this->depenseService->delete($depense->id);
         return redirect()->back()->with('success', "Revenu supprimé");
     }
 

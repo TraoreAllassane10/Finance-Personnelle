@@ -35,8 +35,6 @@ class RevenuServices
         return [$revenus, $revenusParDate, $categories, $totalRevenus];
     }
 
-    public function find() {}
-
     public function create(RevenuRequest $request)
     {
         $data = [
