@@ -1,5 +1,3 @@
-//
-
 import { Link, router } from "@inertiajs/react";
 import {
     LayoutDashboard,
@@ -8,7 +6,6 @@ import {
     PiggyBank,
     Settings,
     ClipboardCheck,
-    FileBarChart2
 } from "lucide-react";
 import React from "react";
 
