@@ -45,248 +45,344 @@ const Depense = () => {
     ];
 
     const { data, setData, post, processing, errors, reset } = useForm({
-        date: '',
-        montant: '',
-        category_id: '',
-        description: ''
+        date: "",
+        montant: "",
+        category_id: "",
+        description: "",
     });
-
 
     //Etats pour les filtres
     const [selectedMonth, setSelectedMonth] = useState("");
     const [selectedAmount, setSelectedAmount] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
 
-    const fileredDepenses = depenses.filter(depense => {
-        //Filtrer par mois
-        if (selectedMonth && getMonthRegister(depense.date) !== Number(selectedMonth)) {
-            return false
-        }
+    const fileredDepenses = depenses
+        .filter((depense) => {
+            //Filtrer par mois
+            if (
+                selectedMonth &&
+                getMonthRegister(depense.date) !== Number(selectedMonth)
+            ) {
+                return false;
+            }
 
-        //Filtrer par ctegorie
-        if (selectedCategory && depense.category?.id !== Number(selectedCategory)) {
-            return false;
-        }
+            //Filtrer par ctegorie
+            if (
+                selectedCategory &&
+                depense.category?.id !== Number(selectedCategory)
+            ) {
+                return false;
+            }
 
-        return true
-    }).sort((a, b) => {
-        if (selectedAmount === "0") return a.montant - b.montant;
-        if (selectedAmount === "1") return b.montant - a.montant;
+            return true;
+        })
+        .sort((a, b) => {
+            if (selectedAmount === "0") return a.montant - b.montant;
+            if (selectedAmount === "1") return b.montant - a.montant;
 
-        return 0
-    })
-
-
+            return 0;
+        });
 
     const handleSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         post(route("depenses.store"), {
             onSuccess: () => {
-                reset(),
-                    SetShowModal(false);
-                setNotify(true)
-            }
-        })
-    }
-
+                reset(), SetShowModal(false);
+                setNotify(true);
+            },
+        });
+    };
 
     const resetFiltrer = () => {
         setSelectedMonth("");
         setSelectedAmount("");
         setSelectedCategory("");
         setNotify(false);
-    }
+    };
 
     const handleExcel = () => {
-        window.location.href = route('depenses.excel');
-    }
-
-
+        window.location.href = route("depenses.excel");
+    };
 
     return (
         <div>
             <AuthenticatedLayout>
                 <Head title="Depenses" />
 
-                <section className="w-full bg-white p-8 rounded-2xl shadow-xl transition-all duration-300">
+                <section>
+                    <div className="w-full bg-white p-8 rounded-2xl shadow-xl transition-all duration-300 mb-6">
+                        {/* Titre et Bouton */}
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-3xl font-bold text-gray-800 tracking-wide">
+                                Mes Dépenses
+                            </h2>
 
-                    {/* Titre et Bouton */}
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-3xl font-bold text-gray-800 tracking-wide">
-                            Mes Dépenses
-                        </h2>
+                            <Sheet>
+                                <SheetTrigger asChild>
+                                    <Button
+                                        onClick={() => SetShowModal(true)}
+                                        className="bg-red-600 hover:bg-red-700 text-white py-2 px-5 rounded-full shadow-lg transition-all duration-300"
+                                    >
+                                        + Ajouter une dépense
+                                    </Button>
+                                </SheetTrigger>
 
-                        <Sheet>
-                            <SheetTrigger asChild>
-                                <Button
-                                    onClick={() => SetShowModal(true)}
-                                    className="bg-red-600 hover:bg-red-700 text-white py-2 px-5 rounded-full shadow-lg transition-all duration-300"
-                                >
-                                    + Ajouter une dépense
-                                </Button>
-                            </SheetTrigger>
+                                {showModal && (
+                                    <SheetContent
+                                        onKeyDown={(e) => e.stopPropagation()}
+                                        className="p-6"
+                                    >
+                                        <SheetHeader>
+                                            <SheetTitle className="text-lg font-semibold text-slate-800">
+                                                Ajouter une dépense
+                                            </SheetTitle>
+                                        </SheetHeader>
 
-                            {showModal && (
-                                <SheetContent onKeyDown={(e) => e.stopPropagation()} className="p-6">
-                                    <SheetHeader>
-                                        <SheetTitle className="text-lg font-semibold text-slate-800">Ajouter une dépense</SheetTitle>
-                                    </SheetHeader>
+                                        <div className="space-y-4 mt-4">
+                                            {/* Date */}
+                                            <div>
+                                                <Label htmlFor="date">
+                                                    Date
+                                                </Label>
+                                                <Input
+                                                    type="date"
+                                                    id="date"
+                                                    value={data.date}
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "date",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                />
+                                                {errors?.date && (
+                                                    <p className="text-sm text-red-500 mt-1">
+                                                        {errors.date}
+                                                    </p>
+                                                )}
+                                            </div>
 
-                                    <div className="space-y-4 mt-4">
-                                        {/* Date */}
-                                        <div>
-                                            <Label htmlFor="date">Date</Label>
-                                            <Input
-                                                type="date"
-                                                id="date"
-                                                value={data.date}
-                                                onChange={(e) => setData("date", e.target.value)}
-                                            />
-                                            {errors?.date && <p className="text-sm text-red-500 mt-1">{errors.date}</p>}
-                                        </div>
+                                            {/* Montant */}
+                                            <div>
+                                                <Label htmlFor="montant">
+                                                    Montant
+                                                </Label>
+                                                <Input
+                                                    type="number"
+                                                    id="montant"
+                                                    value={data.montant}
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "montant",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                />
+                                                {errors?.montant && (
+                                                    <p className="text-sm text-red-500 mt-1">
+                                                        {errors.montant}
+                                                    </p>
+                                                )}
+                                            </div>
 
-                                        {/* Montant */}
-                                        <div>
-                                            <Label htmlFor="montant">Montant</Label>
-                                            <Input
-                                                type="number"
-                                                id="montant"
-                                                value={data.montant}
-                                                onChange={(e) => setData("montant", e.target.value)}
-                                            />
-                                            {errors?.montant && <p className="text-sm text-red-500 mt-1">{errors.montant}</p>}
-                                        </div>
-
-                                        {/* Catégorie */}
-                                        <div>
-                                            <Label htmlFor="categorie">Catégorie</Label>
-                                            <select
-                                                id="categorie"
-                                                value={data.category_id}
-                                                onChange={(e) => setData("category_id", e.target.value)}
-                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                                            >
-                                                <option value="" disabled>Choisissez une catégorie</option>
-                                                {categories.map((categorie) => (
-                                                    <option key={categorie.id} value={categorie.id}>
-                                                        {categorie.name}
+                                            {/* Catégorie */}
+                                            <div>
+                                                <Label htmlFor="categorie">
+                                                    Catégorie
+                                                </Label>
+                                                <select
+                                                    id="categorie"
+                                                    value={data.category_id}
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "category_id",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                                                >
+                                                    <option value="" disabled>
+                                                        Choisissez une catégorie
                                                     </option>
-                                                ))}
-                                            </select>
+                                                    {categories.map(
+                                                        (categorie) => (
+                                                            <option
+                                                                key={
+                                                                    categorie.id
+                                                                }
+                                                                value={
+                                                                    categorie.id
+                                                                }
+                                                            >
+                                                                {categorie.name}
+                                                            </option>
+                                                        )
+                                                    )}
+                                                </select>
+                                            </div>
+
+                                            {/* Description */}
+                                            <div>
+                                                <Label htmlFor="description">
+                                                    Description
+                                                </Label>
+                                                <Textarea
+                                                    id="description"
+                                                    value={data.description}
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "description",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                />
+                                                {errors?.description && (
+                                                    <p className="text-sm text-red-500 mt-1">
+                                                        {errors.description}
+                                                    </p>
+                                                )}
+                                            </div>
                                         </div>
 
-                                        {/* Description */}
-                                        <div>
-                                            <Label htmlFor="description">Description</Label>
-                                            <Textarea
-                                                id="description"
-                                                value={data.description}
-                                                onChange={(e) => setData("description", e.target.value)}
-                                            />
-                                            {errors?.description && <p className="text-sm text-red-500 mt-1">{errors.description}</p>}
-                                        </div>
-                                    </div>
+                                        <SheetFooter className="mt-6 flex justify-end">
+                                            <SheetClose asChild>
+                                                <Button
+                                                    onClick={handleSubmit}
+                                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl shadow-sm transition"
+                                                    disabled={processing}
+                                                >
+                                                    {processing
+                                                        ? "Ajout en cours..."
+                                                        : "Ajouter"}
+                                                </Button>
+                                            </SheetClose>
+                                        </SheetFooter>
+                                    </SheetContent>
+                                )}
+                            </Sheet>
+                        </div>
 
-                                    <SheetFooter className="mt-6 flex justify-end">
-                                        <SheetClose asChild>
-                                            <Button
-                                                onClick={handleSubmit}
-                                                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl shadow-sm transition"
-                                                disabled={processing}
+                        {notify && (
+                            <Notification
+                                message={"Une dépense a été ajoutée"}
+                            />
+                        )}
+
+                        {/* Filtres et bouton export */}
+                        <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
+                            <div className="flex gap-4 flex-wrap">
+                                <div className="w-44">
+                                    <select
+                                        onChange={(e) =>
+                                            setSelectedMonth(e.target.value)
+                                        }
+                                        value={selectedMonth}
+                                        className="w-full rounded-lg border-gray-300 py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                    >
+                                        <option value="" disabled>
+                                            Mois
+                                        </option>
+                                        {mois.map((mois) => (
+                                            <option
+                                                value={mois.nb}
+                                                key={mois.nb}
                                             >
-                                                {processing ? "Ajout en cours..." : "Ajouter"}
-                                            </Button>
-                                        </SheetClose>
-                                    </SheetFooter>
-                                </SheetContent>
-                            )}
-                        </Sheet>
-                    </div>
+                                                {mois.nom}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                    {notify && <Notification message={"Une dépense a été ajoutée"} />}
+                                <div className="w-44">
+                                    <select
+                                        onChange={(e) =>
+                                            setSelectedCategory(e.target.value)
+                                        }
+                                        value={selectedCategory}
+                                        className="w-full rounded-lg border-gray-300 py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                    >
+                                        <option value="" disabled>
+                                            Catégorie
+                                        </option>
+                                        {categories.map((category) => (
+                                            <option
+                                                value={category.id}
+                                                key={category.id}
+                                            >
+                                                {category.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                    {/* Filtres et bouton export */}
-                    <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
-                        <div className="flex gap-4 flex-wrap">
-                            <div className="w-44">
-                                <select
-                                    onChange={(e) => setSelectedMonth(e.target.value)}
-                                    value={selectedMonth}
-                                    className="w-full rounded-lg border-gray-300 py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                <div className="w-44">
+                                    <select
+                                        onChange={(e) =>
+                                            setSelectedAmount(e.target.value)
+                                        }
+                                        value={selectedAmount}
+                                        className="w-full rounded-lg border-gray-300 py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                    >
+                                        <option value="" disabled>
+                                            Trier
+                                        </option>
+                                        <option value="0">Moins élevé</option>
+                                        <option value="1">Plus élevé</option>
+                                    </select>
+                                </div>
+
+                                <button
+                                    onClick={resetFiltrer}
+                                    className="text-sm text-indigo-600 hover:underline"
                                 >
-                                    <option value="" disabled>Mois</option>
-                                    {mois.map((mois) => (
-                                        <option value={mois.nb} key={mois.nb}>{mois.nom}</option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div className="w-44">
-                                <select
-                                    onChange={(e) => setSelectedCategory(e.target.value)}
-                                    value={selectedCategory}
-                                    className="w-full rounded-lg border-gray-300 py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                                >
-                                    <option value="" disabled>Catégorie</option>
-                                    {categories.map((category) => (
-                                        <option value={category.id} key={category.id}>{category.name}</option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div className="w-44">
-                                <select
-                                    onChange={(e) => setSelectedAmount(e.target.value)}
-                                    value={selectedAmount}
-                                    className="w-full rounded-lg border-gray-300 py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                                >
-                                    <option value="" disabled>Trier</option>
-                                    <option value="0">Moins élevé</option>
-                                    <option value="1">Plus élevé</option>
-                                </select>
+                                    Actualiser
+                                </button>
                             </div>
 
                             <button
-                                onClick={resetFiltrer}
-                                className="text-sm text-indigo-600 hover:underline"
+                                onClick={handleExcel}
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2"
                             >
-                                Actualiser
+                                <FileSpreadsheet className="w-5 h-5" />
+                                EXCEL
                             </button>
                         </div>
 
-                        <button
-                            onClick={handleExcel}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2"
-                        >
-                            <FileSpreadsheet className="w-5 h-5" />
-                            EXCEL
-                        </button>
-                    </div>
-
-                    {/* Table et graphique */}
-                    <div className="flex gap-4 flex-col lg:flex-row">
-                        <div className="w-full lg:w-3/4">
-                            <CardTable datas={fileredDepenses} name="depense"/>
-                        </div>
-
-                        <div className="w-full lg:w-1/4 flex flex-col gap-4">
-                            <div className="flex flex-col gap-2 bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-sm">
-                                <span className="text-gray-600">Total des depenses de ce mois</span>
-                                <span className="text-slate-900 font-semibold text-2xl">{totalDepense.toLocaleString('fr-CI', { style: 'currency', currency: 'XOF' })}</span>
+                        {/* Table*/}
+                        <div className="flex gap-4 flex-col lg:flex-row">
+                            <div className="w-full lg:w-3/4">
+                                <CardTable
+                                    datas={fileredDepenses}
+                                    name="depense"
+                                />
                             </div>
 
-                            <Card className="p-6 shadow-sm rounded-xl">
-                                <DepensesChart />
-                            </Card>
+                            <div className="w-full lg:w-1/4 flex flex-col gap-4">
+                                <div className="flex flex-col gap-2 bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-sm">
+                                    <span className="text-gray-600">
+                                        Total des depenses de ce mois
+                                    </span>
+                                    <span className="text-slate-900 font-semibold text-2xl">
+                                        {totalDepense.toLocaleString("fr-CI", {
+                                            style: "currency",
+                                            currency: "XOF",
+                                        })}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    
+                    {/* Section graphique */}
+                    <div className="w-full bg-white p-8 rounded-2xl shadow-xl transition-all duration-300">
+                        <Card className="p-6 shadow-sm rounded-xl">
+                            <DepensesChart />
+                        </Card>
                     </div>
                 </section>
             </AuthenticatedLayout>
         </div>
-    )
+    );
+};
 
-
-}
-
-export default Depense
-
+export default Depense;
