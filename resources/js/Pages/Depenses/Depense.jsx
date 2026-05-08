@@ -1,5 +1,5 @@
 import { Button } from "@/Components/ui/button";
-import { Card } from "@/Components/ui/card";
+import { Card, CardContent } from "@/Components/ui/card";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -87,7 +87,7 @@ const Depense = () => {
         e.preventDefault();
         post(route("depenses.store"), {
             onSuccess: () => {
-                reset(), SetShowModal(false);
+                (reset(), SetShowModal(false));
                 setNotify(true);
             },
         });
@@ -109,167 +109,159 @@ const Depense = () => {
             <AuthenticatedLayout>
                 <Head title="Depenses" />
 
-                <section>
-                    <div className="w-full bg-white p-8 rounded-2xl shadow-xl transition-all duration-300 mb-6">
-                        {/* Titre et Bouton */}
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-3xl font-bold text-gray-800 tracking-wide">
-                                Mes Dépenses
-                            </h2>
+                {/* Titre et Bouton */}
+                <div className="flex justify-between items-center mb-7">
+                    <div>
+                        <h2 className="text-3xl font-bold text-gray-800 tracking-wide">
+                            Dépense
+                        </h2>
 
-                            <Sheet>
-                                <SheetTrigger asChild>
-                                    <Button
-                                        onClick={() => SetShowModal(true)}
-                                        className="bg-red-600 hover:bg-red-700 text-white py-2 px-5 rounded-full shadow-lg transition-all duration-300"
-                                    >
-                                        + Ajouter une dépense
-                                    </Button>
-                                </SheetTrigger>
+                        <p className="text-muted-foreground text-sm">
+                            Visualiser et gerer vos depenses efficacement
+                        </p>
+                    </div>
 
-                                {showModal && (
-                                    <SheetContent
-                                        onKeyDown={(e) => e.stopPropagation()}
-                                        className="p-6"
-                                    >
-                                        <SheetHeader>
-                                            <SheetTitle className="text-lg font-semibold text-slate-800">
-                                                Ajouter une dépense
-                                            </SheetTitle>
-                                        </SheetHeader>
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button
+                                onClick={() => SetShowModal(true)}
+                                className="bg-red-600 hover:bg-red-700 text-white py-2 px-5 rounded-full shadow-lg transition-all duration-300"
+                            >
+                                + Ajouter une dépense
+                            </Button>
+                        </SheetTrigger>
 
-                                        <div className="space-y-4 mt-4">
-                                            {/* Date */}
-                                            <div>
-                                                <Label htmlFor="date">
-                                                    Date
-                                                </Label>
-                                                <Input
-                                                    type="date"
-                                                    id="date"
-                                                    value={data.date}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "date",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                />
-                                                {errors?.date && (
-                                                    <p className="text-sm text-red-500 mt-1">
-                                                        {errors.date}
-                                                    </p>
-                                                )}
-                                            </div>
+                        {showModal && (
+                            <SheetContent
+                                onKeyDown={(e) => e.stopPropagation()}
+                                className="p-6"
+                            >
+                                <SheetHeader>
+                                    <SheetTitle className="text-lg font-semibold text-slate-800">
+                                        Ajouter une dépense
+                                    </SheetTitle>
+                                </SheetHeader>
 
-                                            {/* Montant */}
-                                            <div>
-                                                <Label htmlFor="montant">
-                                                    Montant
-                                                </Label>
-                                                <Input
-                                                    type="number"
-                                                    id="montant"
-                                                    value={data.montant}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "montant",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                />
-                                                {errors?.montant && (
-                                                    <p className="text-sm text-red-500 mt-1">
-                                                        {errors.montant}
-                                                    </p>
-                                                )}
-                                            </div>
+                                <div className="space-y-4 mt-4">
+                                    {/* Date */}
+                                    <div>
+                                        <Label htmlFor="date">Date</Label>
+                                        <Input
+                                            type="date"
+                                            id="date"
+                                            value={data.date}
+                                            onChange={(e) =>
+                                                setData("date", e.target.value)
+                                            }
+                                        />
+                                        {errors?.date && (
+                                            <p className="text-sm text-red-500 mt-1">
+                                                {errors.date}
+                                            </p>
+                                        )}
+                                    </div>
 
-                                            {/* Catégorie */}
-                                            <div>
-                                                <Label htmlFor="categorie">
-                                                    Catégorie
-                                                </Label>
-                                                <select
-                                                    id="categorie"
-                                                    value={data.category_id}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "category_id",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                                    {/* Montant */}
+                                    <div>
+                                        <Label htmlFor="montant">Montant</Label>
+                                        <Input
+                                            type="number"
+                                            id="montant"
+                                            value={data.montant}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "montant",
+                                                    e.target.value,
+                                                )
+                                            }
+                                        />
+                                        {errors?.montant && (
+                                            <p className="text-sm text-red-500 mt-1">
+                                                {errors.montant}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Catégorie */}
+                                    <div>
+                                        <Label htmlFor="categorie">
+                                            Catégorie
+                                        </Label>
+                                        <select
+                                            id="categorie"
+                                            value={data.category_id}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "category_id",
+                                                    e.target.value,
+                                                )
+                                            }
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                                        >
+                                            <option value="" disabled>
+                                                Choisissez une catégorie
+                                            </option>
+                                            {categories.map((categorie) => (
+                                                <option
+                                                    key={categorie.id}
+                                                    value={categorie.id}
                                                 >
-                                                    <option value="" disabled>
-                                                        Choisissez une catégorie
-                                                    </option>
-                                                    {categories.map(
-                                                        (categorie) => (
-                                                            <option
-                                                                key={
-                                                                    categorie.id
-                                                                }
-                                                                value={
-                                                                    categorie.id
-                                                                }
-                                                            >
-                                                                {categorie.name}
-                                                            </option>
-                                                        )
-                                                    )}
-                                                </select>
-                                            </div>
+                                                    {categorie.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
 
-                                            {/* Description */}
-                                            <div>
-                                                <Label htmlFor="description">
-                                                    Description
-                                                </Label>
-                                                <Textarea
-                                                    id="description"
-                                                    value={data.description}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "description",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                />
-                                                {errors?.description && (
-                                                    <p className="text-sm text-red-500 mt-1">
-                                                        {errors.description}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
+                                    {/* Description */}
+                                    <div>
+                                        <Label htmlFor="description">
+                                            Description
+                                        </Label>
+                                        <Textarea
+                                            id="description"
+                                            value={data.description}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "description",
+                                                    e.target.value,
+                                                )
+                                            }
+                                        />
+                                        {errors?.description && (
+                                            <p className="text-sm text-red-500 mt-1">
+                                                {errors.description}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
 
-                                        <SheetFooter className="mt-6 flex justify-end">
-                                            <SheetClose asChild>
-                                                <Button
-                                                    onClick={handleSubmit}
-                                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl shadow-sm transition"
-                                                    disabled={processing}
-                                                >
-                                                    {processing
-                                                        ? "Ajout en cours..."
-                                                        : "Ajouter"}
-                                                </Button>
-                                            </SheetClose>
-                                        </SheetFooter>
-                                    </SheetContent>
-                                )}
-                            </Sheet>
-                        </div>
-
-                        {notify && (
-                            <Notification
-                                message={"Une dépense a été ajoutée"}
-                            />
+                                <SheetFooter className="mt-6 flex justify-end">
+                                    <SheetClose asChild>
+                                        <Button
+                                            onClick={handleSubmit}
+                                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl shadow-sm transition"
+                                            disabled={processing}
+                                        >
+                                            {processing
+                                                ? "Ajout en cours..."
+                                                : "Ajouter"}
+                                        </Button>
+                                    </SheetClose>
+                                </SheetFooter>
+                            </SheetContent>
                         )}
+                    </Sheet>
+                </div>
 
+                {notify && (
+                    <Notification message={"Une dépense a été ajoutée"} />
+                )}
+
+                {/* Section de filtre */}
+                <Card className="mb-4 p-6">
+                    <CardContent>
                         {/* Filtres et bouton export */}
-                        <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
+                        <div className="flex justify-between items-center flex-wrap gap-4">
                             <div className="flex gap-4 flex-wrap">
                                 <div className="w-44">
                                     <select
@@ -347,39 +339,10 @@ const Depense = () => {
                                 EXCEL
                             </button>
                         </div>
+                    </CardContent>
+                </Card>
 
-                        {/* Table*/}
-                        <div className="flex gap-4 flex-col lg:flex-row">
-                            <div className="w-full lg:w-3/4">
-                                <CardTable
-                                    datas={fileredDepenses}
-                                    name="depense"
-                                />
-                            </div>
-
-                            <div className="w-full lg:w-1/4 flex flex-col gap-4">
-                                <div className="flex flex-col gap-2 bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-sm">
-                                    <span className="text-gray-600">
-                                        Total des depenses de ce mois
-                                    </span>
-                                    <span className="text-slate-900 font-semibold text-2xl">
-                                        {totalDepense.toLocaleString("fr-CI", {
-                                            style: "currency",
-                                            currency: "XOF",
-                                        })}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    {/* Section graphique */}
-                    <div className="w-full bg-white p-8 rounded-2xl shadow-xl transition-all duration-300">
-                        <Card className="p-6 shadow-sm rounded-xl">
-                            <DepensesChart />
-                        </Card>
-                    </div>
-                </section>
+                <CardTable datas={fileredDepenses} name="depense" />
             </AuthenticatedLayout>
         </div>
     );
