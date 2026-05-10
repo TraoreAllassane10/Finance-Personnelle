@@ -72,9 +72,7 @@
 
     .btn-primary
     {
-        background-color: #6F00FF;
-        color: #FFF;
-        @apply text-sm rounded-md px-2 py-2  transition focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white;
+        @apply bg-blue-600 text-white text-sm rounded-md px-2 py-2 hover:bg-blue-800  transition duration-300 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white;
     }
 
     .t-primary

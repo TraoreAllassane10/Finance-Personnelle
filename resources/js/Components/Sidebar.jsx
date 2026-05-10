@@ -7,10 +7,59 @@ import {
     Settings,
     ClipboardCheck,
     LogOut,
+    Landmark,
+    Banknote,
+    ChartColumnDecreasingIcon,
+    Wallet2,
+    User,
+    Box,
 } from "lucide-react";
 import React from "react";
 
-export const Nav = () => {
+const mainMenu = [
+    {
+        name: "Dashboard",
+        icon: LayoutDashboard,
+        route: "dashboard",
+    },
+    {
+        name: "Revenus",
+        icon: Banknote,
+        route: "revenus",
+    },
+    {
+        name: "Dépenses",
+        icon: Wallet2,
+        route: "depenses",
+    },
+    {
+        name: "Épargnes",
+        icon: PiggyBank,
+        route: "epargnes",
+    },
+    {
+        name: "Budgets",
+        icon: Wallet2,
+        route: "dashboard",
+    },
+    {
+        name: "categories",
+        icon: Box,
+        route: "dashboard",
+    },
+    {
+        name: "Rapports",
+        icon: ChartColumnDecreasingIcon,
+        route: "dashboard",
+    },
+    {
+        name: "Paramètres",
+        icon: Settings,
+        route: "parametres",
+    },
+];
+
+export const Sidebar = () => {
     const handleLogout = (e) => {
         e.preventDefault();
         router.post(route("logout"));
@@ -18,6 +67,7 @@ export const Nav = () => {
 
     return (
         <>
+            {/* Menu Mobile */}
             <div className="block lg:hidden fixed z-50 bottom-0 left-0 w-full bg-blue-500 shadow-sm border-r">
                 <div className="">
                     <div className="flex flex-row gap-8 px-10 text-white  flex-wrap my-4">
@@ -83,75 +133,54 @@ export const Nav = () => {
 
             {/* Menu Desktop */}
             <div className="hidden lg:block fixed w-1/6 h-full bg-white shadow-sm border-r">
-                <div className="flex items-center gap-2 p-6">
-                    <PiggyBank size={24} className="text-indigo-700" />
-                    <span className="text-2xl font-bold">TraoreBank</span>
-                </div>
-
-                <div className="py-1">
-                    <span className="text-gray-400 px-6">Tableau de bord</span>
-
-                    <div className="flex flex-col gap-4 my-4">
-                        <div className="flex gap-2 px-10 py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
-                            <LayoutDashboard className="text-gray-700" />
-                            <Link
-                                href={route("dashboard")}
-                                className="text-xl text-gray-800 hover:text-indigo-800"
-                            >
-                                Dashboard
-                            </Link>
-                        </div>
-
-                        <div className="flex gap-2 px-10 py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
-                            <TrendingUp className="text-gray-700" />
-                            <Link
-                                href={route("revenus")}
-                                className="text-xl text-gray-800 hover:text-indigo-800"
-                            >
-                                Revenus
-                            </Link>
-                        </div>
-
-                        <div className="flex gap-2 px-10 py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
-                            <Wallet className="text-gray-700" />
-                            <Link
-                                href={route("depenses")}
-                                className="text-xl text-gray-800 hover:text-indigo-800"
-                            >
-                                Dépenses
-                            </Link>
-                        </div>
-
-                        <div className="flex gap-2 px-10 py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
-                            <ClipboardCheck className="text-gray-700" />
-                            <Link
-                                href={route("epargnes")}
-                                className="text-xl text-gray-800 hover:text-indigo-800"
-                            >
-                                Épargnes
-                            </Link>
-                        </div>
+                <div>
+                    {/* Logo et nom */}
+                    <div className="flex items-center gap-2 p-6">
+                        <Landmark
+                            size={24}
+                            className="text-white bg-blue-700 p-1 rounded-md"
+                        />
+                        <span className="text-xl font-semibold">
+                            FinanceApp
+                        </span>
                     </div>
 
-                    <span className="text-gray-400 px-6">Options</span>
+                    {/* Menu */}
+                    <div className="flex flex-col gap-4 mx-4 my-2">
+                        {mainMenu.map((item, index) => {
+                            const Icon = item.icon;
 
-                    <div className="flex flex-col gap-4 mt-4">
-                        <div className="flex gap-2 px-10 py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
-                            <Settings className="text-gray-700" />
-                            <Link
-                                href={route("parametres")}
-                                className="text-xl text-gray-800 hover:text-indigo-800"
-                            >
-                                Paramètres
-                            </Link>
-                        </div>
+                            return (
+                                <div
+                                    key={index}
+                                    className="flex gap-2 px-2 py-2 hover:bg-blue-50 hover:text-blue-600 hover:border-r-4 hover:border-blue-600 hover:rounded-md group transition duration-300"
+                                >
+                                    <Icon className="text-gray-700 group-hover:text-blue-600" />
+                                    <Link
+                                        href={route(`${item.route}`)}
+                                        className="text-md text-gray-800 group-hover:text-blue-600 group-hover:font-semibold"
+                                    >
+                                        {item.name}
+                                    </Link>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
 
-                        <button
-                            onClick={handleLogout}
-                            className="bg-red-500 hover:bg-red-700 text-white rounded-md p-1 mx-6 transition"
-                        >
-                            Deconnexion
-                        </button>
+                <div className="flex flex-col gap-2 mx-4 absolute bottom-4 left-0 border-t pt-2 w-[90%]">
+                    <div className="flex gap-2 px-2 py-2 hover:bg-blue-50 hover:text-blue-600 hover:border-r-4 hover:border-blue-600 hover:rounded-md group transition duration-300">
+                        <User className="text-gray-700 group-hover:text-blue-600" />
+                        <Link className="text-md text-gray-800 group-hover:text-blue-600 group-hover:font-semibold">
+                            Compte
+                        </Link>
+                    </div>
+
+                    <div className="flex gap-2 px-2 py-2 hover:bg-blue-50 hover:text-blue-600 hover:border-r-4 hover:border-blue-600 hover:rounded-md group transition duration-300">
+                        <LogOut className="text-gray-700 group-hover:text-blue-600" />
+                        <Link className="text-md text-gray-800 group-hover:text-blue-600 group-hover:font-semibold">
+                            Déconnexion
+                        </Link>
                     </div>
                 </div>
             </div>
