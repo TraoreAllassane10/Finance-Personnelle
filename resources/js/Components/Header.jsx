@@ -2,7 +2,7 @@ import React from "react";
 import { Bell, Calendar, Plus, Search } from "lucide-react";
 import { Button } from "@headlessui/react";
 
-const Header = () => {
+const Header = ({ setOpenModal }) => {
     return (
         <div className="bg-white px-8 py-2 shadow-sm border-r sticky top-0 z-10">
             <div className="flex justify-between place-items-center">
@@ -21,7 +21,10 @@ const Header = () => {
                         <Bell className="text-gray-500" size={20} />
                     </div>
 
-                    <Button className="btn-primary flex gap-2 place-items-center">
+                    <Button
+                        onClick={() => setOpenModal(true)}
+                        className="btn-primary flex gap-2 place-items-center"
+                    >
                         <Plus className="text-white" size={16} />
                         Ajouter une transaction
                     </Button>
