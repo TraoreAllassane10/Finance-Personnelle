@@ -11,13 +11,7 @@ import {
     SelectValue,
 } from "../ui/select";
 import { Button } from "../ui/button";
-
-const categories = [
-    { id: 1, name: "Alimentation", type: "depense" },
-    { id: 2, name: "Transport", type: "depense" },
-    { id: 3, name: "salaire", type: "revenu" },
-    { id: 4, name: "investissement", type: "revenu" },
-];
+import { categories } from "@/constant";
 
 const ModalTransaction = ({ typeModal, setOpenModal }) => {
     const [typeTransaction, setTypeTransaction] = useState("depense");

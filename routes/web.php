@@ -9,6 +9,7 @@ use App\Http\Controllers\EpargneController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RevenusController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -34,7 +35,6 @@ Route::middleware('auth')->group(function () {
     Route::put("/revenus/{revenu}", [RevenusController::class, 'update'])->name('revenus.update');
     Route::delete('/revenus/{revenu}', [RevenusController::class, 'destroy'])->name('revenus.delete');
 
-
     Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses');
     Route::post('/depenses', [DepenseController::class, 'store'])->name('depenses.store');
     Route::get('/depenses/{depense}', [DepenseController::class, 'edit'])->name('depenses.edit');
@@ -46,6 +46,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/epargnes/{epargne}', [EpargneController::class, 'edit'])->name('epargnes.edit');
     Route::put("/epargnes/{epargne}", [EpargneController::class, 'update'])->name('epargnes.update');
     Route::delete('/epargnes/{epargne}', [EpargneController::class, 'destroy'])->name('epargnes.delete');
+
+    Route::get('/categories', function () {
+        return Inertia::render('Categorie/Index');
+    })->name('categories');
 
     Route::get("/parametres", [ConfigurationController::class, 'index'])->name('parametres');
     Route::put("parametres/{user}", [ConfigurationController::class, 'user'])->name('user.infos');

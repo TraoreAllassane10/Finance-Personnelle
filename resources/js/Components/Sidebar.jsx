@@ -45,7 +45,7 @@ const mainMenu = [
     {
         name: "categories",
         icon: Box,
-        route: "dashboard",
+        route: "categories",
     },
     {
         name: "Rapports",

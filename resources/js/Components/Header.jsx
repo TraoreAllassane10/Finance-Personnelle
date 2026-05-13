@@ -25,7 +25,6 @@ const Header = ({ setOpenModal }) => {
                         onClick={() => setOpenModal(true)}
                         className="btn-primary flex gap-2 place-items-center"
                     >
-                        <Plus className="text-white" size={16} />
                         Ajouter une transaction
                     </Button>
                 </div>
