@@ -20,7 +20,7 @@ use Inertia\Inertia;
 //     ]);
 // });
 
- Route::get('/', [AuthenticatedSessionController::class, 'create']);
+Route::get('/', [AuthenticatedSessionController::class, 'create']);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/revenus/excel', [RevenusController::class, 'excel'])->name('revenus.excel');
@@ -51,9 +51,12 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Categorie/Index');
     })->name('categories');
 
-    Route::get("/parametres", [ConfigurationController::class, 'index'])->name('parametres');
-    Route::put("parametres/{user}", [ConfigurationController::class, 'user'])->name('user.infos');
-    Route::put("/configuration", [ConfigurationController::class, 'updateConfig'])->name('preferences');
+    Route::get("/parametres", function () {
+        return Inertia::render('Parametre/Index');
+    })->name('parametres');
+
+    // Route::put("parametres/{user}", [ConfigurationController::class, 'user'])->name('user.infos');
+    // Route::put("/configuration", [ConfigurationController::class, 'updateConfig'])->name('preferences');
 
     Route::post('/categorie', [CategoryController::class, 'store'])->name('categorie.store');
 

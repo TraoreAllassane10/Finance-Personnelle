@@ -59,6 +59,10 @@
     }
 }
 
+body {
+    font-family: "Poppins", sans-serif;
+}
+
 @layer base {
     * {
         font-family: "Poppins", sans-serif;
