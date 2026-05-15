@@ -176,7 +176,7 @@ export const Sidebar = () => {
                         </Link>
                     </div>
 
-                    <div className="flex gap-2 px-2 py-2 hover:bg-blue-50 hover:text-blue-600 hover:border-r-4 hover:border-blue-600 hover:rounded-md group transition duration-300">
+                    <div onClick={handleLogout} className="flex gap-2 px-2 py-2 hover:bg-blue-50 hover:text-blue-600 hover:border-r-4 hover:border-blue-600 hover:rounded-md group transition duration-300">
                         <LogOut className="text-gray-700 group-hover:text-blue-600" />
                         <Link className="text-md text-gray-800 group-hover:text-blue-600 group-hover:font-semibold">
                             Déconnexion

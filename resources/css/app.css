@@ -59,36 +59,23 @@
     }
 }
 
-body {
-    font-family: "Poppins", sans-serif;
+@layer base {
+    :root {
+        --font-sans: "Poppins", sans-serif;
+        --chart-1: "#6F00FF";
+        --chart-2: "#00BFA6";
+    }
 }
 
-@layer base {
-    * {
-        font-family: "Poppins", sans-serif;
-        font-weight: 400;
-    }
-
-    .bg-primary {
-        background-color: #6F00FF;
-    }
-
+@layer components {
     .btn-primary {
         @apply bg-blue-600 text-white text-sm rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white;
     }
 
+}
+
+@layer utilities {
     .t-primary {
-        color: #6F00FF;
-    }
-
-    .link {
-        color: #0B6E4F;
-        transition: all 0.3s ease-in-out;
-    }
-
-    .link:hover {
-        color: #0B6E4F;
-        opacity: 0.7;
-
+        color: #5661fe;
     }
 }
