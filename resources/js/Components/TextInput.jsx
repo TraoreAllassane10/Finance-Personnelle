@@ -1,7 +1,8 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { Mail } from "lucide-react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 
 export default forwardRef(function TextInput(
-    { type = 'text', className = '', isFocused = false, ...props },
+    { type = "text", className = "", isFocused = false, ...props },
     ref,
 ) {
     const localRef = useRef(null);
@@ -17,14 +18,17 @@ export default forwardRef(function TextInput(
     }, [isFocused]);
 
     return (
-        <input
-            {...props}
-            type={type}
+        <div
             className={
-                'rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ' +
-                className
+                "rounded-lg border border-gray-300 shadow-sm mt-1" + className
             }
-            ref={localRef}
-        />
+        >
+            <input
+                {...props}
+                type={type}
+                ref={localRef}
+                className=" outline-none border-none w-full focus:border-none rounded-lg"
+            />
+        </div>
     );
 });

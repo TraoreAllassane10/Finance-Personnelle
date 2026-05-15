@@ -76,6 +76,6 @@
 
 @layer utilities {
     .t-primary {
-        color: #5661fe;
+        @apply text-blue-600
     }
 }
