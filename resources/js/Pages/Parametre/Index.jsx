@@ -17,13 +17,12 @@ const Index = () => {
         <AuthenticatedLayout>
             <Head title="Paramètre" />
 
-            <section className="flex mb-8">
-                <div className="flex flex-col gap-1">
-                    <h2 className="text-2xl text-slate-900 font-bold">
-                        Paramètres
-                    </h2>
-                    <p className="text-muted-foreground text-xs">
-                        Gérer votre compte et vos preférences
+            {/* Entete de la page */}
+            <section className="mb-6">
+                <div className="space-y-1">
+                    <h1 className="text-3xl font-bold">Paramètres</h1>
+                    <p className="text-sm text-muted-foreground">
+                        Gérer votre compte et vos preférences.
                     </p>
                 </div>
             </section>

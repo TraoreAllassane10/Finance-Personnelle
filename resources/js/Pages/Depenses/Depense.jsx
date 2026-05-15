@@ -81,22 +81,15 @@ const Depense = () => {
             <AuthenticatedLayout>
                 <Head title="Depenses" />
 
-                {/* Titre et Bouton */}
-                <div className="flex justify-between items-center mb-7">
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-800 tracking-wide">
-                            Dépenses
-                        </h2>
-
-                        <p className="text-muted-foreground text-xs">
-                            Gérer et suivez vos dépenses
+                {/* Entete de la page */}
+                <section className="mb-6">
+                    <div className="space-y-1">
+                        <h1 className="text-3xl font-bold">Dépenses</h1>
+                        <p className="text-sm text-muted-foreground">
+                            Gérer et suivez vos dépenses.
                         </p>
                     </div>
-                </div>
-
-                {notify && (
-                    <Notification message={"Une dépense a été ajoutée"} />
-                )}
+                </section>
 
                 {/* Section de filtre */}
                 <Card className="mb-4 px-6 py-4">

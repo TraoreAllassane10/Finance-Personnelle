@@ -19,7 +19,6 @@ export default function Revenus() {
     const [showModal, SetShowModal] = useState(false);
     const [notify, setNotify] = useState(false);
 
-
     const { data, setData, post, processing, errors, reset } = useForm({
         date: "",
         montant: "",
@@ -83,20 +82,16 @@ export default function Revenus() {
         <div>
             <AuthenticatedLayout>
                 <Head title="Revenus" />
-                {/* Titre et Bouton */}
-                <div className="flex justify-between items-center mb-7">
-                    <div className="flex flex-col">
-                        <h2 className="text-2xl font-bold text-gray-800 tracking-wide">
-                            Aperçu des Revenus
-                        </h2>
-
-                        <p className="text-muted-foreground text-xs">
+ 
+                {/* Entete de la page */}
+                <section className="mb-6">
+                    <div className="space-y-1">
+                        <h1 className="text-3xl font-bold">Revenus</h1>
+                        <p className="text-sm text-muted-foreground">
                             Gérer et suivez vos sources de revenus.
                         </p>
                     </div>
-                </div>
-
-                {notify && <Notification message={"Un revenu a été ajouté"} />}
+                </section>
 
                 {/* Section de filtre */}
                 <Card className="mb-4 px-6 py-4">
