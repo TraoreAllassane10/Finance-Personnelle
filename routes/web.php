@@ -1,25 +1,26 @@
 <?php
 
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Application;
-use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ConfigurationController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepenseController;
+use App\Http\Controllers\EpargneController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RevenusController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\EpargneController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
+
+Route::get('/', [AuthenticatedSessionController::class, 'create']);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/revenus/excel', [RevenusController::class, 'excel'])->name('revenus.excel');
@@ -34,7 +35,6 @@ Route::middleware('auth')->group(function () {
     Route::put("/revenus/{revenu}", [RevenusController::class, 'update'])->name('revenus.update');
     Route::delete('/revenus/{revenu}', [RevenusController::class, 'destroy'])->name('revenus.delete');
 
-
     Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses');
     Route::post('/depenses', [DepenseController::class, 'store'])->name('depenses.store');
     Route::get('/depenses/{depense}', [DepenseController::class, 'edit'])->name('depenses.edit');
@@ -47,9 +47,20 @@ Route::middleware('auth')->group(function () {
     Route::put("/epargnes/{epargne}", [EpargneController::class, 'update'])->name('epargnes.update');
     Route::delete('/epargnes/{epargne}', [EpargneController::class, 'destroy'])->name('epargnes.delete');
 
-    Route::get("/parametres", [ConfigurationController::class, 'index'])->name('parametres');
-    Route::put("parametres/{user}", [ConfigurationController::class, 'user'])->name('user.infos');
-    Route::put("/configuration", [ConfigurationController::class, 'updateConfig'])->name('preferences');
+    Route::get('/budgets', function () {
+        return Inertia::render('Budget/Index');
+    })->name('budgets');
+
+    Route::get('/categories', function () {
+        return Inertia::render('Categorie/Index');
+    })->name('categories');
+
+    Route::get("/parametres", function () {
+        return Inertia::render('Parametre/Index');
+    })->name('parametres');
+
+    // Route::put("parametres/{user}", [ConfigurationController::class, 'user'])->name('user.infos');
+    // Route::put("/configuration", [ConfigurationController::class, 'updateConfig'])->name('preferences');
 
     Route::post('/categorie', [CategoryController::class, 'store'])->name('categorie.store');
 

@@ -1,48 +1,20 @@
-import { Button } from "@/Components/ui/button";
-import { Card } from "@/Components/ui/card";
+import { Card, CardContent } from "@/Components/ui/card";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "@/components/ui/sheet";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, router, useForm, usePage } from "@inertiajs/react";
-import { FileSpreadsheet } from "lucide-react";
+import { FileSpreadsheet, X } from "lucide-react";
 import React, { useState } from "react";
-import { Textarea } from "@/Components/ui/textarea";
-import DepensesChart from "@/Components/DepensesChart";
+
 import Notification from "@/Components/Notification";
-import { CardTable } from "@/Components/CardTable";
+
 import { getMonthRegister } from "@/services/helpers";
+import { TableTransaction } from "@/Components/transaction/TableTransaction";
+import { Input } from "@/Components/ui/input";
+import { Button } from "@/Components/ui/button";
 
 const Depense = () => {
     const depenses = usePage().props.depenses || [];
-    const totalDepense = usePage().props.totalDepense;
-    const categories = usePage().props.categories || [];
-    const [showModal, SetShowModal] = useState(false);
     const [notify, setNotify] = useState(false);
-
-    const mois = [
-        { nb: 0, nom: "Janvier" },
-        { nb: 1, nom: "Fevrier" },
-        { nb: 2, nom: "Mars" },
-        { nb: 3, nom: "Avril" },
-        { nb: 4, nom: "Mai" },
-        { nb: 5, nom: "Juin" },
-        { nb: 6, nom: "Juillet" },
-        { nb: 7, nom: "Août" },
-        { nb: 8, nom: "Septembre" },
-        { nb: 9, nom: "Octobre" },
-        { nb: 10, nom: "Novembre" },
-        { nb: 11, nom: "Decembre" },
-    ];
 
     const { data, setData, post, processing, errors, reset } = useForm({
         date: "",
@@ -87,7 +59,7 @@ const Depense = () => {
         e.preventDefault();
         post(route("depenses.store"), {
             onSuccess: () => {
-                reset(), SetShowModal(false);
+                (reset(), SetShowModal(false));
                 setNotify(true);
             },
         });
@@ -109,277 +81,53 @@ const Depense = () => {
             <AuthenticatedLayout>
                 <Head title="Depenses" />
 
-                <section>
-                    <div className="w-full bg-white p-8 rounded-2xl shadow-xl transition-all duration-300 mb-6">
-                        {/* Titre et Bouton */}
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-3xl font-bold text-gray-800 tracking-wide">
-                                Mes Dépenses
-                            </h2>
-
-                            <Sheet>
-                                <SheetTrigger asChild>
-                                    <Button
-                                        onClick={() => SetShowModal(true)}
-                                        className="bg-red-600 hover:bg-red-700 text-white py-2 px-5 rounded-full shadow-lg transition-all duration-300"
-                                    >
-                                        + Ajouter une dépense
-                                    </Button>
-                                </SheetTrigger>
-
-                                {showModal && (
-                                    <SheetContent
-                                        onKeyDown={(e) => e.stopPropagation()}
-                                        className="p-6"
-                                    >
-                                        <SheetHeader>
-                                            <SheetTitle className="text-lg font-semibold text-slate-800">
-                                                Ajouter une dépense
-                                            </SheetTitle>
-                                        </SheetHeader>
-
-                                        <div className="space-y-4 mt-4">
-                                            {/* Date */}
-                                            <div>
-                                                <Label htmlFor="date">
-                                                    Date
-                                                </Label>
-                                                <Input
-                                                    type="date"
-                                                    id="date"
-                                                    value={data.date}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "date",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                />
-                                                {errors?.date && (
-                                                    <p className="text-sm text-red-500 mt-1">
-                                                        {errors.date}
-                                                    </p>
-                                                )}
-                                            </div>
-
-                                            {/* Montant */}
-                                            <div>
-                                                <Label htmlFor="montant">
-                                                    Montant
-                                                </Label>
-                                                <Input
-                                                    type="number"
-                                                    id="montant"
-                                                    value={data.montant}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "montant",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                />
-                                                {errors?.montant && (
-                                                    <p className="text-sm text-red-500 mt-1">
-                                                        {errors.montant}
-                                                    </p>
-                                                )}
-                                            </div>
-
-                                            {/* Catégorie */}
-                                            <div>
-                                                <Label htmlFor="categorie">
-                                                    Catégorie
-                                                </Label>
-                                                <select
-                                                    id="categorie"
-                                                    value={data.category_id}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "category_id",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                                                >
-                                                    <option value="" disabled>
-                                                        Choisissez une catégorie
-                                                    </option>
-                                                    {categories.map(
-                                                        (categorie) => (
-                                                            <option
-                                                                key={
-                                                                    categorie.id
-                                                                }
-                                                                value={
-                                                                    categorie.id
-                                                                }
-                                                            >
-                                                                {categorie.name}
-                                                            </option>
-                                                        )
-                                                    )}
-                                                </select>
-                                            </div>
-
-                                            {/* Description */}
-                                            <div>
-                                                <Label htmlFor="description">
-                                                    Description
-                                                </Label>
-                                                <Textarea
-                                                    id="description"
-                                                    value={data.description}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "description",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                />
-                                                {errors?.description && (
-                                                    <p className="text-sm text-red-500 mt-1">
-                                                        {errors.description}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        <SheetFooter className="mt-6 flex justify-end">
-                                            <SheetClose asChild>
-                                                <Button
-                                                    onClick={handleSubmit}
-                                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl shadow-sm transition"
-                                                    disabled={processing}
-                                                >
-                                                    {processing
-                                                        ? "Ajout en cours..."
-                                                        : "Ajouter"}
-                                                </Button>
-                                            </SheetClose>
-                                        </SheetFooter>
-                                    </SheetContent>
-                                )}
-                            </Sheet>
-                        </div>
-
-                        {notify && (
-                            <Notification
-                                message={"Une dépense a été ajoutée"}
-                            />
-                        )}
-
-                        {/* Filtres et bouton export */}
-                        <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
-                            <div className="flex gap-4 flex-wrap">
-                                <div className="w-44">
-                                    <select
-                                        onChange={(e) =>
-                                            setSelectedMonth(e.target.value)
-                                        }
-                                        value={selectedMonth}
-                                        className="w-full rounded-lg border-gray-300 py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                                    >
-                                        <option value="" disabled>
-                                            Mois
-                                        </option>
-                                        {mois.map((mois) => (
-                                            <option
-                                                value={mois.nb}
-                                                key={mois.nb}
-                                            >
-                                                {mois.nom}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                <div className="w-44">
-                                    <select
-                                        onChange={(e) =>
-                                            setSelectedCategory(e.target.value)
-                                        }
-                                        value={selectedCategory}
-                                        className="w-full rounded-lg border-gray-300 py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                                    >
-                                        <option value="" disabled>
-                                            Catégorie
-                                        </option>
-                                        {categories.map((category) => (
-                                            <option
-                                                value={category.id}
-                                                key={category.id}
-                                            >
-                                                {category.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                <div className="w-44">
-                                    <select
-                                        onChange={(e) =>
-                                            setSelectedAmount(e.target.value)
-                                        }
-                                        value={selectedAmount}
-                                        className="w-full rounded-lg border-gray-300 py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                                    >
-                                        <option value="" disabled>
-                                            Trier
-                                        </option>
-                                        <option value="0">Moins élevé</option>
-                                        <option value="1">Plus élevé</option>
-                                    </select>
-                                </div>
-
-                                <button
-                                    onClick={resetFiltrer}
-                                    className="text-sm text-indigo-600 hover:underline"
-                                >
-                                    Actualiser
-                                </button>
-                            </div>
-
-                            <button
-                                onClick={handleExcel}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2"
-                            >
-                                <FileSpreadsheet className="w-5 h-5" />
-                                EXCEL
-                            </button>
-                        </div>
-
-                        {/* Table*/}
-                        <div className="flex gap-4 flex-col lg:flex-row">
-                            <div className="w-full lg:w-3/4">
-                                <CardTable
-                                    datas={fileredDepenses}
-                                    name="depense"
-                                />
-                            </div>
-
-                            <div className="w-full lg:w-1/4 flex flex-col gap-4">
-                                <div className="flex flex-col gap-2 bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-sm">
-                                    <span className="text-gray-600">
-                                        Total des depenses de ce mois
-                                    </span>
-                                    <span className="text-slate-900 font-semibold text-2xl">
-                                        {totalDepense.toLocaleString("fr-CI", {
-                                            style: "currency",
-                                            currency: "XOF",
-                                        })}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    {/* Section graphique */}
-                    <div className="w-full bg-white p-8 rounded-2xl shadow-xl transition-all duration-300">
-                        <Card className="p-6 shadow-sm rounded-xl">
-                            <DepensesChart />
-                        </Card>
+                {/* Entete de la page */}
+                <section className="mb-6">
+                    <div className="space-y-1">
+                        <h1 className="text-3xl font-bold">Dépenses</h1>
+                        <p className="text-sm text-muted-foreground">
+                            Gérer et suivez vos dépenses.
+                        </p>
                     </div>
                 </section>
+
+                {/* Section de filtre */}
+                <Card className="mb-4 px-6 py-4">
+                    <div className="flex justify-between ">
+                        <div className="flex flex-wrap gap-4">
+                            <div>
+                                <Input type="date" />
+                            </div>
+
+                            <div className="relative flex items-center w-[180px]">
+                                <select
+                                    onChange={(e) =>
+                                        setSelectedAmount(e.target.value)
+                                    }
+                                    value={selectedAmount}
+                                    className="block w-full rounded-md border border-gray-300 bg-white py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                >
+                                    <option value="" disabled>
+                                        Trier
+                                    </option>
+                                    <option value="0">Moins élevé</option>
+                                    <option value="1">Plus élevé</option>
+                                </select>
+                            </div>
+
+                            <Button
+                                variant={"ghost"}
+                                onClick={resetFiltrer}
+                                className=" text-sm"
+                            >
+                                <X />
+                                Réinitialiser
+                            </Button>
+                        </div>
+                    </div>
+                </Card>
+
+                <TableTransaction datas={fileredDepenses} name="depense" />
             </AuthenticatedLayout>
         </div>
     );
