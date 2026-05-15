@@ -42,6 +42,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Progress } from "@/Components/ui/progress";
 
 // Données pour le graphique Revenu - Depense
 export const description = "An interactive area chart";
@@ -461,23 +463,49 @@ export default function Dashboard() {
                     </CardHeader>
                     <CardContent className="flex-1">
                         <div className="flex flex-col gap-4 mt-4">
-                            <div>
-                                <h3 className="text-gray-800 font-bold text-sm">
-                                    Nouvelle voiture
-                                </h3>
-                                <p className="text-muted-foreground text-xs">
-                                    5000000 fcfa / 7000000 fcfa
-                                </p>
-                            </div>
+                            <Field className="w-full max-w-sm">
+                                <FieldLabel htmlFor="progress-upload">
+                                    <div className={"flex flex-col "}>
+                                        <h3 className="text-gray-800 font-bold text-sm">
+                                            Nouvelle voiture
+                                        </h3>
+                                        <p className="text-muted-foreground text-xs">
+                                            5000000 fcfa / 7000000 fcfa
+                                        </p>
+                                    </div>
+                                    <span className="ml-auto t-primary">
+                                        66%
+                                    </span>
+                                </FieldLabel>
 
-                            <div>
-                                <h3 className="text-gray-800 font-bold text-sm">
-                                    Fond d'urgence
-                                </h3>
-                                <p className="text-muted-foreground text-xs">
-                                    100000 fcfa / 300000 fcfa
-                                </p>
-                            </div>
+                                <Progress
+                                    value={66}
+                                    classNameIndicator="bg-blue-600"
+                                    id="progress-upload"
+                                />
+                            </Field>
+
+                            <Field className="w-full max-w-sm">
+                                <FieldLabel htmlFor="progress-upload">
+                                    <div className={"flex flex-col "}>
+                                        <h3 className="text-gray-800 font-bold text-sm">
+                                            Fond d'urgence
+                                        </h3>
+                                        <p className="text-muted-foreground text-xs">
+                                            100000 fcfa / 300000 fcfa
+                                        </p>
+                                    </div>
+                                    <span className="ml-auto text-green-600">
+                                        65%
+                                    </span>
+                                </FieldLabel>
+
+                                <Progress
+                                    value={65}
+                                    classNameIndicator="bg-green-600"
+                                    id="progress-upload"
+                                />
+                            </Field>
                         </div>
                     </CardContent>
                 </Card>
