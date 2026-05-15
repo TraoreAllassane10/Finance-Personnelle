@@ -5,6 +5,9 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { Plus } from "lucide-react";
 import React, { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator"
+import CategorieRevenu from "@/Components/categorie/CategorieRevenu";
 
 const Index = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -18,10 +21,10 @@ const Index = () => {
 
             <section className="flex justify-between place-items-center mb-8">
                 <div className="flex flex-col gap-1">
-                    <h2 className="text-2xl text-slate-900 font-bold">
+                    <h2 className="text-3xl font-bold">
                         Catégories
                     </h2>
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-sm text-muted-foreground">
                         Gérer vos catégories de revenus et de dépense
                     </p>
                 </div>
@@ -35,13 +38,23 @@ const Index = () => {
                 </Button>
             </section>
 
-            <section>
-                <h1 className="text-md text-muted-foreground font-medium">
-                    Catégories de depense
-                </h1>
-                <hr className="w-full border-1 border-gray-200 mt-2 mb-4" />
-                <CategorieDepense setOpenModal={setOpenModal} />
-            </section>
+            <Tabs defaultValue="depense" className="w-full">
+                <TabsList>
+                    <TabsTrigger value="depense">
+                        Catégories dépense
+                    </TabsTrigger>
+                    <TabsTrigger value="revenu">Catégories Revenu</TabsTrigger>
+                </TabsList>
+               
+                <Separator className='my-2' />
+
+                <TabsContent value="depense">
+                    <CategorieDepense setOpenModal={setOpenModal} />
+                </TabsContent>
+                <TabsContent value="revenu">
+                    <CategorieRevenu setOpenModal={setOpenModal} />
+                </TabsContent>
+            </Tabs>
         </AuthenticatedLayout>
     );
 };
