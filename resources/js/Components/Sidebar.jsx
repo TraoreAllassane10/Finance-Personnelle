@@ -40,7 +40,7 @@ const mainMenu = [
     {
         name: "Budgets",
         icon: Wallet2,
-        route: "dashboard",
+        route: "budgets",
     },
     {
         name: "categories",

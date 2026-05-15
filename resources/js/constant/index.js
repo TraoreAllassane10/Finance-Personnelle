@@ -3,11 +3,13 @@ import {
     ArrowUp,
     Banknote,
     Car,
+    House,
     Landmark,
     PiggyBank,
     Salad,
     TrendingDown,
     TrendingUp,
+    Utensils,
     Wallet,
 } from "lucide-react";
 
@@ -146,5 +148,35 @@ export const depotRecent = [
         date: "2026-12-31",
         compte: "Fond de vacance",
         montant: 600_000,
+    },
+];
+
+export const budgets = [
+    {
+        id: 1,
+        icon: House,
+        categorie: "Logement",
+        montant_alloue: 80000,
+        montant_depense: 60000,
+        bgcolor: "bg-blue-100",
+        textColor: "text-blue-600",
+    },
+    {
+        id: 2,
+        icon: Utensils,
+        categorie: "Alimentation",
+        montant_alloue: 100000,
+        montant_depense: 70000,
+        bgcolor: "bg-orange-100",
+        textColor: "text-orange-600",
+    },
+        {
+        id: 3,
+        icon: Car,
+        categorie: "Transport",
+        montant_alloue: 50000,
+        montant_depense: 10000,
+        bgcolor: "bg-red-100",
+        textColor: "text-red-600",
     },
 ];

@@ -47,6 +47,10 @@ Route::middleware('auth')->group(function () {
     Route::put("/epargnes/{epargne}", [EpargneController::class, 'update'])->name('epargnes.update');
     Route::delete('/epargnes/{epargne}', [EpargneController::class, 'destroy'])->name('epargnes.delete');
 
+    Route::get('/budgets', function () {
+        return Inertia::render('Budget/Index');
+    })->name('budgets');
+
     Route::get('/categories', function () {
         return Inertia::render('Categorie/Index');
     })->name('categories');

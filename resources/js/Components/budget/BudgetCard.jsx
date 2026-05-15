@@ -1,0 +1,77 @@
+import React from "react";
+import { Card, CardContent, CardHeader } from "../ui/card";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Progress } from "@/components/ui/progress";
+
+const BudgetCard = ({ budget }) => {
+    // Icon de la categorie
+    const Icon = budget.icon;
+
+    // Calcule de progression
+    const progression =
+        budget.montant_alloue > 0
+            ? (budget.montant_depense * 100) / budget.montant_alloue
+            : 0;
+
+    // Recuperation du sytle de l'indicateur
+    const [textColor, bgColor] = getSytleIndicator(progression);
+
+    // Calcule du montant restant
+    const montant_restant = budget.montant_alloue - budget.montant_depense;
+
+    return (
+        <Card>
+            <CardHeader className="border-b">
+                <div className="flex gap-4 place-items-center">
+                    <div
+                        className={`p-1 flex justify-center rounded-lg ${budget.bgcolor}`}
+                    >
+                        <Icon className={`${budget.textColor}`} />
+                    </div>
+
+                    <span className="text-xl font-semibold">
+                        {budget?.categorie}
+                    </span>
+                </div>
+            </CardHeader>
+
+            <CardContent className="mt-4">
+                <Field className="w-full max-w-sm">
+                    <FieldLabel htmlFor="progress-upload">
+                        <span className="text-xl font-bold">
+                            {budget.montant_alloue.toLocaleString("fr-CI", {
+                                style: "currency",
+                                currency: "XOF",
+                            })}
+                        </span>
+                    </FieldLabel>
+                    <Progress
+                        value={progression}
+                        id="progress-upload"
+                        classNameIndicator={bgColor}
+                    />
+                </Field>
+
+                <div className="flex justify-between text-sm font-medium mt-4">
+                    <p className="text-muted-foreground">Restant</p>
+                    <p className="text-green-600">
+                        {montant_restant.toLocaleString("fr-CI", {
+                            style: "currency",
+                            currency: "XOF",
+                        })}
+                    </p>
+                </div>
+            </CardContent>
+        </Card>
+    );
+};
+
+export default BudgetCard;
+
+const getSytleIndicator = (progression) => {
+    if (progression > 0 && progression <= 100) {
+        return ["text-green-500", "bg-green-500"];
+    } else {
+        return ["text-red-600", "bg-red-600"];
+    }
+};
