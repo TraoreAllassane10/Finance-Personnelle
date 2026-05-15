@@ -1,5 +1,5 @@
 import { Button } from "@/Components/ui/button";
-import { Card, CardContent } from "@/Components/ui/card";
+import { Card, CardContent, CardHeader } from "@/Components/ui/card";
 
 import {
     Table,
@@ -9,30 +9,16 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "@/components/ui/sheet";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
-import { Edit, FileSpreadsheet, Trash2 } from "lucide-react";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { ArrowUp, Landmark, PlusCircle, Wallet } from "lucide-react";
 import React, { useState } from "react";
-import { Textarea } from "@/Components/ui/textarea";
-import Notification from "@/Components/Notification";
 import { getMonthRegister } from "@/services/helpers";
+
+import { depotRecent, recentesTransaction } from "@/constant";
 
 const Epargnes = () => {
     const { epargnes } = usePage().props || [];
-    const totalEpargne = usePage().props.totalEpargne;
-    const [showModal, SetShowModal] = useState(false);
-    const [notify, setNotify] = useState(false);
 
     const mois = [
         { nb: 0, nom: "Janvier" },
@@ -110,242 +96,182 @@ const Epargnes = () => {
         <AuthenticatedLayout>
             <Head title="Epargnes" />
 
-            {/* Titre et bouton */}
-            <div className="flex justify-between items-center mb-6">
-                <div>
-                    <h2 className="text-3xl font-bold text-gray-800 tracking-wide">
-                        Epargnes
-                    </h2>
-
-                    <p className="text-muted-foreground text-sm">
-                        Visualiser et gerer vos epargnes efficacement
+            {/* Entete de la page */}
+            <section className="mb-6">
+                <div className="space-y-1">
+                    <h1 className="text-3xl font-bold">Epargnes</h1>
+                    <p className="text-sm text-muted-foreground">
+                        Suivre vos comptes d'epargnes et la progression de votre
+                        objectif.
                     </p>
                 </div>
+            </section>
 
-                <Sheet>
-                    <SheetTrigger asChild>
-                        <Button
-                            onClick={() => SetShowModal(true)}
-                            className="bg-green-600 hover:bg-green-700 text-white py-2 px-5 rounded-full shadow-lg transition-all duration-300"
-                        >
-                            + Ajouter une epargnes
-                        </Button>
-                    </SheetTrigger>
-
-                    {showModal && (
-                        <SheetContent
-                            onKeyDown={(e) => e.stopPropagation()}
-                            className="p-6 space-y-6"
-                        >
-                            <SheetHeader>
-                                <SheetTitle className="text-xl font-semibold text-gray-900">
-                                    Ajouter une epargnes
-                                </SheetTitle>
-                            </SheetHeader>
-
-                            <div className="space-y-4">
-                                <div>
-                                    <Label htmlFor="date">Date</Label>
-                                    <Input
-                                        type="date"
-                                        id="date"
-                                        value={data.date}
-                                        onChange={(e) =>
-                                            setData("date", e.target.value)
-                                        }
-                                    />
-                                    {errors?.date && (
-                                        <p className="text-sm text-red-500 mt-1">
-                                            {errors.date}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="montant">Montant</Label>
-                                    <Input
-                                        type="number"
-                                        id="montant"
-                                        value={data.montant}
-                                        onChange={(e) =>
-                                            setData("montant", e.target.value)
-                                        }
-                                    />
-                                    {errors?.montant && (
-                                        <p className="text-sm text-red-500 mt-1">
-                                            {errors.montant}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="compte">
-                                        Compte d'epargnes
-                                    </Label>
-                                    <Input
-                                        type="text"
-                                        id="compte"
-                                        value={data.compte}
-                                        onChange={(e) =>
-                                            setData("compte", e.target.value)
-                                        }
-                                    />
-                                    {errors?.compte && (
-                                        <p className="text-sm text-red-500 mt-1">
-                                            {errors.compte}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="projet">Projet</Label>
-                                    <Textarea
-                                        id="projet"
-                                        value={data.projet}
-                                        onChange={(e) =>
-                                            setData("projet", e.target.value)
-                                        }
-                                    />
-                                    {errors?.projet && (
-                                        <p className="text-sm text-red-500 mt-1">
-                                            {errors.projet}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <SheetFooter className="mt-4 flex justify-end">
-                                <SheetClose asChild>
-                                    <Button
-                                        onClick={handleSubmit}
-                                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl shadow-md transition"
-                                        disabled={processing}
-                                    >
-                                        {processing
-                                            ? "Ajout en cours..."
-                                            : "Ajouter"}
-                                    </Button>
-                                </SheetClose>
-                            </SheetFooter>
-                        </SheetContent>
-                    )}
-                </Sheet>
-            </div>
-
-            {notify && <Notification message="Une epargne a été ajoutée" />}
-
-            {/* Section de filtre */}
-            <Card className="mb-4 p-6">
-                <CardContent>
-                    {/* Filtres */}
-                    <div className="flex flex-col md:flex-row justify-between items-center">
-                        <div className="flex flex-wrap gap-4">
-                            <div className="w-[180px]">
-                                <select
-                                    onChange={(e) =>
-                                        setSelectedMonth(e.target.value)
-                                    }
-                                    id="categorie"
-                                    value={selectedMonth}
-                                    className="block w-full rounded-md border border-gray-300 bg-white py-2 px-3 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                >
-                                    <option value="" disabled>
-                                        Mois
-                                    </option>
-                                    {mois.map((mois) => (
-                                        <option value={mois.nb} key={mois.nb}>
-                                            {mois.nom}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div className="w-[180px]">
-                                <select
-                                    onChange={(e) =>
-                                        setSelectedAmount(e.target.value)
-                                    }
-                                    id="montant"
-                                    value={selectedAmount}
-                                    className="block w-full rounded-md border border-gray-300 bg-white py-2 px-3 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                >
-                                    <option value="" disabled>
-                                        Trier
-                                    </option>
-                                    <option value="0">Moins élevé</option>
-                                    <option value="1">Plus élevé</option>
-                                </select>
-                            </div>
-
-                            <button
-                                onClick={resetFiltrer}
-                                className="text-sm text-indigo-600 hover:underline"
-                            >
-                                Actualiser
-                            </button>
-                        </div>
-
-                        <div>
-                            <button
-                                onClick={handleExcel}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2"
-                            >
-                                <FileSpreadsheet />
-                                EXCEL
-                            </button>
-                        </div>
+            {/* Carte Total et compte actifs */}
+            <section className="flex gap-4 mb-6">
+                <Card className="w-1/4 p-4 bg-gradient-to-br from-white to-yellow-50">
+                    <div className="flex place-items-center gap-2 mb-4">
+                        <Landmark size={16} className="text-yellow-500" />
+                        <span className="text-sm text-muted-foreground uppercase">
+                            Total d'epargne
+                        </span>
                     </div>
-                </CardContent>
-            </Card>
 
-                   <Card className="shadow-lg mb-8 p-6 border border-gray-100 rounded-xl transition-all duration-300">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Date</TableHead>
-                                        <TableHead>Montant</TableHead>
-                                        <TableHead>Compte d'épargnes</TableHead>
-                                        <TableHead>Projet</TableHead>
-                                        <TableHead>Actions</TableHead>
-                                    </TableRow>
-                                </TableHeader>
+                    <div className="text-gray-800 font-bold text-xl">
+                        15 000 000 fcfa
+                    </div>
 
-                                {fileredEpargnes.map((epargne) => (
-                                    <TableRow key={epargne.id}>
-                                        <TableCell>{epargne.date}</TableCell>
-                                        <TableCell>
-                                            {epargne.montant.toLocaleString(
-                                                "fr-CI",
-                                                {
-                                                    style: "currency",
-                                                    currency: "XOF",
-                                                },
-                                            )}
+                    <div className="flex gap-2 mt-8">
+                        <div className="bg-green-50 text-green-600 font-bold px-1 py-0.5 flex gap-1 justify-between items-center place-items-center rounded-md">
+                            <ArrowUp /> +4.2%
+                        </div>
+
+                        <p className="text-muted-foreground">
+                            {" "}
+                            vs mois dernier
+                        </p>
+                    </div>
+                </Card>
+
+                <Card className="w-3/4">
+                    <CardHeader className="border-b border-gray-200 text-gray-800 font-semibold text-xl">
+                        Comptes actifs
+                    </CardHeader>
+
+                    <CardContent className="mt-2 flex gap-4">
+                        <div className="flex gap-2 place-items-center border border-gray-200 p-4 w-1/2 rounded-lg">
+                            <div className="bg-slate-100 flex items-center justify-center p-1 rounded-sm">
+                                <Wallet className="text-yellow-500" />
+                            </div>
+
+                            <div className="flex flex-col ">
+                                <h2 className="text-gray-800 font-semibold text-xl">
+                                    Epargne Principal
+                                </h2>
+                                <p className="text-muted-foreground text-xs">
+                                    10 000 000 fcfa
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex gap-2 place-items-center border border-gray-200 p-4 w-1/2 rounded-lg">
+                            <div className="bg-slate-100 flex items-center justify-center p-1 rounded-sm">
+                                <Wallet className="text-yellow-500" />
+                            </div>
+
+                            <div className="flex flex-col ">
+                                <h2 className="text-gray-800 font-semibold text-xl">
+                                    Fond de vacance
+                                </h2>
+                                <p className="text-muted-foreground text-sm">
+                                    500 000 fcfa
+                                </p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            </section>
+
+            {/* Carte objectifs et virement recent */}
+            <section className="flex gap-4">
+                <Card className="w-[30%]">
+                    <CardHeader className="border-b border-gray-200 text-gray-800 font-semibold text-xl">
+                        Objectifs actuel
+                    </CardHeader>
+
+                    <CardContent className="mt-4 space-y-6">
+                        <div className="flex gap-4">
+                            <div className="flex justify-center items-center border-4 border-gray-500 rounded-full p-1 text-sm">
+                                80%
+                            </div>
+
+                            <div className="w-full">
+                                <h3 className="text-xl font-semibold">
+                                    Fond d'urgence
+                                </h3>
+                                <div className="flex justify-between text-muted-foreground text-xs">
+                                    <span>300000 fcfa</span>
+                                    <span>sur 500000 fcfa</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex gap-4">
+                            <div className="flex justify-center items-center border-4 border-gray-500 rounded-full p-1 text-sm">
+                                80%
+                            </div>
+
+                            <div className="w-full">
+                                <h3 className="text-xl font-semibold">
+                                    Nouvelle voiture
+                                </h3>
+                                <div className="flex justify-between text-muted-foreground text-xs">
+                                    <span>3 000 000 fcfa</span>
+                                    <span>sur 5 000 000 fcfa</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <Button
+                            variant={"outline"}
+                            className="w-full flex gap-2"
+                        >
+                            <PlusCircle />
+                            creer un nouvel objectif
+                        </Button>
+                    </CardContent>
+                </Card>
+
+                <Card className="w-[70%]">
+                    <CardHeader className="border-b border-gray-200 text-gray-800 font-semibold text-xl">
+                        Dépôts récents
+                    </CardHeader>
+
+                    <CardContent className="mt-2 flex gap-4">
+                        <Table>
+                            <TableHeader>
+                                <TableRow className="bg-gray-50">
+                                    <TableHead className="font-semibold text-muted-foreground">
+                                        DATE
+                                    </TableHead>
+                                    <TableHead className="font-semibold text-muted-foreground">
+                                        COMPTE
+                                    </TableHead>
+                                    <TableHead className="font-semibold text-muted-foreground">
+                                        MONTANT
+                                    </TableHead>
+                                </TableRow>
+                                {depotRecent.map((data) => (
+                                    <TableRow key={data.id}>
+                                        <TableCell className="text-muted-foreground">
+                                            {new Date(
+                                                data.date,
+                                            ).toLocaleDateString()}
                                         </TableCell>
-                                        <TableCell>{epargne.compte}</TableCell>
-                                        <TableCell>{epargne.projets}</TableCell>
-                                        <TableCell className="flex gap-3">
-                                            <Link
-                                                href={route(
-                                                    "epargnes.edit",
-                                                    epargne.id,
+
+                                        <TableCell className="text-muted-foreground">
+                                            {data.compte}
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground">
+                                            <span
+                                                className={` font-bold`}
+                                            >
+                                                {data.montant.toLocaleString(
+                                                    "fr-CI",
+                                                    {
+                                                        style: "currency",
+                                                        currency: "XOF",
+                                                    },
                                                 )}
-                                            >
-                                                <Edit className="text-indigo-500 cursor-pointer" />
-                                            </Link>
-                                            <Link
-                                                onClick={() =>
-                                                    handleDelete(epargne.id)
-                                                }
-                                            >
-                                                <Trash2 className="text-red-500 cursor-pointer" />
-                                            </Link>
+                                            </span>
                                         </TableCell>
                                     </TableRow>
                                 ))}
-                            </Table>
-                        </Card>
-
+                            </TableHeader>
+                        </Table>
+                    </CardContent>
+                </Card>
+            </section>
         </AuthenticatedLayout>
     );
 };

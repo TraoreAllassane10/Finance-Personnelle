@@ -98,7 +98,7 @@ export const recentesTransaction = [
     },
     {
         id: 2,
-         date: "2026-05-15",
+        date: "2026-05-15",
         description: "Paiement de Facture",
         categorie: "Facture",
         montant: 50_000,
@@ -114,10 +114,37 @@ export const recentesTransaction = [
     },
     {
         id: 4,
-         date: "2026-12-31",
+        date: "2026-12-31",
         description: "Bourse",
         categorie: "Inverstissement",
         montant: 1_000_000,
         type: "revenu",
+    },
+];
+
+export const depotRecent = [
+    {
+        id: 1,
+        date: "2026-12-31",
+        compte: "Epargne Principal",
+        montant: 200_000,
+    },
+    {
+        id: 2,
+        date: "2026-12-31",
+        compte: "Fond de vacance",
+        montant: 300_000,
+    },
+    {
+        id: 3,
+        date: "2026-12-31",
+        compte: "Epargne Principal",
+        montant: 500_000,
+    },
+    {
+        id: 4,
+        date: "2026-12-31",
+        compte: "Fond de vacance",
+        montant: 600_000,
     },
 ];

@@ -43,14 +43,6 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
 // Données pour le graphique Revenu - Depense
 export const description = "An interactive area chart";
 
