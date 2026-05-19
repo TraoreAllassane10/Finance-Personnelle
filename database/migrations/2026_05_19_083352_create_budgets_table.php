@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('montant_alloue');
 
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('categorie_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
 
             $table->timestamps();
         });
