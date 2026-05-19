@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\EpargneController;
@@ -51,9 +50,10 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Budget/Index');
     })->name('budgets');
 
-    Route::get('/categories', function () {
-        return Inertia::render('Categorie/Index');
-    })->name('categories');
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/categories', 'index')->name('categories');
+        Route::post('/categories/store', 'store')->name('categories.store');
+    });
 
     Route::get("/parametres", function () {
         return Inertia::render('Parametre/Index');

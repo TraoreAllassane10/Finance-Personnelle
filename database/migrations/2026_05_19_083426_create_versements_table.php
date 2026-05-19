@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('configurations', function (Blueprint $table) {
+        Schema::create('versements', function (Blueprint $table) {
             $table->id();
-            $table->string('devise')->default('fcfa');
-            $table->string('theme')->default('clair');
-            $table->string('langue')->default('francais');
-            $table->foreignId('user_id')->constrained();
+            $table->date("date");
+            $table->integer('montant_verse');
+            
+            $table->foreignId('objectif_epargne_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('configurations');
+        Schema::dropIfExists('versements');
     }
 };

@@ -16,31 +16,31 @@ class DashboardController extends Controller
         $totalRevenus = 0;
         $totalDepenses = 0;
 
-        $revenus = Revenus::where('user_id', Auth::id())->get();
-        $depenses = Depense::where('user_id', Auth::id())->get();
+        // $revenus = Revenus::where('user_id', Auth::id())->get();
+        // $depenses = Depense::where('user_id', Auth::id())->get();
 
         //La somme de tous les revenus
-        for ($i=0; $i < $revenus->count(); $i++) {
-            $totalRevenus += $revenus[$i]->montant;
-        }
+        // for ($i=0; $i < $revenus->count(); $i++) {
+        //     $totalRevenus += $revenus[$i]->montant;
+        // }
 
         //La somme de toutes les depenses
-        for ($i=0; $i < $depenses->count(); $i++) {
-            $totalDepenses += $depenses[$i]->montant;
-        }
+        // for ($i=0; $i < $depenses->count(); $i++) {
+        //     $totalDepenses += $depenses[$i]->montant;
+        // }
 
         //Graphique de revenus
-        $revenusParDate = (new GroupByDate())->group($revenus);
+        // $revenusParDate = (new GroupByDate())->group($revenus);
 
         //Graphique de depense
-        $depensesParDate = (new GroupByDate())->group($depenses);
+        // $depensesParDate = (new GroupByDate())->group($depenses);
 
         return Inertia::render('Dashboard', [
-            "totalRevenus" =>  $totalRevenus,
-            "totalDepenses" => $totalDepenses,
-            "total" => $totalRevenus - $totalDepenses,
-            "revenusChart" => $revenusParDate,
-            "depensesChart" => $depensesParDate
+            // "totalRevenus" =>  $totalRevenus,
+            // "totalDepenses" => $totalDepenses,
+            // "total" => $totalRevenus - $totalDepenses,
+            // "revenusChart" => $revenusParDate,
+            // "depensesChart" => $depensesParDate
         ]);
     }
 }

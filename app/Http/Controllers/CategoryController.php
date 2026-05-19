@@ -2,18 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Http\Requests\categorie\CreateCategoryRequest;
+use App\Services\CategorieService;
+use Exception;
+use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
-    public function store(Request $request)
-    {
-        $validated = $request->validate(['categorie' => 'required|string']);
-        $categorie = new Category();
-        $categorie->name = $validated['categorie'];
-        $categorie->save();
+    public function __construct(
+        protected CategorieService $categorieService
+    ) {}
 
-        return redirect()->route('dashboard');
+    public function index()
+    {
+        $categories =  $this->categorieService->getCategories();
+
+        return Inertia::render('Categorie/Index', [
+            "categories" => $categories
+        ]);
+    }
+
+    public function store(CreateCategoryRequest $request)
+    {
+        try {
+            $data = $request->validated();
+
+            $this->categorieService->createCategory($data);
+
+            return response()->json(["success" => true, "message" => "Catégorie ajoutée avec succès"]);
+        } catch (Exception $e) {
+            Log::error("Erreur lors de la création d'une categorie", ["erreur" => $e->getMessage()]);
+
+            return response()->json(["success" => false, "message" => "Erreur lors de la création d'une categorie"]);
+        }
     }
 }

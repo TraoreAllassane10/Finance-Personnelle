@@ -22,13 +22,13 @@ class DepenseController extends Controller
 
     public function index()
     {
-        $depenseService = $this->depenseService->all();
+        // $depenseService = $this->depenseService->all();
 
         return Inertia::render('Depenses/Depense', [
-            "depenses" => $depenseService[0],
-            "categories" => $depenseService[1],
-            "depensesChart" => $depenseService[2],
-            "totalDepense" => $depenseService[3]
+            // "depenses" => $depenseService[0],
+            // "categories" => $depenseService[1],
+            // "depensesChart" => $depenseService[2],
+            // "totalDepense" => $depenseService[3]
         ]);
     }
 
