@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
@@ -16,9 +16,23 @@ import { categories } from "@/constant";
 const ModalTransaction = ({ typeModal, setOpenModal }) => {
     const [typeTransaction, setTypeTransaction] = useState("depense");
 
+    const [data, setData] = useState({
+        type: "depense",
+        montant: null,
+        date: "",
+        category_id: "",
+        description: "",
+        note: "",
+    });
+
+    const handleChange = (key, value) => {
+        setData((prev) => ({ ...prev, [key]: value }));
+    };
+
     return (
         <div className="fixed inset-0 z-40 flex items-center justify-center">
             <div className="absolute inset-0 bg-black/50 backdrop-blur-md"></div>
+
             <div className="bg-white w-[400px] rounded-lg absolute top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
                 <div className="p-4">
                     {/* Entete */}
@@ -38,14 +52,14 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                     <div className="w-full bg-gray-100 rounded-lg p-1 mb-4">
                         <div className="flex">
                             <button
-                                onClick={() => setTypeTransaction("depense")}
-                                className={`w-1/2 py-1 text-sm font-medium text-gray-600 rounded-md transition duration-100 shadow-sm ${typeTransaction === "depense" && "bg-white"}`}
+                                onClick={() => handleChange("type", "depense")}
+                                className={`w-1/2 py-1 text-sm font-medium text-gray-600 rounded-md transition duration-100 shadow-sm ${data.type === "depense" && "bg-white"}`}
                             >
                                 Dépense
                             </button>
                             <button
-                                onClick={() => setTypeTransaction("revenu")}
-                                className={`w-1/2  text-sm font-medium text-gray-600 rounded-md transition duration-100 shadow-sm ${typeTransaction === "revenu" && "bg-white"}`}
+                                onClick={() => handleChange("type", "revenu")}
+                                className={`w-1/2  text-sm font-medium text-gray-600 rounded-md transition duration-100 shadow-sm ${data.type === "revenu" && "bg-white"}`}
                             >
                                 Revenu
                             </button>
