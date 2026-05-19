@@ -10,7 +10,8 @@ class CategorieRepository
 
     public function all()
     {
-        return Category::all();
+        return Category::where('user_id', Auth::user()->id)
+            ->withCount('transactions')->get();
     }
 
     public function store(array $data)

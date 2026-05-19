@@ -21,7 +21,7 @@ return new class extends Migration
             $table->mediumText('note')->nullable();
 
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('categorie_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
 
             $table->timestamps();
         });
