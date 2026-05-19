@@ -11,7 +11,7 @@ import {
 } from "@/Components/ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
-import { budgets } from "@/constant";
+
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
 import {
@@ -23,7 +23,7 @@ import {
 import React, { useState } from "react";
 
 const Index = () => {
-    const {categories} = usePage().props;
+    const { categories, budgets } = usePage().props;
 
     const [openModal, setOpenModal] = useState(false);
 

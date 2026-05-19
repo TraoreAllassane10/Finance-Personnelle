@@ -8,7 +8,14 @@ use Illuminate\Support\Facades\Auth;
 class BudgetRepository
 {
 
-    public function all() {}
+    public function all()
+    {
+        return Budget::with(['category' => function ($query) {
+            $query->with(["transactions" => function ($query) {
+                $query->whereMonth("date", now()->month)->sum("montant");
+            }]);
+        }])->get();
+    }
 
     public function create(array $data, int $mois, int $annee)
     {

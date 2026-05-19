@@ -17,4 +17,8 @@ class Budget extends Model
         "mois",
         'annee'
     ];
+
+    public function category() {
+        return $this->belongsTo(Category::class);
+    }
 }

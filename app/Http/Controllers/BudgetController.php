@@ -19,8 +19,12 @@ class BudgetController extends Controller
     public function index()
     {
         $categories = $this->categorieService->getCategories();
+        $budgets = $this->budgetService->getBudgets();
 
-        return Inertia::render('Budget/Index', ['categories' => $categories]);
+        return Inertia::render('Budget/Index', [
+            'categories' => $categories,
+            'budgets' => $budgets
+        ]);
     }
 
     public function store(CreateBudgetRequest $request)

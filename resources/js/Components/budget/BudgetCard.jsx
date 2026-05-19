@@ -2,35 +2,49 @@ import React from "react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
+import { Banknote, Car, Plus, Salad, ShoppingBag, Wallet } from "lucide-react";
+
+const ConfigIcon = {
+    Wallet: Wallet,
+    Banknote: Banknote,
+    Salad: Salad,
+    Car: Car,
+    ShoppingBag: ShoppingBag,
+};
 
 const BudgetCard = ({ budget }) => {
     // Icon de la categorie
-    const Icon = budget.icon;
+    const Icon = ConfigIcon[budget.category?.icon];
+    console.log(budget);
 
-    // Calcule de progression
-    const progression =
-        budget.montant_alloue > 0
-            ? (budget.montant_depense * 100) / budget.montant_alloue
-            : 0;
+    // Calcule de la progression
+    // const progression =
+    //     budget.montant_alloue > 0
+    //         ? (budget.montant_depense * 100) / budget.montant_alloue
+    //         : 0;
+    
+    const progression = 50;
 
     // Recuperation du sytle de l'indicateur
-    const [textColor, bgColor] = getSytleIndicator(progression);
+    const [bgColor] = getSytleIndicator(progression);
 
     // Calcule du montant restant
-    const montant_restant = budget.montant_alloue - budget.montant_depense;
+    // const montant_restant = budget.montant_alloue - budget.montant_depense;
+    const montant_restant = 10000;
 
     return (
         <Card>
             <CardHeader className="border-b">
                 <div className="flex gap-4 place-items-center">
                     <div
-                        className={`p-1 flex justify-center rounded-lg ${budget.bgcolor}`}
+                        className={`p-1 flex justify-center rounded-lg`}
+                        style={{ backgroundColor: budget.category.couleur }}
                     >
-                        <Icon className={`${budget.textColor}`} />
+                        <Icon className={`text-white`} />
                     </div>
 
                     <span className="text-xl font-semibold">
-                        {budget?.categorie}
+                        {budget.category?.nom}
                     </span>
                 </div>
             </CardHeader>
