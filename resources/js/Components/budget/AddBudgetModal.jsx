@@ -1,5 +1,4 @@
-import { Banknote, Car, Salad, ShoppingBag, Wallet, X } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -10,9 +9,26 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../ui/select";
-import { categories } from "@/constant";
+import { X } from "lucide-react";
+import useBudget from "@/hooks/useBudget";
 
-const AddBudgetModal = ({ setOpenModal }) => {
+const AddBudgetModal = ({ categories, setOpenModal }) => {
+    const [data, setData] = useState({
+        montant_alloue: "",
+        category_id: "",
+    });
+
+    const handleChange = (key, value) => {
+        setData((prev) => ({ ...prev, [key]: value }));
+    };
+
+    const { createBudget, isLoading } = useBudget();
+
+    // Création de budget
+    const handleSubmit = async () => {
+        createBudget(data);
+    };
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div className="absolute inset-0 bg-black/50 backdrop-blur-md">
@@ -41,6 +57,13 @@ const AddBudgetModal = ({ setOpenModal }) => {
                                     </Label>
                                     <Input
                                         type="number"
+                                        value={data.montant_alloue}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                "montant_alloue",
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="Ex: 50000"
                                         className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                     />
@@ -53,7 +76,16 @@ const AddBudgetModal = ({ setOpenModal }) => {
                                             Catégorie
                                         </Label>
 
-                                        <Select className="h-7 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition">
+                                        <Select
+                                            value={data.category_id}
+                                            onValueChange={(value) =>
+                                                handleChange(
+                                                    "category_id",
+                                                    value,
+                                                )
+                                            }
+                                            className="h-7 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                        >
                                             <SelectTrigger className="w-[180px]">
                                                 <SelectValue placeholder="Sélectionner le type" />
                                             </SelectTrigger>
@@ -65,8 +97,11 @@ const AddBudgetModal = ({ setOpenModal }) => {
                                                             "depense",
                                                     )
                                                     .map((categorie) => (
-                                                        <SelectItem value={categorie.name}>
-                                                            {categorie.name}
+                                                        <SelectItem
+                                                            key={categorie.id}
+                                                            value={categorie.id}
+                                                        >
+                                                            {categorie.nom}
                                                         </SelectItem>
                                                     ))}
                                             </SelectContent>
@@ -88,8 +123,14 @@ const AddBudgetModal = ({ setOpenModal }) => {
                                 >
                                     Annuler
                                 </Button>
-                                <Button className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300">
-                                    Ajouter une transaction
+                                <Button
+                                    onClick={handleSubmit}
+                                    disable={isLoading ? true : false}
+                                    className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300"
+                                >
+                                    {isLoading
+                                        ? "Enregistrement..."
+                                        : " Ajouter une transaction"}
                                 </Button>
                             </div>
                         </div>

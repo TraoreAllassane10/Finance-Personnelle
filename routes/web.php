@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepenseController;
@@ -46,9 +47,11 @@ Route::middleware('auth')->group(function () {
     Route::put("/epargnes/{epargne}", [EpargneController::class, 'update'])->name('epargnes.update');
     Route::delete('/epargnes/{epargne}', [EpargneController::class, 'destroy'])->name('epargnes.delete');
 
-    Route::get('/budgets', function () {
-        return Inertia::render('Budget/Index');
-    })->name('budgets');
+
+    Route::controller(BudgetController::class)->group(function () {
+        Route::get('/budgets', 'index')->name('budgets');
+        Route::post('/budgets', 'store')->name('budgets.store');
+    });
 
     Route::controller(CategoryController::class)->group(function () {
         Route::get('/categories', 'index')->name('categories');

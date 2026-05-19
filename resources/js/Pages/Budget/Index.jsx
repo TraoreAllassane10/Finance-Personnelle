@@ -13,7 +13,7 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
 import { budgets } from "@/constant";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import {
     CircleAlert,
     SlidersHorizontal,
@@ -23,6 +23,8 @@ import {
 import React, { useState } from "react";
 
 const Index = () => {
+    const {categories} = usePage().props;
+
     const [openModal, setOpenModal] = useState(false);
 
     return (
@@ -30,7 +32,7 @@ const Index = () => {
             <Head title="Budget" />
 
             {/* Modal de définition de budget */}
-            {openModal && <AddBudgetModal setOpenModal={setOpenModal} />}
+            {openModal && <AddBudgetModal categories={categories} setOpenModal={setOpenModal} />}
 
             {/* Entete de la page */}
             <section className="flex justify-between place-items-center mb-6">

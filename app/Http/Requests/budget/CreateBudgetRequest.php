@@ -11,7 +11,7 @@ class CreateBudgetRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,17 @@ class CreateBudgetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "montant_alloue" => ['required', "numeric"],
+            "category_id" => ['required']
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            "montant_alloue.required" => "Le montant alloué est requis",
+            "montant_alloue.numeric" => "Le montant alloué doit etre un nombre entier",
+            "category_id.required" => "La categorie est requise",
         ];
     }
 }

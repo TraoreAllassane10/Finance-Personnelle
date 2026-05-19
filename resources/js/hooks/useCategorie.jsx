@@ -27,5 +27,6 @@ export default function useCategorie() {
 
     return {
         createCategorie,
+        isLoading
     };
 }

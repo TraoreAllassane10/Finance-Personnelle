@@ -13,6 +13,8 @@ class Budget extends Model
     protected $fillable = [
         'montant_alloue',
         'user_id',
-        'category_id'
+        'category_id',
+        "mois",
+        'annee'
     ];
 }

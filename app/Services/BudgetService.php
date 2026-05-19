@@ -2,13 +2,32 @@
 
 namespace App\Services;
 
+use App\Repositories\BudgetRepository;
+use Carbon\Carbon;
+
 class BudgetService
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
+
+    public function __construct(
+        protected BudgetRepository $budgetRepository
+    ) {}
+
+    public function getBudgets()
     {
-        //
+        return $this->budgetRepository->all();
+    }
+
+    public function createBudget(array $data)
+    {
+        $mois = now()->month;
+        $annee = now()->year;
+
+        $budgetExist = $this->budgetRepository->budgetExiste($data['category_id'], $mois, $annee);
+
+        if ($budgetExist) {
+            return null;
+        }
+
+        return $this->budgetRepository->create($data, $mois, $annee);
     }
 }
