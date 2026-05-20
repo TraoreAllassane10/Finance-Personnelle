@@ -1,50 +1,32 @@
 import React from "react";
-import {
-    Table,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/Components/ui/table";
-
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Table, TableBody } from "@/Components/ui/table";
 
 import { Card } from "@/Components/ui/card";
+import { Banknote, Wallet } from "lucide-react";
 
-import { MoreHorizontalIcon } from "lucide-react";
-import { Button } from "../ui/button";
-
-export const TableTransactionNotFound = () => {
-
-
+export const TableTransactionNotFound = ({ typeTransaction }) => {
     return (
         <Card className="mb-8 border border-gray-100 rounded-xl transition-all duration-300">
             <Table>
-                <TableHeader>
-                    <TableRow className="bg-gray-50">
-                        <TableHead className="font-semibold text-muted-foreground">
-                            DATE
-                        </TableHead>
-                        <TableHead className="font-semibold text-muted-foreground">
-                            DESCRIPTION
-                        </TableHead>
-                        <TableHead className="font-semibold text-muted-foreground">
-                            CATEGORIE
-                        </TableHead>
-                        <TableHead className="font-semibold text-muted-foreground">
-                            MONTANT
-                        </TableHead>
-                        <TableHead className="font-semibold text-muted-foreground">
-                            ACTIONS
-                        </TableHead>
-                    </TableRow>
-                </TableHeader>
+                <TableBody>
+                    <div>
+                        {typeTransaction === "revenu" ? (
+                            <div className="flex flex-col items-center justify-center gap-4 p-10">
+                                <Banknote size={70} className="text-gray-400" />
+                                <h1 className="text-gray-500 text-lg">
+                                    Aucun revenu trouvé
+                                </h1>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center gap-4">
+                                <Wallet size={70} className="text-gray-400" />
+                                <h1 className="text-gray-500 text-lg">
+                                    Aucune depense trouvée
+                                </h1>
+                            </div>
+                        )}
+                    </div>
+                </TableBody>
             </Table>
         </Card>
     );

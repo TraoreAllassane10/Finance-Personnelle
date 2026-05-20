@@ -22,8 +22,9 @@ import { router } from "@inertiajs/react";
 import { MoreHorizontalIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { TableTransactionNotFound } from "./TableTransactionNotFound";
 
-export const TableTransaction = ({ datas, name }) => {
+export const TableTransaction = ({ datas }) => {
     const handleDeleteRevenu = (id) => {
         router.delete(route("revenus.delete", id), {
             onSuccess: () => {},

@@ -11,6 +11,7 @@ import { getMonthRegister } from "@/services/helpers";
 import { TableTransaction } from "@/Components/transaction/TableTransaction";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
+import { TableTransactionNotFound } from "@/Components/transaction/TableTransactionNotFound";
 
 export default function Revenus() {
     const revenus = usePage().props.revenus || [];
@@ -82,7 +83,7 @@ export default function Revenus() {
         <div>
             <AuthenticatedLayout>
                 <Head title="Revenus" />
- 
+
                 {/* Entete de la page */}
                 <section className="mb-6">
                     <div className="space-y-1">
@@ -129,8 +130,11 @@ export default function Revenus() {
                     </div>
                 </Card>
 
-                {/* Table d'affichage */}
-                <TableTransaction datas={fileredRevenus} name="revenus" />
+                {revenus.length === 0 ? (
+                    <TableTransactionNotFound typeTransaction="revenu" />
+                ) : (
+                    <TableTransaction datas={fileredRevenus} name="revenus" />
+                )}
             </AuthenticatedLayout>
         </div>
     );

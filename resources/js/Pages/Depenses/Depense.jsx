@@ -11,17 +11,10 @@ import { getMonthRegister } from "@/services/helpers";
 import { TableTransaction } from "@/Components/transaction/TableTransaction";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
+import { TableTransactionNotFound } from "@/Components/transaction/TableTransactionNotFound";
 
 const Depense = () => {
     const depenses = usePage().props.depenses || [];
-    const [notify, setNotify] = useState(false);
-
-    const { data, setData, post, processing, errors, reset } = useForm({
-        date: "",
-        montant: "",
-        category_id: "",
-        description: "",
-    });
 
     //Etats pour les filtres
     const [selectedMonth, setSelectedMonth] = useState("");
@@ -55,25 +48,11 @@ const Depense = () => {
             return 0;
         });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        post(route("depenses.store"), {
-            onSuccess: () => {
-                (reset(), SetShowModal(false));
-                setNotify(true);
-            },
-        });
-    };
-
     const resetFiltrer = () => {
         setSelectedMonth("");
         setSelectedAmount("");
         setSelectedCategory("");
         setNotify(false);
-    };
-
-    const handleExcel = () => {
-        window.location.href = route("depenses.excel");
     };
 
     return (
@@ -127,7 +106,11 @@ const Depense = () => {
                     </div>
                 </Card>
 
-                <TableTransaction datas={fileredDepenses} name="depense" />
+                {depenses.length === 0 ? (
+                    <TableTransactionNotFound typeTransaction="depense" />
+                ) : (
+                    <TableTransaction datas={fileredDepenses} name="depense" />
+                )}
             </AuthenticatedLayout>
         </div>
     );
