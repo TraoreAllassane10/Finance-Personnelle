@@ -12,10 +12,9 @@ import {
 } from "../ui/select";
 import { Button } from "../ui/button";
 import { categories } from "@/constant";
+import useTransaction from "@/hooks/useTransaction";
 
-const ModalTransaction = ({ typeModal, setOpenModal }) => {
-    const [typeTransaction, setTypeTransaction] = useState("depense");
-
+const ModalTransaction = ({ setOpenModal }) => {
     const [data, setData] = useState({
         type: "depense",
         montant: null,
@@ -25,8 +24,22 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
         note: "",
     });
 
+    let canSubmit =
+        data.type &&
+        data.montant &&
+        data.date &&
+        data.category_id &&
+        data.description &&
+        data.note;
+
     const handleChange = (key, value) => {
         setData((prev) => ({ ...prev, [key]: value }));
+    };
+
+    const { createTransaction, isLoading } = useTransaction();
+
+    const handleSubmit = () => {
+        createTransaction(data);
     };
 
     return (
@@ -75,6 +88,10 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                                     Montant
                                 </Label>
                                 <Input
+                                    value={data.montant}
+                                    onChange={(e) =>
+                                        handleChange("montant", e.target.value)
+                                    }
                                     type="number"
                                     placeholder="10000"
                                     className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
@@ -90,6 +107,10 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                                     </Label>
                                     <Input
                                         type="date"
+                                        value={data.date}
+                                        onChange={(e) =>
+                                            handleChange("date", e.target.value)
+                                        }
                                         className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                     />
                                 </div>
@@ -101,7 +122,16 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                                             Categorie
                                         </Label>
 
-                                        <Select className="h-7 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition">
+                                        <Select
+                                            value={data.category_id}
+                                            onValueChange={(value) =>
+                                                handleChange(
+                                                    "category_id",
+                                                    value,
+                                                )
+                                            }
+                                            className="h-7 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                        >
                                             <SelectTrigger className="w-[180px]">
                                                 <SelectValue placeholder="Sélectionner une catégorie" />
                                             </SelectTrigger>
@@ -110,13 +140,11 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                                                     .filter(
                                                         (c) =>
                                                             c.type ===
-                                                            typeTransaction,
+                                                            data.type,
                                                     )
                                                     .map((categorie) => (
                                                         <SelectItem
-                                                            value={
-                                                                categorie.name
-                                                            }
+                                                            value={categorie.id}
                                                             key={categorie.id}
                                                         >
                                                             {categorie.name}
@@ -135,6 +163,13 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                                 </Label>
                                 <Input
                                     type="text"
+                                    value={data.description}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            "description",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="Ex: Courses hebdomadaires"
                                     className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                 />
@@ -147,6 +182,10 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                                 </Label>
                                 <Textarea
                                     rows={3}
+                                    value={data.note}
+                                    onChange={(e) =>
+                                        handleChange("note", e.target.value)
+                                    }
                                     placeholder="Ex: J'ai acheté des fruits et légumes pour la semaine"
                                     className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                 ></Textarea>
@@ -165,7 +204,11 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                             >
                                 Annuler
                             </Button>
-                            <Button className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300">
+                            <Button
+                                disabled={!canSubmit && isLoading}
+                                onClick={handleSubmit}
+                                className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300"
+                            >
                                 Ajouter une transaction
                             </Button>
                         </div>

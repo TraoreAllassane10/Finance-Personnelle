@@ -14,7 +14,9 @@ class BudgetRepository
             $query->with(["transactions" => function ($query) {
                 $query->whereMonth("date", now()->month)->sum("montant");
             }]);
-        }])->get();
+        }])
+            ->where('user_id', Auth::user()->id)
+            ->get();
     }
 
     public function create(array $data, int $mois, int $annee)
@@ -30,7 +32,8 @@ class BudgetRepository
 
     public function budgetExiste(mixed $categoryId, int $mois, int $annee,)
     {
-        return Budget::where('category_id', $categoryId)
+        return Budget::where("user_id", Auth::user()->id)
+            ->where('category_id', $categoryId)
             ->where('mois', $mois)
             ->where('annee', $annee)
             ->exists();

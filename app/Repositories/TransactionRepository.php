@@ -2,13 +2,38 @@
 
 namespace App\Repositories;
 
+use App\Enums\TypeTransaction;
+use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth;
+
 class TransactionRepository
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
+
+    public function all()
     {
-        //
+        return Transaction::with('category')->where('user_id', Auth::user()->id)->get();
+    }
+
+    public function allRevenu()
+    {
+        return $this->fetchTransaction(TypeTransaction::REVENU->value);
+    }
+
+    public function allDepense()
+    {
+        return $this->fetchTransaction(TypeTransaction::DEPENSE->value);
+    }
+
+    public function fetchTransaction(string $typeTransaction)
+    {
+        return Transaction::with('category')
+            ->where('user_id', Auth::user()->id)
+            ->where('type', $typeTransaction)
+            ->get();
+    }
+
+    public function create(array $data)
+    {
+        return Transaction::create($data);
     }
 }
