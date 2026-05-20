@@ -4,10 +4,8 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\EpargneController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RevenusController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,9 +22,6 @@ use Inertia\Inertia;
 Route::get('/', [AuthenticatedSessionController::class, 'create']);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/revenus/excel', [RevenusController::class, 'excel'])->name('revenus.excel');
-Route::get('/depenses/excel', [DepenseController::class, 'excel'])->name('depenses.excel');
-Route::get('/epargnes/excel', [EpargneController::class, 'excel'])->name('epargnes.excel');
 
 Route::middleware('auth')->group(function () {
 
@@ -36,18 +31,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/transactions', 'store')->name('transactions.store');
         Route::delete('transactions/{transaction}', 'destroy')->name('transactions.destroy');
     });
-
-    // Route::get('/revenus', [RevenusController::class, 'index'])->name('revenus');
-    Route::post('/revenus', [RevenusController::class, 'store'])->name('revenus.store');
-    Route::get('/revenus/{revenu}', [RevenusController::class, 'edit'])->name('revenus.edit');
-    Route::put("/revenus/{revenu}", [RevenusController::class, 'update'])->name('revenus.update');
-    Route::delete('/revenus/{revenu}', [RevenusController::class, 'destroy'])->name('revenus.delete');
-
-    // Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses');
-    Route::post('/depenses', [DepenseController::class, 'store'])->name('depenses.store');
-    Route::get('/depenses/{depense}', [DepenseController::class, 'edit'])->name('depenses.edit');
-    Route::put("/depenses/{depense}", [DepenseController::class, 'update'])->name('depenses.update');
-    Route::delete('/depenses/{depense}', [DepenseController::class, 'destroy'])->name('depenses.delete');
 
     Route::get('/epargnes', [EpargneController::class, 'index'])->name('epargnes');
     Route::post('/epargnes', [EpargneController::class, 'store'])->name('epargnes.store');

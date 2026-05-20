@@ -38,7 +38,7 @@ class BudgetController extends Controller
                 return response()->json(['success' => false, 'message' => 'Le budget de cette categorie pour ce mois ci est déjà défini']);
             }
 
-            return response()->json(["success" => true, "message" => "Budget ajouté avec succès"]);
+            return response()->json(["success" => true, "message" => "Budget defini avec succès"]);
         } catch (Exception $e) {
             Log::error("Erreur lors de la création d'un budget", ["erreur" => $e->getMessage()]);
 

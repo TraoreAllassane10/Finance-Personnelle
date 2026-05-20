@@ -18,6 +18,8 @@ const AddBudgetModal = ({ categories, setOpenModal }) => {
         category_id: "",
     });
 
+    const canSubmit = data.montant_alloue && data.category_id
+
     const handleChange = (key, value) => {
         setData((prev) => ({ ...prev, [key]: value }));
     };
@@ -125,7 +127,7 @@ const AddBudgetModal = ({ categories, setOpenModal }) => {
                                 </Button>
                                 <Button
                                     onClick={handleSubmit}
-                                    disable={isLoading ? true : false}
+                                    disabled={!canSubmit || isLoading}
                                     className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300"
                                 >
                                     {isLoading
