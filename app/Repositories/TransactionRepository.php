@@ -29,11 +29,17 @@ class TransactionRepository
         return Transaction::with('category')
             ->where('user_id', Auth::user()->id)
             ->where('type', $typeTransaction)
+            ->orderBy('created_at', 'desc')
             ->get();
     }
 
     public function create(array $data)
     {
         return Transaction::create($data);
+    }
+
+    public function delete(Transaction $transaction)
+    {
+        return $transaction->delete();
     }
 }

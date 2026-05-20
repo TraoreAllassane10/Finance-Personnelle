@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Transaction;
 use App\Repositories\TransactionRepository;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,7 +25,11 @@ class TransactionService
     public function createTransaction(array $data)
     {
         $data['user_id'] = Auth::user()->id;
-        
+
         return $this->transactionRepository->create($data);
+    }
+
+    public function deleteTransaction(Transaction $transaction) {
+        return $this->transactionRepository->delete($transaction);
     }
 }

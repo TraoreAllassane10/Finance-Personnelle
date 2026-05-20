@@ -18,23 +18,18 @@ import {
 
 import { Card } from "@/Components/ui/card";
 import { router } from "@inertiajs/react";
-
 import { MoreHorizontalIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import { TableTransactionNotFound } from "./TableTransactionNotFound";
+import useTransaction from "@/hooks/useTransaction";
 
 export const TableTransaction = ({ datas }) => {
-    const handleDeleteRevenu = (id) => {
-        router.delete(route("revenus.delete", id), {
-            onSuccess: () => {},
-        });
-    };
+    const { deleteTransaction } = useTransaction();
 
-    const handleDeleteDepense = (id) => {
-        router.delete(route("depenses.delete", id), {
-            onSuccess: () => {},
-        });
+    const handleDeleteRevenu = (id) => {
+        deleteTransaction(id);
+
+        router.reload(0);
     };
 
     return (
@@ -81,9 +76,14 @@ export const TableTransaction = ({ datas }) => {
                                     {data.category?.nom}
                                 </span>
                             </TableCell>
-                            <TableCell className={cn(' font-bold', 
-                                data.type === "revenu" ? "text-green-600" : "text-red-600"
-                            )}>
+                            <TableCell
+                                className={cn(
+                                    " font-bold",
+                                    data.type === "revenu"
+                                        ? "text-green-600"
+                                        : "text-red-600",
+                                )}
+                            >
                                 {data.type === "revenu" ? "+" : "-"}
                                 {data.montant.toLocaleString("fr-CI", {
                                     style: "currency",
@@ -109,7 +109,12 @@ export const TableTransaction = ({ datas }) => {
                                             Modifier
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem variant="destructive">
+                                        <DropdownMenuItem
+                                            onClick={() =>
+                                                handleDeleteRevenu(data.id)
+                                            }
+                                            variant="destructive"
+                                        >
                                             Supprimer
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>

@@ -47,8 +47,48 @@ export default function useTransaction() {
         }
     };
 
+    const deleteTransaction = async (id) => {
+        try {
+            setLoading(true);
+
+            await axios
+                .delete("/transactions/" + id)
+                .then((response) => {
+                    if (response.data.success) {
+                        setLoading(false);
+
+                        toast.success(response.data.message, {
+                            position: "top-center",
+                        });
+                    } else {
+                        toast.error(response.data.message, {
+                            position: "top-center",
+                        });
+                    }
+                })
+                .catch((error) => {
+                    toast.error(
+                        "Erreur survenue lors de la suppression d'une transaction",
+                        { position: "top-center" },
+                    );
+                    console.log(
+                        "Erreur lors de la suppression d'une transaction",
+                        error,
+                    );
+                });
+        } catch (error) {
+            toast.error("Erreur survenue au niveau du serveur", {
+                position: "top-center",
+            });
+            console.log("Erreur dans deleteTransaction", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return {
         createTransaction,
+        deleteTransaction,
         isLoading,
     };
 }

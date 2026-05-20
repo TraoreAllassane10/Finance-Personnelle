@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\transaction\CreateTransactionRequest;
+use App\Models\Transaction;
 use App\Services\TransactionService;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +25,6 @@ class TransactionController extends Controller
             ]);
         } catch (Exception $e) {
             Log::error('Erreur survenu lors de la recuperation des revenus', ['erreur' => $e->getMessage()]);
-            return response()->json(['success' => false, 'message' => 'Erreur survenu lors de la recuperation des revenus']);
         }
     }
 
@@ -38,7 +38,6 @@ class TransactionController extends Controller
             ]);
         } catch (Exception $e) {
             Log::error('Erreur survenu lors de la recuperation des depenses', ['erreur' => $e->getMessage()]);
-            return response()->json(['success' => false, 'message' => 'Erreur survenu lors de la recuperation des depenses']);
         }
     }
 
@@ -53,6 +52,18 @@ class TransactionController extends Controller
         } catch (Exception $e) {
             Log::error('Erreur survenu lors de la creation d\'une transaction', ['erreur' => $e->getMessage()]);
             return response()->json(['success' => false, 'message' => 'Erreur survenu lors de la creation d\'une transaction']);
+        }
+    }
+
+    public function destroy(Transaction $transaction)
+    {
+        try {
+            $this->transactionService->deleteTransaction($transaction);
+
+            return response()->json(['success' => true, 'message' => 'Transaction supprimée avec succès']);
+        } catch (Exception $e) {
+            Log::error('Erreur survenu lors de la suppression d\'une transaction', ['erreur' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => 'Erreur survenu lors de la suppression d\'une transaction']);
         }
     }
 }

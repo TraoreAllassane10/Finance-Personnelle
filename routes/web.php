@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/revenus', 'revenus')->name('revenus');
         Route::get('/depenses', 'depenses')->name('depenses');
         Route::post('/transactions', 'store')->name('transactions.store');
+        Route::delete('transactions/{transaction}', 'destroy')->name('transactions.destroy');
     });
 
     // Route::get('/revenus', [RevenusController::class, 'index'])->name('revenus');
