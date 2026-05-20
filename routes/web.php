@@ -8,6 +8,7 @@ use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\EpargneController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RevenusController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -29,13 +30,19 @@ Route::get('/epargnes/excel', [EpargneController::class, 'excel'])->name('epargn
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/revenus', [RevenusController::class, 'index'])->name('revenus');
+    Route::controller(TransactionController::class)->group(function () {
+        Route::get('/revenus', 'revenus')->name('revenus');
+        Route::get('/depenses', 'depenses')->name('depenses');
+        Route::post('/transactions', 'store')->name('transactions.store');
+    });
+
+    // Route::get('/revenus', [RevenusController::class, 'index'])->name('revenus');
     Route::post('/revenus', [RevenusController::class, 'store'])->name('revenus.store');
     Route::get('/revenus/{revenu}', [RevenusController::class, 'edit'])->name('revenus.edit');
     Route::put("/revenus/{revenu}", [RevenusController::class, 'update'])->name('revenus.update');
     Route::delete('/revenus/{revenu}', [RevenusController::class, 'destroy'])->name('revenus.delete');
 
-    Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses');
+    // Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses');
     Route::post('/depenses', [DepenseController::class, 'store'])->name('depenses.store');
     Route::get('/depenses/{depense}', [DepenseController::class, 'edit'])->name('depenses.edit');
     Route::put("/depenses/{depense}", [DepenseController::class, 'update'])->name('depenses.update');
@@ -55,17 +62,13 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(CategoryController::class)->group(function () {
         Route::get('/categories', 'index')->name('categories');
+        Route::get('/categories/all', 'categories')->name('categories.all');
         Route::post('/categories/store', 'store')->name('categories.store');
     });
 
     Route::get("/parametres", function () {
         return Inertia::render('Parametre/Index');
     })->name('parametres');
-
-    // Route::put("parametres/{user}", [ConfigurationController::class, 'user'])->name('user.infos');
-    // Route::put("/configuration", [ConfigurationController::class, 'updateConfig'])->name('preferences');
-
-    Route::post('/categorie', [CategoryController::class, 'store'])->name('categorie.store');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

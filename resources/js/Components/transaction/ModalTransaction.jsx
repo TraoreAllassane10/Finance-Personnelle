@@ -1,5 +1,5 @@
-import { X } from "lucide-react";
-import { useState } from "react";
+import { Loader2, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
@@ -11,10 +11,13 @@ import {
     SelectValue,
 } from "../ui/select";
 import { Button } from "../ui/button";
-import { categories } from "@/constant";
 import useTransaction from "@/hooks/useTransaction";
+import { router } from "@inertiajs/react";
+import useCategorie from "@/hooks/useCategorie";
 
 const ModalTransaction = ({ setOpenModal }) => {
+    const [categories, setCategories] = useState([]);
+
     const [data, setData] = useState({
         type: "depense",
         montant: null,
@@ -29,18 +32,62 @@ const ModalTransaction = ({ setOpenModal }) => {
         data.montant &&
         data.date &&
         data.category_id &&
-        data.description &&
-        data.note;
+        data.description;
 
     const handleChange = (key, value) => {
         setData((prev) => ({ ...prev, [key]: value }));
     };
 
     const { createTransaction, isLoading } = useTransaction();
+    const { getCategories, isLoading: isLoadingCategorie } = useCategorie();
 
-    const handleSubmit = () => {
-        createTransaction(data);
+    // Recuperation des categories lors du montage du composant
+    useEffect(() => {
+        async function fethCategories(params) {
+            const data = await getCategories();
+            setCategories(data);
+        }
+
+        fethCategories();
+    }, []);
+
+    useEffect(() => {
+        setData({
+            type: data.type,
+            montant: "",
+            date: "",
+            category_id: "",
+            description: "",
+            note: "",
+        });
+    }, [data.type]);
+
+    const handleSubmit = async () => {
+        await createTransaction(data);
+
+        setData({
+            type: "depense",
+            montant: null,
+            date: "",
+            category_id: "",
+            description: "",
+            note: "",
+        });
+
+        setOpenModal(false);
+        
+        router.reload(0);
     };
+
+    if (isLoadingCategorie) {
+        return (
+            <div className="fixed inset-0 z-40 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/50 backdrop-blur-md"></div>
+
+                <Loader2 className=" animate-spin" />
+            </div>
+        );
+    }
 
     return (
         <div className="fixed inset-0 z-40 flex items-center justify-center">
@@ -65,13 +112,17 @@ const ModalTransaction = ({ setOpenModal }) => {
                     <div className="w-full bg-gray-100 rounded-lg p-1 mb-4">
                         <div className="flex">
                             <button
-                                onClick={() => handleChange("type", "depense")}
+                                onClick={() => {
+                                    handleChange("type", "depense");
+                                }}
                                 className={`w-1/2 py-1 text-sm font-medium text-gray-600 rounded-md transition duration-100 shadow-sm ${data.type === "depense" && "bg-white"}`}
                             >
                                 Dépense
                             </button>
                             <button
-                                onClick={() => handleChange("type", "revenu")}
+                                onClick={() => {
+                                    handleChange("type", "revenu");
+                                }}
                                 className={`w-1/2  text-sm font-medium text-gray-600 rounded-md transition duration-100 shadow-sm ${data.type === "revenu" && "bg-white"}`}
                             >
                                 Revenu
@@ -94,7 +145,7 @@ const ModalTransaction = ({ setOpenModal }) => {
                                     }
                                     type="number"
                                     placeholder="10000"
-                                    className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                    className="h-7 py-1 text-muted-foreground placeholder:text-muted-foreground/50 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                 />
                             </div>
 
@@ -111,7 +162,7 @@ const ModalTransaction = ({ setOpenModal }) => {
                                         onChange={(e) =>
                                             handleChange("date", e.target.value)
                                         }
-                                        className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                        className="h-7 py-1 text-sm text-muted-foreground  border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                     />
                                 </div>
 
@@ -130,7 +181,7 @@ const ModalTransaction = ({ setOpenModal }) => {
                                                     value,
                                                 )
                                             }
-                                            className="h-7 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                            className="h-7 text-sm text-muted-foreground border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                         >
                                             <SelectTrigger className="w-[180px]">
                                                 <SelectValue placeholder="Sélectionner une catégorie" />
@@ -147,7 +198,7 @@ const ModalTransaction = ({ setOpenModal }) => {
                                                             value={categorie.id}
                                                             key={categorie.id}
                                                         >
-                                                            {categorie.name}
+                                                            {categorie.nom}
                                                         </SelectItem>
                                                     ))}
                                             </SelectContent>
@@ -171,7 +222,7 @@ const ModalTransaction = ({ setOpenModal }) => {
                                         )
                                     }
                                     placeholder="Ex: Courses hebdomadaires"
-                                    className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                    className="h-7 py-1 text-muted-foreground placeholder:text-muted-foreground/50 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                 />
                             </div>
 
@@ -187,7 +238,7 @@ const ModalTransaction = ({ setOpenModal }) => {
                                         handleChange("note", e.target.value)
                                     }
                                     placeholder="Ex: J'ai acheté des fruits et légumes pour la semaine"
-                                    className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                    className="h-7 py-1 text-muted-foreground placeholder:text-muted-foreground/50 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                 ></Textarea>
                             </div>
                         </div>
@@ -205,7 +256,7 @@ const ModalTransaction = ({ setOpenModal }) => {
                                 Annuler
                             </Button>
                             <Button
-                                disabled={!canSubmit && isLoading}
+                                disabled={!canSubmit || isLoading}
                                 onClick={handleSubmit}
                                 className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300"
                             >

@@ -6,6 +6,27 @@ import { toast } from "sonner";
 export default function useCategorie() {
     const [isLoading, setLoading] = useState(false);
 
+    const getCategories = async () => {
+        try {
+            setLoading(true);
+
+            const response = await axios.get("/categories/all");
+
+            if (response.data.success) {
+                setLoading(false);
+                return response.data.data;
+            }
+        } catch (error) {
+            toast.error("Erreur survenue au niveau du serveur", {
+                position: "top-center",
+            });
+
+            console.log("Erreur dans getCategories", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const createCategorie = async (data) => {
         try {
             setLoading(true);
@@ -35,6 +56,7 @@ export default function useCategorie() {
 
     return {
         createCategorie,
+        getCategories,
         isLoading,
     };
 }

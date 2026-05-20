@@ -1,6 +1,7 @@
 import React from "react";
 import {
     Table,
+    TableBody,
     TableCell,
     TableHead,
     TableHeader,
@@ -16,10 +17,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Card } from "@/Components/ui/card";
-import { Link, router } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 
 import { MoreHorizontalIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 export const TableTransaction = ({ datas, name }) => {
     const handleDeleteRevenu = (id) => {
@@ -55,18 +57,33 @@ export const TableTransaction = ({ datas, name }) => {
                             ACTIONS
                         </TableHead>
                     </TableRow>
+                </TableHeader>
+
+                <TableBody>
                     {datas.map((data) => (
                         <TableRow key={data.id}>
                             <TableCell className="text-muted-foreground">
                                 {new Date(data.date).toLocaleDateString()}
                             </TableCell>
-                            <TableCell className="text-muted-foreground">
+                            <TableCell className="text-slate-800 font-bold">
                                 {data.description}
                             </TableCell>
-                            <TableCell className="text-muted-foreground">
-                                {data.category?.name}
+                            <TableCell className={`text-muted-foreground`}>
+                                <span
+                                    style={{
+                                        backgroundColor: data.category?.couleur,
+                                        color: "white",
+                                        fontWeight: "bold",
+                                    }}
+                                    className="px-4 py-1 text-center rounded-full"
+                                >
+                                    {data.category?.nom}
+                                </span>
                             </TableCell>
-                            <TableCell className="text-muted-foreground">
+                            <TableCell className={cn(' font-bold', 
+                                data.type === "revenu" ? "text-green-600" : "text-red-600"
+                            )}>
+                                {data.type === "revenu" ? "+" : "-"}
                                 {data.montant.toLocaleString("fr-CI", {
                                     style: "currency",
                                     currency: "XOF",
@@ -99,7 +116,7 @@ export const TableTransaction = ({ datas, name }) => {
                             </TableCell>
                         </TableRow>
                     ))}
-                </TableHeader>
+                </TableBody>
             </Table>
         </Card>
     );

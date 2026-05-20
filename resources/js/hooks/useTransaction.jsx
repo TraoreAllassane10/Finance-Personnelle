@@ -20,7 +20,7 @@ export default function useTransaction() {
                             position: "top-center",
                         });
 
-                        router.reload();
+                        return response.data.data;
                     } else {
                         toast.error(response.data.message, {
                             position: "top-center",

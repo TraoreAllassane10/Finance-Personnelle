@@ -24,6 +24,20 @@ class CategoryController extends Controller
         ]);
     }
 
+    public function categories()
+    {
+        try {
+            $categories =  $this->categorieService->getCategories();
+
+            return response()->json(["success" => true, "data" => $categories]);
+
+        } catch (Exception $e) {
+            Log::error("Erreur lors de la recupération des categories", ["erreur" => $e->getMessage()]);
+
+            return response()->json(["success" => false, "message" => "Erreur lors de la création d'une categorie"]);
+        }
+    }
+
     public function store(CreateCategoryRequest $request)
     {
         try {
