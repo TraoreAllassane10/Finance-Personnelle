@@ -1,6 +1,7 @@
 import { router } from "@inertiajs/react";
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function useCategorie() {
     const [isLoading, setLoading] = useState(false);
@@ -14,11 +15,18 @@ export default function useCategorie() {
             if (response.data.success) {
                 setLoading(false);
 
+                toast.success(response.data.message, {
+                    position: "top-center",
+                });
+
                 router.visit("/categories");
             } else {
-                console.log(response.data.message);
+                toast.error(response.data.message, { position: "top-center" });
             }
         } catch (error) {
+            toast.error("Erreur survenue au niveau du serveur", {
+                position: "top-center",
+            });
             console.log("Erreur dans createCategorie", error);
         } finally {
             setLoading(false);
@@ -27,6 +35,6 @@ export default function useCategorie() {
 
     return {
         createCategorie,
-        isLoading
+        isLoading,
     };
 }

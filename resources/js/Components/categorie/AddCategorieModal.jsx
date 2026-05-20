@@ -35,7 +35,9 @@ const AddCategorieModal = ({ setOpenModal }) => {
         icon: "",
     });
 
-    const { createCategorie } = useCategorie();
+    let canSubmit = data.nom && data.type && data.couleur && data.icon;
+
+    const { createCategorie, isLoading } = useCategorie();
 
     const handleChange = (key, value) => {
         setData((prev) => ({ ...prev, [key]: value }));
@@ -187,9 +189,12 @@ const AddCategorieModal = ({ setOpenModal }) => {
 
                                 <Button
                                     onClick={handleSubmit}
+                                    disabled={!canSubmit || isLoading}
                                     className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300"
                                 >
-                                    Ajouter une transaction
+                                    {isLoading
+                                        ? "Enregistrement..."
+                                        : "Ajouter une transaction"}
                                 </Button>
                             </div>
                         </div>
