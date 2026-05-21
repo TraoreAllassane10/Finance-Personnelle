@@ -1,11 +1,7 @@
-import { Card } from "@/Components/ui/card";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
-import { X } from "lucide-react";
 import React, { useState } from "react";
 import { TableTransaction } from "@/Components/transaction/TableTransaction";
-import { Button } from "@/Components/ui/button";
-import { Input } from "@/Components/ui/input";
 import { TableTransactionNotFound } from "@/Components/transaction/TableTransactionNotFound";
 import ModalTransactionUpdate from "@/Components/transaction/ModalTransactionUpdate";
 
