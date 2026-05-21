@@ -2,7 +2,16 @@ import React from "react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
-import { Banknote, Car, Plus, Salad, ShoppingBag, Wallet } from "lucide-react";
+import {
+    Banknote,
+    Car,
+    House,
+    Plus,
+    Salad,
+    ShoppingBag,
+    Wallet,
+    Wifi,
+} from "lucide-react";
 
 const ConfigIcon = {
     Wallet: Wallet,
@@ -10,6 +19,8 @@ const ConfigIcon = {
     Salad: Salad,
     Car: Car,
     ShoppingBag: ShoppingBag,
+    House: House,
+    Wifi: Wifi,
 };
 
 const BudgetCard = ({ budget }) => {
@@ -19,7 +30,10 @@ const BudgetCard = ({ budget }) => {
     // Calcule de la progression
     const progression =
         budget.montant_alloue > 0
-            ? Math.ceil((budget.category.montant_depense * 100) / budget.montant_alloue)
+            ? Math.ceil(
+                  (budget.category.montant_depense * 100) /
+                      budget.montant_alloue,
+              )
             : 0;
 
     // Recuperation du sytle de l'indicateur
@@ -65,7 +79,13 @@ const BudgetCard = ({ budget }) => {
 
                 <div className="flex justify-between text-sm font-medium mt-4">
                     <p className="text-muted-foreground">Restant</p>
-                    <p className={progression > 100 ? "text-red-600" : "text-green-600"}>
+                    <p
+                        className={
+                            progression > 100
+                                ? "text-red-600"
+                                : "text-green-600"
+                        }
+                    >
                         {montant_restant.toLocaleString("fr-CI", {
                             style: "currency",
                             currency: "XOF",

@@ -147,16 +147,17 @@ export default function Dashboard() {
         },
     ];
 
-    const [timeRange, setTimeRange] = useState("90d");
+    const [timeRange, setTimeRange] = useState("7d");
 
     const filteredData = chartData.transactionParDate.filter((item) => {
         const date = new Date(item.date);
-        const referenceDate = new Date("2024-06-30");
-        let daysToSubtract = 90;
+        const referenceDate = new Date(chartData.transactionParDate[0].date);
+        let daysToSubtract = 7;
+
         if (timeRange === "30d") {
             daysToSubtract = 30;
-        } else if (timeRange === "7d") {
-            daysToSubtract = 7;
+        } else if (timeRange === "90d") {
+            daysToSubtract = 90;
         }
         const startDate = new Date(referenceDate);
         startDate.setDate(startDate.getDate() - daysToSubtract);
