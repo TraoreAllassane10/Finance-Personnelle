@@ -45,7 +45,10 @@ class TransactionRepository
 
     public function recenteTransaction()
     {
-        return Transaction::latest()->limit(5)->get();
+        return Transaction::where("user_id", Auth::user()->id)
+            ->latest()
+            ->limit(5)
+            ->get();
     }
 
     public function find(string $id)
