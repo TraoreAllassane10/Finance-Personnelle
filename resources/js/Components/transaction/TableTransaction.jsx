@@ -23,7 +23,7 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import useTransaction from "@/hooks/useTransaction";
 
-export const TableTransaction = ({ datas }) => {
+export const TableTransaction = ({ datas, setUpdateTransactionId, setOpenModalUpdate }) => {
     const { deleteTransaction } = useTransaction();
 
     const handleDeleteRevenu = (id) => {
@@ -105,7 +105,12 @@ export const TableTransaction = ({ datas }) => {
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() => {
+                                                setUpdateTransactionId(data.id);
+                                                setOpenModalUpdate(true);
+                                            }}
+                                        >
                                             Modifier
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator />

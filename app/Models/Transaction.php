@@ -20,6 +20,8 @@ class Transaction extends Model
         'user_id'
     ];
 
+    protected $with = ['category'];
+
     public function category()
     {
         return $this->belongsTo(Category::class);

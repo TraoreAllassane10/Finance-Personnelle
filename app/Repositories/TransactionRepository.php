@@ -33,9 +33,19 @@ class TransactionRepository
             ->get();
     }
 
+    public function find(string $id)
+    {
+        return Transaction::find($id);
+    }
+
     public function create(array $data)
     {
         return Transaction::create($data);
+    }
+
+    public function update(Transaction $transaction, array $data)
+    {
+        return $transaction->update($data);
     }
 
     public function delete(Transaction $transaction)

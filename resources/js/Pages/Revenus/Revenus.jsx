@@ -1,31 +1,19 @@
 import { Card } from "@/Components/ui/card";
-
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, useForm, usePage } from "@inertiajs/react";
-import { FileSpreadsheet, X } from "lucide-react";
+import { Head, usePage } from "@inertiajs/react";
+import { X } from "lucide-react";
 import React, { useState } from "react";
-
-import Notification from "@/Components/Notification";
-
 import { getMonthRegister } from "@/services/helpers";
 import { TableTransaction } from "@/Components/transaction/TableTransaction";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { TableTransactionNotFound } from "@/Components/transaction/TableTransactionNotFound";
+import ModalTransactionUpdate from "@/Components/transaction/ModalTransactionUpdate";
 
 export default function Revenus() {
-    const revenus = usePage().props.revenus || [];
-    const totalRevenus = usePage().props.totalRevenus;
-    const categories = usePage().props.categories || [];
-    const [showModal, SetShowModal] = useState(false);
-    const [notify, setNotify] = useState(false);
-
-    const { data, setData, post, processing, errors, reset } = useForm({
-        date: "",
-        montant: "",
-        category_id: "",
-        description: "",
-    });
+    const { revenus } = usePage().props;
+    const [updateTransactionId, setUpdateTransactionId] = useState(null);
+    const [openModal, setOpenModal] = useState(false);
 
     //Etats pour les filtres
     const [selectedMonth, setSelectedMonth] = useState("");
@@ -59,30 +47,24 @@ export default function Revenus() {
             return 0;
         });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        post(route("revenus.store"), {
-            onSuccess: () => {
-                (reset(), SetShowModal(false), setNotify(true));
-            },
-        });
-    };
-
     const resetFiltrer = () => {
         setSelectedMonth("");
         setSelectedAmount("");
         setSelectedCategory("");
-        setNotify(false);
-    };
-
-    const handleExcel = () => {
-        window.location.href = route("revenus.excel");
     };
 
     return (
         <div>
             <AuthenticatedLayout>
                 <Head title="Revenus" />
+
+                {/* Modal de modification d'une transaction */}
+                {openModal && (
+                    <ModalTransactionUpdate
+                        updateTransactionId={updateTransactionId}
+                        setOpenModal={setOpenModal}
+                    />
+                )}
 
                 {/* Entete de la page */}
                 <section className="mb-6">
@@ -133,7 +115,12 @@ export default function Revenus() {
                 {revenus.length === 0 ? (
                     <TableTransactionNotFound typeTransaction="revenu" />
                 ) : (
-                    <TableTransaction datas={fileredRevenus} name="revenus" />
+                    <TableTransaction
+                        setUpdateTransactionId={setUpdateTransactionId}
+                        setOpenModalUpdate={setOpenModal}
+                        datas={fileredRevenus}
+                        name="revenus"
+                    />
                 )}
             </AuthenticatedLayout>
         </div>

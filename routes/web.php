@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/revenus', 'revenus')->name('revenus');
         Route::get('/depenses', 'depenses')->name('depenses');
         Route::post('/transactions', 'store')->name('transactions.store');
+        Route::get('/transactions/{transaction}', 'show')->name('transactions.show');
+        Route::put('/transactions/{transaction}', 'update')->name('transactions.update');
         Route::delete('transactions/{transaction}', 'destroy')->name('transactions.destroy');
     });
 

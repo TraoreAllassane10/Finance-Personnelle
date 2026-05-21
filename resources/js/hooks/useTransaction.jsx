@@ -47,6 +47,68 @@ export default function useTransaction() {
         }
     };
 
+    const getTransaction = async (id) => {
+        try {
+            setLoading(true);
+
+            const response = await axios.get(`/transactions/${id}`);
+
+            if (response.data.success) {
+                setLoading(false);
+                return response.data.data;
+            }
+            
+        } catch (error) {
+            toast.error("Erreur survenue au niveau du serveur", {
+                position: "top-center",
+            });
+            console.log("Erreur dans getTransaction", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const updateTransaction = async (id, data) => {
+        try {
+            setLoading(true);
+
+            await axios
+                .put(`/transactions/${id}`, data)
+                .then((response) => {
+                    if (response.data.success) {
+                        setLoading(false);
+
+                        toast.success(response.data.message, {
+                            position: "top-center",
+                        });
+
+                        return response.data.data;
+                    } else {
+                        toast.error(response.data.message, {
+                            position: "top-center",
+                        });
+                    }
+                })
+                .catch((error) => {
+                    toast.error(
+                        "Erreur survenue lors de la modification d'une transaction",
+                        { position: "top-center" },
+                    );
+                    console.log(
+                        "Erreur lors de la modification d'une transaction",
+                        error,
+                    );
+                });
+        } catch (error) {
+            toast.error("Erreur survenue au niveau du serveur", {
+                position: "top-center",
+            });
+            console.log("Erreur dans updateTransaction", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const deleteTransaction = async (id) => {
         try {
             setLoading(true);
@@ -87,6 +149,8 @@ export default function useTransaction() {
     };
 
     return {
+        getTransaction,
+        updateTransaction,
         createTransaction,
         deleteTransaction,
         isLoading,

@@ -1,20 +1,19 @@
-import { Card, CardContent } from "@/Components/ui/card";
-
+import { Card } from "@/Components/ui/card";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, router, useForm, usePage } from "@inertiajs/react";
-import { FileSpreadsheet, X } from "lucide-react";
+import { Head, usePage } from "@inertiajs/react";
+import { X } from "lucide-react";
 import React, { useState } from "react";
-
-import Notification from "@/Components/Notification";
-
 import { getMonthRegister } from "@/services/helpers";
 import { TableTransaction } from "@/Components/transaction/TableTransaction";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 import { TableTransactionNotFound } from "@/Components/transaction/TableTransactionNotFound";
+import ModalTransactionUpdate from "@/Components/transaction/ModalTransactionUpdate";
 
 const Depense = () => {
-    const depenses = usePage().props.depenses || [];
+    const { depenses } = usePage().props;
+    const [updateTransactionId, setUpdateTransactionId] = useState(null);
+    const [openModal, setOpenModal] = useState(false);
 
     //Etats pour les filtres
     const [selectedMonth, setSelectedMonth] = useState("");
@@ -52,13 +51,20 @@ const Depense = () => {
         setSelectedMonth("");
         setSelectedAmount("");
         setSelectedCategory("");
-        setNotify(false);
     };
 
     return (
         <div>
             <AuthenticatedLayout>
                 <Head title="Depenses" />
+
+                {/* Modal de modification d'une transaction */}
+                {openModal && (
+                    <ModalTransactionUpdate
+                        updateTransactionId={updateTransactionId}
+                        setOpenModal={setOpenModal}
+                    />
+                )}
 
                 {/* Entete de la page */}
                 <section className="mb-6">
@@ -109,7 +115,12 @@ const Depense = () => {
                 {depenses.length === 0 ? (
                     <TableTransactionNotFound typeTransaction="depense" />
                 ) : (
-                    <TableTransaction datas={fileredDepenses} name="depense" />
+                    <TableTransaction
+                        setUpdateTransactionId={setUpdateTransactionId}
+                        setOpenModalUpdate={setOpenModal}
+                        datas={fileredDepenses}
+                        name="depense"
+                    />
                 )}
             </AuthenticatedLayout>
         </div>

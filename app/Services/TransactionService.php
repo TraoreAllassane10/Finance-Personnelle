@@ -22,11 +22,20 @@ class TransactionService
         return $this->transactionRepository->allDepense();
     }
 
+
+    public function getTransaction(string $id) {
+        return $this->transactionRepository->find($id);
+    }
+
     public function createTransaction(array $data)
     {
         $data['user_id'] = Auth::user()->id;
 
         return $this->transactionRepository->create($data);
+    }
+
+    public function updateTransaction(Transaction $transaction, array $data) {
+        return $this->transactionRepository->update($transaction, $data);
     }
 
     public function deleteTransaction(Transaction $transaction) {
