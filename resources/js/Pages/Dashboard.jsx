@@ -56,122 +56,19 @@ import { formatMontant } from "./lib/utils";
 // Données pour le graphique Revenu - Depense
 export const description = "An interactive area chart";
 
-// const chartData = [
-//     { date: "2024-04-01", revenu: 222, depense: 150 },
-//     { date: "2024-04-02", revenu: 97, depense: 180 },
-//     { date: "2024-04-03", revenu: 167, depense: 120 },
-//     { date: "2024-04-04", revenu: 242, depense: 260 },
-//     { date: "2024-04-05", revenu: 373, depense: 290 },
-//     { date: "2024-04-06", revenu: 301, depense: 340 },
-//     { date: "2024-04-07", revenu: 245, depense: 180 },
-//     { date: "2024-04-08", revenu: 409, depense: 320 },
-//     { date: "2024-04-09", revenu: 59, depense: 110 },
-//     { date: "2024-04-10", revenu: 261, depense: 190 },
-//     { date: "2024-04-11", revenu: 327, depense: 350 },
-//     { date: "2024-04-12", revenu: 292, depense: 210 },
-//     { date: "2024-04-13", revenu: 342, depense: 380 },
-//     { date: "2024-04-14", revenu: 137, depense: 220 },
-//     { date: "2024-04-15", revenu: 120, depense: 170 },
-//     { date: "2024-04-16", revenu: 138, depense: 190 },
-//     { date: "2024-04-17", revenu: 446, depense: 360 },
-//     { date: "2024-04-18", revenu: 364, depense: 410 },
-//     { date: "2024-04-19", revenu: 243, depense: 180 },
-//     { date: "2024-04-20", revenu: 89, depense: 150 },
-//     { date: "2024-04-21", revenu: 137, depense: 200 },
-//     { date: "2024-04-22", revenu: 224, depense: 170 },
-//     { date: "2024-04-23", revenu: 138, depense: 230 },
-//     { date: "2024-04-24", revenu: 387, depense: 290 },
-//     { date: "2024-04-25", revenu: 215, depense: 250 },
-//     { date: "2024-04-26", revenu: 75, depense: 130 },
-//     { date: "2024-04-27", revenu: 383, depense: 420 },
-//     { date: "2024-04-28", revenu: 122, depense: 180 },
-//     { date: "2024-04-29", revenu: 315, depense: 240 },
-//     { date: "2024-04-30", revenu: 454, depense: 380 },
-//     { date: "2024-05-01", revenu: 165, depense: 220 },
-//     { date: "2024-05-02", revenu: 293, depense: 310 },
-//     { date: "2024-05-03", revenu: 247, depense: 190 },
-//     { date: "2024-05-04", revenu: 385, depense: 420 },
-//     { date: "2024-05-05", revenu: 481, depense: 390 },
-//     { date: "2024-05-06", revenu: 498, depense: 520 },
-//     { date: "2024-05-07", revenu: 388, depense: 300 },
-//     { date: "2024-05-08", revenu: 149, depense: 210 },
-//     { date: "2024-05-09", revenu: 227, depense: 180 },
-//     { date: "2024-05-10", revenu: 293, depense: 330 },
-//     { date: "2024-05-11", revenu: 335, depense: 270 },
-//     { date: "2024-05-12", revenu: 197, depense: 240 },
-//     { date: "2024-05-13", revenu: 197, depense: 160 },
-//     { date: "2024-05-14", revenu: 448, depense: 490 },
-//     { date: "2024-05-15", revenu: 473, depense: 380 },
-//     { date: "2024-05-16", revenu: 338, depense: 400 },
-//     { date: "2024-05-17", revenu: 499, depense: 420 },
-//     { date: "2024-05-18", revenu: 315, depense: 350 },
-//     { date: "2024-05-19", revenu: 235, depense: 180 },
-//     { date: "2024-05-20", revenu: 177, depense: 230 },
-//     { date: "2024-05-21", revenu: 82, depense: 140 },
-//     { date: "2024-05-22", revenu: 81, depense: 120 },
-//     { date: "2024-05-23", revenu: 252, depense: 290 },
-//     { date: "2024-05-24", revenu: 294, depense: 220 },
-//     { date: "2024-05-25", revenu: 201, depense: 250 },
-//     { date: "2024-05-26", revenu: 213, depense: 170 },
-//     { date: "2024-05-27", revenu: 420, depense: 460 },
-//     { date: "2024-05-28", revenu: 233, depense: 190 },
-//     { date: "2024-05-29", revenu: 78, depense: 130 },
-//     { date: "2024-05-30", revenu: 340, depense: 280 },
-//     { date: "2024-05-31", revenu: 178, depense: 230 },
-//     { date: "2024-06-01", revenu: 178, depense: 200 },
-//     { date: "2024-06-02", revenu: 470, depense: 410 },
-//     { date: "2024-06-03", revenu: 103, depense: 160 },
-//     { date: "2024-06-04", revenu: 439, depense: 380 },
-//     { date: "2024-06-05", revenu: 88, depense: 140 },
-//     { date: "2024-06-06", revenu: 294, depense: 250 },
-//     { date: "2024-06-07", revenu: 323, depense: 370 },
-//     { date: "2024-06-08", revenu: 385, depense: 320 },
-//     { date: "2024-06-09", revenu: 438, depense: 480 },
-//     { date: "2024-06-10", revenu: 155, depense: 200 },
-//     { date: "2024-06-11", revenu: 92, depense: 150 },
-//     { date: "2024-06-12", revenu: 492, depense: 420 },
-//     { date: "2024-06-13", revenu: 81, depense: 130 },
-//     { date: "2024-06-14", revenu: 426, depense: 380 },
-//     { date: "2024-06-15", revenu: 307, depense: 350 },
-//     { date: "2024-06-16", revenu: 371, depense: 310 },
-//     { date: "2024-06-17", revenu: 475, depense: 520 },
-//     { date: "2024-06-18", revenu: 107, depense: 170 },
-//     { date: "2024-06-19", revenu: 341, depense: 290 },
-//     { date: "2024-06-20", revenu: 408, depense: 450 },
-//     { date: "2024-06-21", revenu: 169, depense: 210 },
-//     { date: "2024-06-22", revenu: 317, depense: 270 },
-//     { date: "2024-06-23", revenu: 480, depense: 530 },
-//     { date: "2024-06-24", revenu: 132, depense: 180 },
-//     { date: "2024-06-25", revenu: 141, depense: 190 },
-//     { date: "2024-06-26", revenu: 434, depense: 380 },
-//     { date: "2024-06-27", revenu: 448, depense: 490 },
-//     { date: "2024-06-28", revenu: 149, depense: 200 },
-//     { date: "2024-06-29", revenu: 103, depense: 160 },
-//     { date: "2024-06-30", revenu: 446, depense: 400 },
-// ];
-
 const chartConfig = {
-    visitors: {
-        label: "Visitors",
+    DepenseVsRevenu: {
+        label: "Depense vs Revenu",
     },
-    desktop: {
+    revenu: {
         label: "Revenu",
         color: "#5661fe",
     },
-    mobile: {
+    depense: {
         label: "Depense",
         color: "#6F00FF",
     },
 };
-
-// Donnees pour le grahpique Depense par categorie
-const chartData2 = [
-    { browser: "chrome", visitors: 275, fill: "#5661fe" },
-    { browser: "safari", visitors: 200, fill: "#8B5CF6" },
-    { browser: "firefox", visitors: 187, fill: "#F59E0B" },
-    { browser: "edge", visitors: 173, fill: "#EF4444" },
-    { browser: "other", visitors: 90, fill: "#6B7280" },
-];
 
 const chartConfig2 = {
     visitors: {
@@ -433,14 +330,14 @@ export default function Dashboard() {
                                     content={<ChartTooltipContent hideLabel />}
                                 />
                                 <Pie
-                                    data={chartData2}
-                                    dataKey="visitors"
-                                    nameKey="browser"
+                                    data={chartData.transactionParCategorie}
+                                    dataKey="montant"
+                                    nameKey="categorie"
                                     innerRadius={60}
                                 >
                                     <Label
                                         position="center"
-                                        value={200000 + " fcfa"}
+                                        value={formatMontant(totalDepense)}
                                         className="text-md font-bold fill-foreground"
                                     />
                                 </Pie>

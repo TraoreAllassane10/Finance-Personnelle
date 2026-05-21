@@ -21,16 +21,27 @@ class DashboardController extends Controller
         // Les 5 dernieres transactions
         $recenteTransactions = $this->transactionService->getRecenteTransaction();
 
-        // Les données pour les graphiques
         $transactions = $this->transactionService->getTransactions();
 
-        $transactionParDate = $transactions->groupBy("date")->map(function ($transactions, $date) {
-            return [
-                'date' => $date,
-                'revenu' => $transactions->where("type", TypeTransaction::REVENU->value)->sum('montant'),
-                'depense' => $transactions->where("type", TypeTransaction::DEPENSE->value)->sum('montant'),
-            ];
-        })->values();
+        // Regroupement des données par Date pour le graph de comparaison des depense et revenus
+        $transactionParDate = $transactions->groupBy("date")
+            ->map(function ($transactions, $date) {
+                return [
+                    'date' => $date,
+                    'revenu' => $transactions->where("type", TypeTransaction::REVENU->value)->sum('montant'),
+                    'depense' => $transactions->where("type", TypeTransaction::DEPENSE->value)->sum('montant'),
+                ];
+            })->values();
+
+        // Regroupement des transactions par categorie
+        $transactionParCategorie = $transactions->where('type', TypeTransaction::DEPENSE->value)->groupBy('category_id')
+            ->map(function ($transactions, $categorieId) {
+                return [
+                    'categorie' => $transactions[0]->category->nom,
+                    'montant' => $transactions->sum('montant'),
+                    'fill' => $transactions[0]->category->couleur
+                ];
+            })->values();
 
         return Inertia::render('Dashboard', [
             "totalRevenu" =>  $totalRevenu,
@@ -40,7 +51,8 @@ class DashboardController extends Controller
             "recenteTransactions" => $recenteTransactions,
 
             "chartData" => [
-                "transactionParDate" => $transactionParDate
+                "transactionParDate" => $transactionParDate,
+                "transactionParCategorie" => $transactionParCategorie
             ]
         ]);
     }
