@@ -15,22 +15,23 @@ const ConfigIcon = {
 const BudgetCard = ({ budget }) => {
     // Icon de la categorie
     const Icon = ConfigIcon[budget.category?.icon];
-    console.log(budget);
 
     // Calcule de la progression
-    // const progression =
-    //     budget.montant_alloue > 0
-    //         ? (budget.montant_depense * 100) / budget.montant_alloue
-    //         : 0;
-    
-    const progression = 50;
+    const progression =
+        budget.montant_alloue > 0
+            ? (budget.category.montant_depense * 100) / budget.montant_alloue
+            : 0;
+
+            console.log("Les progression : ", progression)
+
+    // const progression = 50;
 
     // Recuperation du sytle de l'indicateur
     const [bgColor] = getSytleIndicator(progression);
 
     // Calcule du montant restant
-    // const montant_restant = budget.montant_alloue - budget.montant_depense;
-    const montant_restant = 10000;
+    const montant_restant =
+        budget.montant_alloue - budget.category.montant_depense;
 
     return (
         <Card>
@@ -60,7 +61,7 @@ const BudgetCard = ({ budget }) => {
                         </span>
                     </FieldLabel>
                     <Progress
-                        value={progression}
+                        value={progression > 100 ? 100 : progression}
                         id="progress-upload"
                         classNameIndicator={bgColor}
                     />
@@ -68,7 +69,7 @@ const BudgetCard = ({ budget }) => {
 
                 <div className="flex justify-between text-sm font-medium mt-4">
                     <p className="text-muted-foreground">Restant</p>
-                    <p className="text-green-600">
+                    <p className={progression > 100 ? "text-red-600" : "text-green-600"}>
                         {montant_restant.toLocaleString("fr-CI", {
                             style: "currency",
                             currency: "XOF",
@@ -84,8 +85,8 @@ export default BudgetCard;
 
 const getSytleIndicator = (progression) => {
     if (progression > 0 && progression <= 100) {
-        return ["text-green-500", "bg-green-500"];
+        return ["bg-green-500"];
     } else {
-        return ["text-red-600", "bg-red-600"];
+        return ["bg-red-600"];
     }
 };
