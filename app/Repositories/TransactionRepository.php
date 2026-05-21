@@ -43,6 +43,11 @@ class TransactionRepository
         return Transaction::where("type", TypeTransaction::REVENU->value)->sum("montant");
     }
 
+    public function recenteTransaction()
+    {
+        return Transaction::latest()->limit(5)->get();
+    }
+
     public function find(string $id)
     {
         return Transaction::find($id);

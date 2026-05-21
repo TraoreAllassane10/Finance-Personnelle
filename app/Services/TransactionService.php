@@ -32,6 +32,11 @@ class TransactionService
         return (int) $this->transactionRepository->montantTotalRevenu();
     }
 
+    public function getRecenteTransaction()
+    {
+        return $this->transactionRepository->recenteTransaction();
+    }
+
     public function getTransaction(string $id)
     {
         return $this->transactionRepository->find($id);

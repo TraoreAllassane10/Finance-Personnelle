@@ -33,7 +33,6 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import CardStatistiques from "@/Components/dashboard/CardStatistiques";
-import { recentesTransaction } from "@/constant";
 import { useState } from "react";
 import {
     Table,
@@ -44,7 +43,15 @@ import {
 } from "@/Components/ui/table";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/Components/ui/progress";
-import { ArrowDown, ArrowUp, Landmark, PiggyBank, TrendingDown, TrendingUp } from "lucide-react";
+import {
+    ArrowDown,
+    ArrowUp,
+    Landmark,
+    PiggyBank,
+    TrendingDown,
+    TrendingUp,
+} from "lucide-react";
+import { formatMontant } from "./lib/utils";
 
 // Données pour le graphique Revenu - Depense
 export const description = "An interactive area chart";
@@ -193,8 +200,13 @@ const chartConfig2 = {
 };
 
 export default function Dashboard() {
-    const { totalRevenu, totalDepense, soldeNet, totalEpargne } =
-        usePage().props;
+    const {
+        totalRevenu,
+        totalDepense,
+        soldeNet,
+        totalEpargne,
+        recenteTransactions,
+    } = usePage().props;
 
     const dashbaordStats = [
         {
@@ -466,7 +478,7 @@ export default function Dashboard() {
                                         MONTANT
                                     </TableHead>
                                 </TableRow>
-                                {recentesTransaction.map((data) => (
+                                {recenteTransactions.map((data) => (
                                     <TableRow key={data.id}>
                                         <TableCell className="text-muted-foreground">
                                             {new Date(
@@ -477,22 +489,26 @@ export default function Dashboard() {
                                             {data.description}
                                         </TableCell>
                                         <TableCell className="text-muted-foreground">
-                                            {data.categorie}
+                                            <span
+                                                style={{
+                                                    backgroundColor:
+                                                        data.category?.couleur,
+                                                    color: "white",
+                                                    fontWeight: "bold",
+                                                }}
+                                                className="px-4 py-1 text-center rounded-full w-fit"
+                                            >
+                                                {data.category?.nom}
+                                            </span>
                                         </TableCell>
                                         <TableCell className="text-muted-foreground">
                                             <span
-                                                className={`${data.type === "revenu" ? "text-green-500" : "text-black"} font-bold`}
+                                                className={`${data.type === "revenu" ? "text-green-500" : "text-red-500"} font-bold`}
                                             >
                                                 {data.type === "revenu"
                                                     ? "+ "
                                                     : "- "}
-                                                {data.montant.toLocaleString(
-                                                    "fr-CI",
-                                                    {
-                                                        style: "currency",
-                                                        currency: "XOF",
-                                                    },
-                                                )}
+                                                {formatMontant(data.montant)}
                                             </span>
                                         </TableCell>
                                     </TableRow>

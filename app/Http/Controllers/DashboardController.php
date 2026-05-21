@@ -17,11 +17,14 @@ class DashboardController extends Controller
         $totalRevenu = $this->transactionService->getMontantTotalRevenu();
         $totalDepense = $this->transactionService->getMontantTotalDepense();
 
+        $recenteTransactions = $this->transactionService->getRecenteTransaction();
+
         return Inertia::render('Dashboard', [
             "totalRevenu" =>  $totalRevenu,
             "totalDepense" => $totalDepense,
             "soldeNet" => $totalRevenu - $totalDepense,
             "totalEpargne" => 0,
+            "recenteTransactions" => $recenteTransactions
         ]);
     }
 }
