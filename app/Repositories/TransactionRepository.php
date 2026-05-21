@@ -11,7 +11,10 @@ class TransactionRepository
 
     public function all()
     {
-        return Transaction::with('category')->where('user_id', Auth::user()->id)->get();
+        return Transaction::with('category')
+        ->where('user_id', Auth::user()->id)
+        ->orderBy('date')
+        ->get();
     }
 
     public function allRevenu()

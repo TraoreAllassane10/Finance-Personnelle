@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import CategorieRevenu from "@/Components/categorie/CategorieRevenu";
-import { Banknote, Car, Plus, Salad, ShoppingBag, Wallet } from "lucide-react";
+import { Banknote, Car, House, Plus, Salad, ShoppingBag, Wallet, Wifi } from "lucide-react";
 
 const ConfigIcon = {
     "Wallet": Wallet,
@@ -15,6 +15,8 @@ const ConfigIcon = {
     "Salad": Salad,
     "Car": Car,
     "ShoppingBag": ShoppingBag,
+    "House" : House,
+    "Wifi" : Wifi
 };
 
 const Index = () => {

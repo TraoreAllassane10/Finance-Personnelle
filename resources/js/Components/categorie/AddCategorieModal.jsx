@@ -1,4 +1,4 @@
-import { Banknote, Car, Salad, ShoppingBag, Wallet, X } from "lucide-react";
+import { Banknote, Car, House, Salad, ShoppingBag, Wallet, Wifi, X } from "lucide-react";
 import React, { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -25,7 +25,7 @@ const couleurs = [
     "#ff8c42",
 ];
 
-const icons = [Wallet, Banknote, Salad, Car, ShoppingBag];
+const icons = [Wallet, Banknote, Salad, Car, ShoppingBag, House, Wifi];
 
 const AddCategorieModal = ({ setOpenModal }) => {
     const [data, setData] = useState({
