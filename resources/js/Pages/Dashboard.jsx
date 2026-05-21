@@ -151,7 +151,7 @@ export default function Dashboard() {
 
     const filteredData = chartData.transactionParDate.filter((item) => {
         const date = new Date(item.date);
-        const referenceDate = new Date(chartData.transactionParDate[0].date);
+        const referenceDate = new Date("2026-01-01");
         let daysToSubtract = 7;
 
         if (timeRange === "30d") {
@@ -160,6 +160,7 @@ export default function Dashboard() {
             daysToSubtract = 90;
         }
         const startDate = new Date(referenceDate);
+        
         startDate.setDate(startDate.getDate() - daysToSubtract);
         return date >= startDate;
     });

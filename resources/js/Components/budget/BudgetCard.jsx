@@ -6,7 +6,6 @@ import {
     Banknote,
     Car,
     House,
-    Plus,
     Salad,
     ShoppingBag,
     Wallet,
