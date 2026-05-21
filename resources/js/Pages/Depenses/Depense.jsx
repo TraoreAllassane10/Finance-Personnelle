@@ -1,12 +1,7 @@
-import { Card } from "@/Components/ui/card";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
-import { X } from "lucide-react";
 import React, { useState } from "react";
-import { getMonthRegister } from "@/services/helpers";
 import { TableTransaction } from "@/Components/transaction/TableTransaction";
-import { Input } from "@/Components/ui/input";
-import { Button } from "@/Components/ui/button";
 import { TableTransactionNotFound } from "@/Components/transaction/TableTransactionNotFound";
 import ModalTransactionUpdate from "@/Components/transaction/ModalTransactionUpdate";
 
@@ -15,43 +10,12 @@ const Depense = () => {
     const [updateTransactionId, setUpdateTransactionId] = useState(null);
     const [openModal, setOpenModal] = useState(false);
 
-    //Etats pour les filtres
-    const [selectedMonth, setSelectedMonth] = useState("");
-    const [selectedAmount, setSelectedAmount] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("");
 
-    const fileredDepenses = depenses
-        .filter((depense) => {
-            //Filtrer par mois
-            if (
-                selectedMonth &&
-                getMonthRegister(depense.date) !== Number(selectedMonth)
-            ) {
-                return false;
-            }
-
-            //Filtrer par ctegorie
-            if (
-                selectedCategory &&
-                depense.category?.id !== Number(selectedCategory)
-            ) {
-                return false;
-            }
-
-            return true;
-        })
-        .sort((a, b) => {
-            if (selectedAmount === "0") return a.montant - b.montant;
-            if (selectedAmount === "1") return b.montant - a.montant;
-
-            return 0;
-        });
-
-    const resetFiltrer = () => {
-        setSelectedMonth("");
-        setSelectedAmount("");
-        setSelectedCategory("");
-    };
+    // const resetFiltrer = () => {
+    //     setSelectedMonth("");
+    //     setSelectedAmount("");
+    //     setSelectedCategory("");
+    // };
 
     return (
         <div>
@@ -77,7 +41,7 @@ const Depense = () => {
                 </section>
 
                 {/* Section de filtre */}
-                <Card className="mb-4 px-6 py-4">
+                {/* <Card className="mb-4 px-6 py-4">
                     <div className="flex justify-between ">
                         <div className="flex flex-wrap gap-4">
                             <div>
@@ -110,7 +74,7 @@ const Depense = () => {
                             </Button>
                         </div>
                     </div>
-                </Card>
+                </Card> */}
 
                 {depenses.length === 0 ? (
                     <TableTransactionNotFound typeTransaction="depense" />
@@ -118,7 +82,7 @@ const Depense = () => {
                     <TableTransaction
                         setUpdateTransactionId={setUpdateTransactionId}
                         setOpenModalUpdate={setOpenModal}
-                        datas={fileredDepenses}
+                        datas={depenses}
                         name="depense"
                     />
                 )}
