@@ -33,7 +33,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import CardStatistiques from "@/Components/dashboard/CardStatistiques";
-import { dashbaordStats, recentesTransaction } from "@/constant";
+import { recentesTransaction } from "@/constant";
 import { useState } from "react";
 import {
     Table,
@@ -44,6 +44,7 @@ import {
 } from "@/Components/ui/table";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/Components/ui/progress";
+import { ArrowDown, ArrowUp, Landmark, PiggyBank, TrendingDown, TrendingUp } from "lucide-react";
 
 // Données pour le graphique Revenu - Depense
 export const description = "An interactive area chart";
@@ -192,6 +193,50 @@ const chartConfig2 = {
 };
 
 export default function Dashboard() {
+    const { totalRevenu, totalDepense, soldeNet, totalEpargne } =
+        usePage().props;
+
+    const dashbaordStats = [
+        {
+            nom: "Total des revenus",
+            montant: totalRevenu,
+            icon: TrendingUp,
+            bgColor: "bg-green-100",
+            color: "text-green-600",
+            trend: "up",
+            trendColor: "text-green-600",
+            trendIcon: ArrowUp,
+            trendText: "5% par rapport au mois dernier",
+        },
+        {
+            nom: "Total des dépenses",
+            montant: totalDepense,
+            icon: TrendingDown,
+            bgColor: "bg-red-100",
+            color: "text-red-600",
+            trend: "down",
+            trendColor: "text-red-600",
+            trendIcon: ArrowDown,
+            trendText: "10% par rapport au mois dernier",
+        },
+        {
+            nom: "Solde Net",
+            montant: soldeNet,
+            icon: Landmark,
+            bgColor: "bg-blue-100",
+            color: "text-blue-600",
+            text: "Solde disponible apres depenses",
+        },
+        {
+            nom: "Epargnes",
+            montant: totalEpargne,
+            icon: PiggyBank,
+            bgColor: "bg-purple-100",
+            color: "text-purple-600",
+            text: "Epargnes totales",
+        },
+    ];
+
     const [timeRange, setTimeRange] = useState("90d");
 
     const filteredData = chartData.filter((item) => {

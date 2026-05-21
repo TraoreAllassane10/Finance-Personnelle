@@ -1,5 +1,6 @@
 import React from "react";
 import { Card } from "../ui/card";
+import { formatMontant } from "@/Pages/lib/utils";
 
 const CardStatistiques = ({ stats, className }) => {
     return (
@@ -18,7 +19,7 @@ const CardStatistiques = ({ stats, className }) => {
 
                     <div className="flex flex-col gap-2">
                         <p className="text-2xl font-bold">
-                            {stat.montant.toLocaleString()} fcfa
+                            {formatMontant(stat.montant)}
                         </p>
 
                         <div>

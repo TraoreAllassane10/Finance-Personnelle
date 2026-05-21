@@ -22,11 +22,18 @@ class TransactionService
         return $this->transactionRepository->allDepense();
     }
 
-    public function getMontantTotalDepense() {
-        return $this->transactionRepository->montantTotalDepense();
+    public function getMontantTotalDepense()
+    {
+        return (int) $this->transactionRepository->montantTotalDepense();
     }
 
-    public function getTransaction(string $id) {
+    public function getMontantTotalRevenu()
+    {
+        return (int) $this->transactionRepository->montantTotalRevenu();
+    }
+
+    public function getTransaction(string $id)
+    {
         return $this->transactionRepository->find($id);
     }
 
@@ -37,11 +44,13 @@ class TransactionService
         return $this->transactionRepository->create($data);
     }
 
-    public function updateTransaction(Transaction $transaction, array $data) {
+    public function updateTransaction(Transaction $transaction, array $data)
+    {
         return $this->transactionRepository->update($transaction, $data);
     }
 
-    public function deleteTransaction(Transaction $transaction) {
+    public function deleteTransaction(Transaction $transaction)
+    {
         return $this->transactionRepository->delete($transaction);
     }
 }
