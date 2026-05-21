@@ -19,12 +19,8 @@ const BudgetCard = ({ budget }) => {
     // Calcule de la progression
     const progression =
         budget.montant_alloue > 0
-            ? (budget.category.montant_depense * 100) / budget.montant_alloue
+            ? Math.ceil((budget.category.montant_depense * 100) / budget.montant_alloue)
             : 0;
-
-            console.log("Les progression : ", progression)
-
-    // const progression = 50;
 
     // Recuperation du sytle de l'indicateur
     const [bgColor] = getSytleIndicator(progression);

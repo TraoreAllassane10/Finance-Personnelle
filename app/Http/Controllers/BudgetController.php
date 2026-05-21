@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\budget\CreateBudgetRequest;
 use App\Services\BudgetService;
 use App\Services\CategorieService;
+use App\Services\TransactionService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -13,6 +14,7 @@ class BudgetController extends Controller
 {
     public function __construct(
         protected CategorieService $categorieService,
+        protected TransactionService $transactionService,
         protected BudgetService $budgetService
     ) {}
 
@@ -20,10 +22,14 @@ class BudgetController extends Controller
     {
         $categories = $this->categorieService->getCategories();
         $budgets = $this->budgetService->getBudgets();
+        $montantTotalBudget = $this->budgetService->getMontantTotalBudget();
+        $montantTotalDepense = $this->transactionService->getMontantTotalDepense();
 
         return Inertia::render('Budget/Index', [
             'categories' => $categories,
-            'budgets' => $budgets
+            'budgets' => $budgets,
+            "montantTotalBudget" => $montantTotalBudget,
+            "montantTotalDepense" => $montantTotalDepense
         ]);
     }
 

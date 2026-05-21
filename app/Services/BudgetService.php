@@ -17,6 +17,10 @@ class BudgetService
         return $this->budgetRepository->all();
     }
 
+    public function getMontantTotalBudget() {
+        return $this->budgetRepository->montantTotalAlloue();
+    }
+
     public function createBudget(array $data)
     {
         $mois = now()->month;

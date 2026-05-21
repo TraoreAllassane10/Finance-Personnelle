@@ -33,6 +33,10 @@ class TransactionRepository
             ->get();
     }
 
+    public function montantTotalDepense() {
+        return Transaction::where("type", TypeTransaction::DEPENSE->value)->sum("montant");
+    }
+
     public function find(string $id)
     {
         return Transaction::find($id);

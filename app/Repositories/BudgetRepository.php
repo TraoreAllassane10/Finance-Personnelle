@@ -21,6 +21,10 @@ class BudgetRepository
             ->get();
     }
 
+    public function montantTotalAlloue() {
+        return Budget::sum("montant_alloue");
+    }
+
     public function create(array $data, int $mois, int $annee)
     {
         return Budget::create([

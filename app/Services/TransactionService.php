@@ -22,6 +22,9 @@ class TransactionService
         return $this->transactionRepository->allDepense();
     }
 
+    public function getMontantTotalDepense() {
+        return $this->transactionRepository->montantTotalDepense();
+    }
 
     public function getTransaction(string $id) {
         return $this->transactionRepository->find($id);
