@@ -47,8 +47,46 @@ export default function useProfile() {
         }
     };
 
+    const deleteAccount = async () => {
+        try {
+            setLoading(true);
+
+            await axios
+                .delete("/user/delete")
+                .then((response) => {
+                    if (response.data.success) {
+                        setLoading(false);
+
+                        router.visit("/");
+                    } else {
+                        toast.error(response.data.message, {
+                            position: "top-center",
+                        });
+                    }
+                })
+                .catch((error) => {
+                    toast.error(
+                        "Erreur survenue lors de la suppression du compte utilisateur",
+                        { position: "top-center" },
+                    );
+                    console.log(
+                        "Erreur survenue lors de la suppression du compte utilisateur",
+                        error,
+                    );
+                });
+        } catch (error) {
+            toast.error("Erreur survenue au niveau du serveur", {
+                position: "top-center",
+            });
+            console.log("Erreur dans deleteAccount", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return {
         udpateNameAndEmail,
+        deleteAccount,
         isLoading,
     };
 }

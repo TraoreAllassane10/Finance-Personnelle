@@ -1,8 +1,11 @@
 import React from "react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
+import useProfile from "@/hooks/useProfile";
 
 const CardCompte = () => {
+    const { deleteAccount, isLoading } = useProfile();
+
     return (
         <Card className="bg-red-100 border border-red-300">
             <CardHeader className="border-b border-red-200">
@@ -27,8 +30,10 @@ const CardCompte = () => {
                     <Button
                         variant={"destructive"}
                         className="self-start text-xs rounded-md px-2 py-2 transition duration-300"
+                        disabled={isLoading}
+                        onClick={deleteAccount}
                     >
-                        Supprimer votre compte
+                        {isLoading ? "Suppression..." : "Supprimer votre compte"}
                     </Button>
                 </div>
             </CardContent>
