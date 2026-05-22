@@ -7,6 +7,7 @@ import {
     Car,
     House,
     MoreHorizontalIcon,
+    MoreVerticalIcon,
     Option,
     Salad,
     ShoppingBag,
@@ -62,7 +63,7 @@ const BudgetCard = ({ budget }) => {
     return (
         <Card>
             <CardHeader className="border-b">
-                <div className="flex justify-between">
+                <div className="flex items-center justify-between place-items-center">
                     <div className="flex gap-4 place-items-center">
                         <div
                             className={`p-1 flex justify-center rounded-lg`}
@@ -84,7 +85,7 @@ const BudgetCard = ({ budget }) => {
                                     size="icon"
                                     className="size-8"
                                 >
-                                    <MoreHorizontalIcon />
+                                    <MoreVerticalIcon />
                                 </Button>
                             </DropdownMenuTrigger>
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EpargneController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -56,6 +57,8 @@ Route::middleware('auth')->group(function () {
     Route::get("/parametres", function () {
         return Inertia::render('Parametre/Index');
     })->name('parametres');
+
+    Route::put('/user/profil', [UserController::class, 'updateNameAndEmail'])->name('user.profile.update');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
