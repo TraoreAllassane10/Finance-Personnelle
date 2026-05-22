@@ -47,6 +47,47 @@ export default function useProfile() {
         }
     };
 
+    const updatePassword = async (data) => {
+        try {
+            setLoading(true);
+
+            await axios
+                .put("/user/password", data)
+                .then((response) => {
+                    if (response.data.success) {
+                        setLoading(false);
+
+                        toast.success(response.data.message, {
+                            position: "top-center",
+                        });
+
+                        router.visit("/");
+                    } else {
+                        toast.error(response.data.message, {
+                            position: "top-center",
+                        });
+                    }
+                })
+                .catch((error) => {
+                    toast.error(
+                        "Erreur survenue lors de la mise à jour du mot de passe",
+                        { position: "top-center" },
+                    );
+                    console.log(
+                        "Erreur lors de la mise à jour du mot de passe",
+                        error,
+                    );
+                });
+        } catch (error) {
+            toast.error("Erreur survenue au niveau du serveur", {
+                position: "top-center",
+            });
+            console.log("Erreur dans updatePassword", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const deleteAccount = async () => {
         try {
             setLoading(true);
@@ -87,6 +128,7 @@ export default function useProfile() {
     return {
         udpateNameAndEmail,
         deleteAccount,
+        updatePassword,
         isLoading,
     };
 }

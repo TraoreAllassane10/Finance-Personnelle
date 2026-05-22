@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
     })->name('parametres');
 
     Route::put('/user/profil', [UserController::class, 'updateNameAndEmail'])->name('user.profile.update');
+    Route::put('/user/password', [UserController::class, 'updatePassword'])->name('user.password.update');
     Route::delete('/user/delete', [UserController::class, 'deleteAccount'])->name('user.deleteAccount');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

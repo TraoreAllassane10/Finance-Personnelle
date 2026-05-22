@@ -1,10 +1,26 @@
-import React from "react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import useProfile from "@/hooks/useProfile";
 
-const CardSecurite = () => {
+const CardSecurite = ({ passData, setPassData }) => {
+    const handleChange = (cle, valeur) => {
+        setPassData((prev) => ({ ...prev, [cle]: valeur }));
+    };
+
+    const canSumbit =
+        passData.ancien_pass &&
+        passData.nouveau_pass &&
+        passData.confirmer_pass &&
+        passData.nouveau_pass == passData.confirmer_pass;
+
+    const { updatePassword } = useProfile();
+
+    const handleSumbit = () => {
+        updatePassword(passData);
+    };
+
     return (
         <Card>
             <CardHeader className="border-b border-gray-200">
@@ -26,6 +42,10 @@ const CardSecurite = () => {
                             </Label>
                             <Input
                                 type="password"
+                                value={passData.ancien_pass}
+                                onChange={(e) =>
+                                    handleChange("ancien_pass", e.target.value)
+                                }
                                 className="h-10 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                             />
                         </div>
@@ -37,6 +57,10 @@ const CardSecurite = () => {
                             </Label>
                             <Input
                                 type="password"
+                                value={passData.nouveau_pass}
+                                onChange={(e) =>
+                                    handleChange("nouveau_pass", e.target.value)
+                                }
                                 className="h-10 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                             />
                         </div>
@@ -48,6 +72,13 @@ const CardSecurite = () => {
                             </Label>
                             <Input
                                 type="password"
+                                value={passData.confirmer_pass}
+                                onChange={(e) =>
+                                    handleChange(
+                                        "confirmer_pass",
+                                        e.target.value,
+                                    )
+                                }
                                 className="h-10 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                             />
                         </div>
@@ -56,6 +87,8 @@ const CardSecurite = () => {
                     <Button
                         variant={"outline"}
                         className="self-start text-xs rounded-md px-2 py-2 transition duration-300"
+                        disabled={!canSumbit}
+                        onClick={handleSumbit}
                     >
                         Modifier votre mot de passe
                     </Button>

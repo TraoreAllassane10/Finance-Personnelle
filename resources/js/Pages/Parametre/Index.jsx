@@ -25,6 +25,12 @@ const Index = () => {
         email: user?.email ?? "",
     });
 
+    const [passData, setPassData] = useState({
+        ancien_pass: "",
+        nouveau_pass: "",
+        confirmer_pass: "",
+    });
+
     return (
         <AuthenticatedLayout>
             <Head title="Paramètre" />
@@ -47,10 +53,10 @@ const Index = () => {
                 <CardPreference />
 
                 {/* Securite */}
-                <CardSecurite/>
+                <CardSecurite passData={passData} setPassData={setPassData} />
 
                 {/* Suppression de compte */}
-                <CardCompte/>
+                <CardCompte />
             </section>
         </AuthenticatedLayout>
     );

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\user\UpdateInfoUserRequest;
+use App\Http\Requests\user\UpdatePassword;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
@@ -29,14 +31,32 @@ class UserController extends Controller
         }
     }
 
+    public function updatePassword(UpdatePassword $request)
+    {
+        try {
+            $data = $request->validated();
+
+            $user = Auth::user();
+
+            $user->update([
+                "password" => Hash::make($data['nouveau_pass'])
+            ]);
+
+            Auth::logout();
+
+            return response()->json(['success' => true, 'message' => 'Mot de passe mis à jour']);
+        } catch (Exception $e) {
+            Log::error('Erreur survenu lors de la mise à jour du mot de passe', ['erreur' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => 'Erreur survenu lors de la mise à jour du mot de passe']);
+        }
+    }
+
     public function deleteAccount()
     {
         try {
             $userAuth = Auth::user();
 
             $user = User::find($userAuth->id);
-
-            Log::info($user);
 
             $userDelete = $user->delete();
 
