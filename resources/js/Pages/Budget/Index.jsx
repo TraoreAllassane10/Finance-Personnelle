@@ -19,6 +19,7 @@ import {
     TrendingDown,
     TrendingUp,
     TriangleAlert,
+    Wallet,
 } from "lucide-react";
 import React, { useState } from "react";
 import { formatMontant } from "../lib/utils";
@@ -199,11 +200,29 @@ const Index = () => {
                     Répartition par catégorie
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    {budgets.map((budget) => (
-                        <BudgetCard key={budget.id} budget={budget} />
-                    ))}
-                </div>
+                {budgets.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        {budgets.map((budget) => (
+                            <BudgetCard key={budget.id} budget={budget} />
+                        ))}
+                    </div>
+                ) : (
+                    <Card>
+                        <CardContent className="flex flex-col items-center justify-center gap-4 p-6">
+                            <Wallet size={32} className="text-gray-400" />
+                            <p className="text-gray-800">
+                                Aucun budget defini pour le mois en cours
+                            </p>
+                            <Button
+                                variant={"outline"}
+                                onClick={() => setOpenModal(true)}
+                            >
+                                <SlidersHorizontal />
+                                Definir les budgets
+                            </Button>
+                        </CardContent>
+                    </Card>
+                )}
             </section>
         </AuthenticatedLayout>
     );

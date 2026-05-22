@@ -23,7 +23,7 @@ class BudgetController extends Controller
         $categories = $this->categorieService->getCategories();
         $budgets = $this->budgetService->getBudgets();
         $montantTotalBudget = $this->budgetService->getMontantTotalBudget();
-        $montantTotalDepense = $this->transactionService->getMontantTotalDepense();
+        $montantTotalDepense = $this->budgetService->getMontantTotalDepenseDansBudget();
 
         return Inertia::render('Budget/Index', [
             'categories' => $categories,

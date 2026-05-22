@@ -12,9 +12,9 @@ class TransactionRepository
     public function all()
     {
         return Transaction::with('category')
-        ->where('user_id', Auth::user()->id)
-        ->orderBy('date')
-        ->get();
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('date')
+            ->get();
     }
 
     public function allRevenu()
@@ -38,12 +38,16 @@ class TransactionRepository
 
     public function montantTotalDepense()
     {
-        return Transaction::where("type", TypeTransaction::DEPENSE->value)->sum("montant");
+        return Transaction::where("type", TypeTransaction::DEPENSE->value)
+            ->where('user_id', Auth::user()->id)
+            ->sum("montant");
     }
 
     public function montantTotalRevenu()
     {
-        return Transaction::where("type", TypeTransaction::REVENU->value)->sum("montant");
+        return Transaction::where("type", TypeTransaction::REVENU->value)
+            ->where('user_id', Auth::user()->id)
+            ->sum("montant");
     }
 
     public function recenteTransaction()

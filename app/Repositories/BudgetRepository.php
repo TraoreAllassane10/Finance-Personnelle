@@ -13,7 +13,8 @@ class BudgetRepository
         return Budget::with(['category' => function ($query) {
             $query->with(["transactions" => function ($query) {
                 $query->whereMonth("date", now()->month);
-            }])->withSum("transactions as montant_depense", "montant");
+            }])
+                ->withSum("transactions as montant_depense", "montant");
         }])
             ->where('user_id', Auth::user()->id)
             ->where('mois', now()->month)
@@ -21,8 +22,20 @@ class BudgetRepository
             ->get();
     }
 
-    public function montantTotalAlloue() {
-        return Budget::sum("montant_alloue");
+    public function montantTotalAlloue()
+    {
+        return Budget::where('user_id', Auth::user()->id)->sum("montant_alloue");
+    }
+
+    // Montant total des depenses dans les budgets definir 
+    // Certaines catégorie peuvent ne pas avoir de budget donc leurs transactions ne doit pas etre dans ce total 
+    public function montantTotalDepense()
+    {
+        $montantTotalDepense = $this->all()->reduce(function ($curry, $item) {
+            return $curry + $item->category->montant_depense;
+        }, 0);
+
+        return $montantTotalDepense;
     }
 
     public function create(array $data, int $mois, int $annee)

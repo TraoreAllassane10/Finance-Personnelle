@@ -6,11 +6,20 @@ import {
     Banknote,
     Car,
     House,
+    MoreHorizontalIcon,
+    Option,
     Salad,
     ShoppingBag,
     Wallet,
     Wifi,
 } from "lucide-react";
+import { Button } from "../ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const ConfigIcon = {
     Wallet: Wallet,
@@ -42,20 +51,48 @@ const BudgetCard = ({ budget }) => {
     const montant_restant =
         budget.montant_alloue - budget.category.montant_depense;
 
+
+    // Suppression d'un budget
+    const handleDelete = () => {
+        
+    }
+
     return (
         <Card>
             <CardHeader className="border-b">
-                <div className="flex gap-4 place-items-center">
-                    <div
-                        className={`p-1 flex justify-center rounded-lg`}
-                        style={{ backgroundColor: budget.category.couleur }}
-                    >
-                        <Icon className={`text-white`} />
+                <div className="flex justify-between">
+                    <div className="flex gap-4 place-items-center">
+                        <div
+                            className={`p-1 flex justify-center rounded-lg`}
+                            style={{ backgroundColor: budget.category.couleur }}
+                        >
+                            <Icon className={`text-white`} />
+                        </div>
+
+                        <span className="text-xl font-semibold">
+                            {budget.category?.nom}
+                        </span>
                     </div>
 
-                    <span className="text-xl font-semibold">
-                        {budget.category?.nom}
-                    </span>
+                    <div>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="size-8"
+                                >
+                                    <MoreHorizontalIcon />
+                                </Button>
+                            </DropdownMenuTrigger>
+
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={handleDelete}>
+                                    Supprimer
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </div>
             </CardHeader>
 
