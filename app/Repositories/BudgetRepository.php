@@ -57,4 +57,8 @@ class BudgetRepository
             ->where('annee', $annee)
             ->exists();
     }
+
+    public function delete(Budget $budget) {
+        return $budget->delete();
+    }
 }

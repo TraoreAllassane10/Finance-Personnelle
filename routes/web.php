@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(BudgetController::class)->group(function () {
         Route::get('/budgets', 'index')->name('budgets');
         Route::post('/budgets', 'store')->name('budgets.store');
+        Route::delete('/budgets/{budget}', 'destroy')->name('budgets.destroy');
     });
 
     Route::controller(CategoryController::class)->group(function () {

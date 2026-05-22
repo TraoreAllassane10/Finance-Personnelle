@@ -47,8 +47,50 @@ export default function useBudget() {
         }
     };
 
+      const deleteBudget = async (id) => {
+        try {
+            setLoading(true);
+
+            await axios
+                .delete("/budgets/"+ id)
+                .then((response) => {
+                    if (response.data.success) {
+                        setLoading(false);
+
+                        toast.success(response.data.message, {
+                            position: "top-center",
+                        });
+
+                        router.visit("/budgets");
+                    } else {
+                        toast.error(response.data.message, {
+                            position: "top-center",
+                        });
+                    }
+                })
+                .catch((error) => {
+                    toast.error(
+                        "Erreur survenue lors de la suppression d'un budget",
+                        { position: "top-center" },
+                    );
+                    console.log(
+                        "Erreur lors de la suppression d'un budget",
+                        error,
+                    );
+                });
+        } catch (error) {
+            toast.error("Erreur survenue au niveau du serveur", {
+                position: "top-center",
+            });
+            console.log("Erreur dans deleteBudget", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return {
         createBudget,
+        deleteBudget,
         isLoading,
     };
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\budget\CreateBudgetRequest;
+use App\Models\Budget;
 use App\Services\BudgetService;
 use App\Services\CategorieService;
 use App\Services\TransactionService;
@@ -49,6 +50,19 @@ class BudgetController extends Controller
             Log::error("Erreur lors de la création d'un budget", ["erreur" => $e->getMessage()]);
 
             return response()->json(["success" => false, "message" => "Erreur lors de la création d'un budget"]);
+        }
+    }
+
+    public function destroy(Budget $budget)
+    {
+        try {
+            $this->budgetService->deleteBudget($budget);
+
+            return response()->json(["success" => true, "message" => "Budget supprimé avec succès"]);
+        } catch (Exception $e) {
+            Log::error("Erreur lors de la suppression d'un budget", ["erreur" => $e->getMessage()]);
+
+            return response()->json(["success" => false, "message" => "Erreur lors de la suppression d'un budget"]);
         }
     }
 }

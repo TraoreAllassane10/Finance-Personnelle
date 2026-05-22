@@ -20,6 +20,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import useBudget from "@/hooks/useBudget";
 
 const ConfigIcon = {
     Wallet: Wallet,
@@ -51,11 +52,12 @@ const BudgetCard = ({ budget }) => {
     const montant_restant =
         budget.montant_alloue - budget.category.montant_depense;
 
-
     // Suppression d'un budget
+    const { deleteBudget } = useBudget();
+
     const handleDelete = () => {
-        
-    }
+        deleteBudget(budget.id);
+    };
 
     return (
         <Card>

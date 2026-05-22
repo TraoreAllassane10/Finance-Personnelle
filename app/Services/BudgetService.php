@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Budget;
 use App\Repositories\BudgetRepository;
 use Carbon\Carbon;
 
@@ -37,5 +38,9 @@ class BudgetService
         }
 
         return $this->budgetRepository->create($data, $mois, $annee);
+    }
+
+    public function deleteBudget(Budget $budget) {
+        return $this->budgetRepository->delete($budget);
     }
 }
