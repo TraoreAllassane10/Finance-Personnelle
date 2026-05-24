@@ -7,23 +7,51 @@ import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import CategorieRevenu from "@/Components/categorie/CategorieRevenu";
-import { Banknote, Car, House, Plus, Salad, ShoppingBag, Wallet, Wifi } from "lucide-react";
+import {
+    Banknote,
+    Car,
+    House,
+    Plus,
+    Salad,
+    ShoppingBag,
+    Wallet,
+    Wifi,
+    Briefcase,
+    CreditCard,
+    ShoppingCart,
+    HeartPulse,
+    Gamepad2,
+    Smartphone,
+    PiggyBank,
+    UtensilsCrossed,
+    Plane,
+    RefreshCw,
+} from "lucide-react";
 
 const ConfigIcon = {
-    "Wallet": Wallet,
-    "Banknote": Banknote,
-    "Salad": Salad,
-    "Car": Car,
-    "ShoppingBag": ShoppingBag,
-    "House" : House,
-    "Wifi" : Wifi
+    Wallet: Wallet,
+    Banknote: Banknote,
+    Salad: Salad,
+    Car: Car,
+    ShoppingBag: ShoppingBag,
+    House: House,
+    Wifi: Wifi,
+    Briefcase: Briefcase,
+    CreditCard: CreditCard,
+    ShoppingCart: ShoppingCart,
+    HeartPulse: HeartPulse,
+    Gamepad2: Gamepad2,
+    Smartphone: Smartphone,
+    PiggyBank: PiggyBank,
+    UtensilsCrossed: UtensilsCrossed,
+    Plane: Plane,
+    RefreshCw: RefreshCw,
 };
 
 const Index = () => {
     const { categories } = usePage().props;
 
     const [openModal, setOpenModal] = useState(false);
-
 
     return (
         <AuthenticatedLayout>
@@ -60,10 +88,18 @@ const Index = () => {
                 <Separator className="my-2" />
 
                 <TabsContent value="depense">
-                    <CategorieDepense categories={categories} ConfigIcon={ConfigIcon} setOpenModal={setOpenModal} />
+                    <CategorieDepense
+                        categories={categories}
+                        ConfigIcon={ConfigIcon}
+                        setOpenModal={setOpenModal}
+                    />
                 </TabsContent>
                 <TabsContent value="revenu">
-                    <CategorieRevenu categories={categories} ConfigIcon={ConfigIcon} setOpenModal={setOpenModal} />
+                    <CategorieRevenu
+                        categories={categories}
+                        ConfigIcon={ConfigIcon}
+                        setOpenModal={setOpenModal}
+                    />
                 </TabsContent>
             </Tabs>
         </AuthenticatedLayout>
