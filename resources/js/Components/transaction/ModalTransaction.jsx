@@ -1,5 +1,5 @@
-import { X } from "lucide-react";
-import React, { useState } from "react";
+import { Loader2, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
@@ -11,14 +11,88 @@ import {
     SelectValue,
 } from "../ui/select";
 import { Button } from "../ui/button";
-import { categories } from "@/constant";
+import useTransaction from "@/hooks/useTransaction";
+import { router } from "@inertiajs/react";
+import useCategorie from "@/hooks/useCategorie";
 
-const ModalTransaction = ({ typeModal, setOpenModal }) => {
-    const [typeTransaction, setTypeTransaction] = useState("depense");
+const ModalTransaction = ({ setOpenModal }) => {
+    const [categories, setCategories] = useState([]);
+
+    const [data, setData] = useState({
+        type: "depense",
+        montant: null,
+        date: "",
+        category_id: "",
+        description: "",
+        note: "",
+    });
+
+    let canSubmit =
+        data.type &&
+        data.montant &&
+        data.date &&
+        data.category_id &&
+        data.description;
+
+    const handleChange = (key, value) => {
+        setData((prev) => ({ ...prev, [key]: value }));
+    };
+
+    const { createTransaction, isLoading } = useTransaction();
+    const { getCategories, isLoading: isLoadingCategorie } = useCategorie();
+
+    // Recuperation des categories lors du montage du composant
+    useEffect(() => {
+        async function fethCategories(params) {
+            const data = await getCategories();
+            setCategories(data);
+        }
+
+        fethCategories();
+    }, []);
+
+    useEffect(() => {
+        setData({
+            type: data.type,
+            montant: "",
+            date: "",
+            category_id: "",
+            description: "",
+            note: "",
+        });
+    }, [data.type]);
+
+    const handleSubmit = async () => {
+        await createTransaction(data);
+
+        setData({
+            type: "depense",
+            montant: null,
+            date: "",
+            category_id: "",
+            description: "",
+            note: "",
+        });
+
+        setOpenModal(false);
+        
+        router.reload(0);
+    };
+
+    if (isLoadingCategorie) {
+        return (
+            <div className="fixed inset-0 z-40 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/50 backdrop-blur-md"></div>
+
+                <Loader2 className=" animate-spin" />
+            </div>
+        );
+    }
 
     return (
         <div className="fixed inset-0 z-40 flex items-center justify-center">
             <div className="absolute inset-0 bg-black/50 backdrop-blur-md"></div>
+
             <div className="bg-white w-[400px] rounded-lg absolute top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
                 <div className="p-4">
                     {/* Entete */}
@@ -38,14 +112,18 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                     <div className="w-full bg-gray-100 rounded-lg p-1 mb-4">
                         <div className="flex">
                             <button
-                                onClick={() => setTypeTransaction("depense")}
-                                className={`w-1/2 py-1 text-sm font-medium text-gray-600 rounded-md transition duration-100 shadow-sm ${typeTransaction === "depense" && "bg-white"}`}
+                                onClick={() => {
+                                    handleChange("type", "depense");
+                                }}
+                                className={`w-1/2 py-1 text-sm font-medium text-gray-600 rounded-md transition duration-100 shadow-sm ${data.type === "depense" && "bg-white"}`}
                             >
                                 Dépense
                             </button>
                             <button
-                                onClick={() => setTypeTransaction("revenu")}
-                                className={`w-1/2  text-sm font-medium text-gray-600 rounded-md transition duration-100 shadow-sm ${typeTransaction === "revenu" && "bg-white"}`}
+                                onClick={() => {
+                                    handleChange("type", "revenu");
+                                }}
+                                className={`w-1/2  text-sm font-medium text-gray-600 rounded-md transition duration-100 shadow-sm ${data.type === "revenu" && "bg-white"}`}
                             >
                                 Revenu
                             </button>
@@ -61,9 +139,13 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                                     Montant
                                 </Label>
                                 <Input
+                                    value={data.montant}
+                                    onChange={(e) =>
+                                        handleChange("montant", e.target.value)
+                                    }
                                     type="number"
                                     placeholder="10000"
-                                    className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                    className="h-7 py-1 text-muted-foreground placeholder:text-muted-foreground/50 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                 />
                             </div>
 
@@ -76,7 +158,11 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                                     </Label>
                                     <Input
                                         type="date"
-                                        className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                        value={data.date}
+                                        onChange={(e) =>
+                                            handleChange("date", e.target.value)
+                                        }
+                                        className="h-7 py-1 text-sm text-muted-foreground  border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                     />
                                 </div>
 
@@ -87,7 +173,16 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                                             Categorie
                                         </Label>
 
-                                        <Select className="h-7 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition">
+                                        <Select
+                                            value={data.category_id}
+                                            onValueChange={(value) =>
+                                                handleChange(
+                                                    "category_id",
+                                                    value,
+                                                )
+                                            }
+                                            className="h-7 text-sm text-muted-foreground border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                        >
                                             <SelectTrigger className="w-[180px]">
                                                 <SelectValue placeholder="Sélectionner une catégorie" />
                                             </SelectTrigger>
@@ -96,16 +191,14 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                                                     .filter(
                                                         (c) =>
                                                             c.type ===
-                                                            typeTransaction,
+                                                            data.type,
                                                     )
                                                     .map((categorie) => (
                                                         <SelectItem
-                                                            value={
-                                                                categorie.name
-                                                            }
+                                                            value={categorie.id}
                                                             key={categorie.id}
                                                         >
-                                                            {categorie.name}
+                                                            {categorie.nom}
                                                         </SelectItem>
                                                     ))}
                                             </SelectContent>
@@ -121,8 +214,15 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                                 </Label>
                                 <Input
                                     type="text"
+                                    value={data.description}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            "description",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="Ex: Courses hebdomadaires"
-                                    className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                    className="h-7 py-1 text-muted-foreground placeholder:text-muted-foreground/50 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                 />
                             </div>
 
@@ -133,8 +233,12 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                                 </Label>
                                 <Textarea
                                     rows={3}
+                                    value={data.note}
+                                    onChange={(e) =>
+                                        handleChange("note", e.target.value)
+                                    }
                                     placeholder="Ex: J'ai acheté des fruits et légumes pour la semaine"
-                                    className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                    className="h-7 py-1 text-muted-foreground placeholder:text-muted-foreground/50 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                 ></Textarea>
                             </div>
                         </div>
@@ -151,7 +255,11 @@ const ModalTransaction = ({ typeModal, setOpenModal }) => {
                             >
                                 Annuler
                             </Button>
-                            <Button className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300">
+                            <Button
+                                disabled={!canSubmit || isLoading}
+                                onClick={handleSubmit}
+                                className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300"
+                            >
                                 Ajouter une transaction
                             </Button>
                         </div>

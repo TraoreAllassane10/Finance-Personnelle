@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('epargnes', function (Blueprint $table) {
+        Schema::create('versements', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->integer('montant');
-            $table->string('compte');
-            $table->text('projets');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->date("date");
+            $table->integer('montant_verse');
+            
+            $table->foreignId('objectif_epargne_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('epargnes');
+        Schema::dropIfExists('versements');
     }
 };

@@ -1,5 +1,5 @@
-import { Banknote, Car, Salad, ShoppingBag, Wallet, X } from "lucide-react";
-import React from "react";
+import { Banknote, Car, House, Salad, ShoppingBag, Wallet, Wifi, X } from "lucide-react";
+import React, { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -10,6 +10,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../ui/select";
+import { cn } from "@/lib/utils";
+import useCategorie from "@/hooks/useCategorie";
 
 const couleurs = [
     "#25ced1",
@@ -23,9 +25,29 @@ const couleurs = [
     "#ff8c42",
 ];
 
-const icons = [Wallet, Banknote, Salad, Car, ShoppingBag];
+const icons = [Wallet, Banknote, Salad, Car, ShoppingBag, House, Wifi];
 
 const AddCategorieModal = ({ setOpenModal }) => {
+    const [data, setData] = useState({
+        nom: "",
+        type: "",
+        couleur: "",
+        icon: "",
+    });
+
+    let canSubmit = data.nom && data.type && data.couleur && data.icon;
+
+    const { createCategorie, isLoading } = useCategorie();
+
+    const handleChange = (key, value) => {
+        setData((prev) => ({ ...prev, [key]: value }));
+    };
+
+    // Ajout d'une categorie
+    const handleSubmit = () => {
+        createCategorie(data);
+    };
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div className="absolute inset-0 bg-black/50 backdrop-blur-md">
@@ -53,6 +75,10 @@ const AddCategorieModal = ({ setOpenModal }) => {
                                         Nom
                                     </Label>
                                     <Input
+                                        value={data.nom}
+                                        onChange={(e) =>
+                                            handleChange("nom", e.target.value)
+                                        }
                                         placeholder="Ex: Alimentation"
                                         className="h-7 py-1 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                     />
@@ -65,7 +91,13 @@ const AddCategorieModal = ({ setOpenModal }) => {
                                             Type de catégorie
                                         </Label>
 
-                                        <Select className="h-7 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition">
+                                        <Select
+                                            value={data.type}
+                                            onValueChange={(value) =>
+                                                handleChange("type", value)
+                                            }
+                                            className="h-7 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
+                                        >
                                             <SelectTrigger className="w-[180px]">
                                                 <SelectValue placeholder="Sélectionner le type" />
                                             </SelectTrigger>
@@ -90,7 +122,17 @@ const AddCategorieModal = ({ setOpenModal }) => {
                                     <div className="flex gap-2">
                                         {couleurs.map((couleur) => (
                                             <div
-                                                className="w-8 h-8 rounded-full cursor-pointer"
+                                                onClick={() =>
+                                                    handleChange(
+                                                        "couleur",
+                                                        couleur,
+                                                    )
+                                                }
+                                                className={cn(
+                                                    "w-8 h-8 rounded-full cursor-pointer",
+                                                    data.couleur === couleur &&
+                                                        "border-4 border-blue-600",
+                                                )}
                                                 style={{
                                                     backgroundColor: couleur,
                                                 }}
@@ -105,11 +147,27 @@ const AddCategorieModal = ({ setOpenModal }) => {
                                         Icon
                                     </Label>
 
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-4 items-center place-items-center">
                                         {icons.map((icon) => {
                                             const Icon = icon;
 
-                                            return <Icon size={24} />;
+                                            return (
+                                                <Icon
+                                                    onClick={() =>
+                                                        handleChange(
+                                                            "icon",
+                                                            icon.displayName,
+                                                        )
+                                                    }
+                                                    className={cn(
+                                                        "cursor-pointer",
+                                                        data.icon ==
+                                                            icon.displayName &&
+                                                            "text-blue-600",
+                                                    )}
+                                                    size={32}
+                                                />
+                                            );
                                         })}
                                     </div>
                                 </div>
@@ -128,8 +186,15 @@ const AddCategorieModal = ({ setOpenModal }) => {
                                 >
                                     Annuler
                                 </Button>
-                                <Button className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300">
-                                    Ajouter une transaction
+
+                                <Button
+                                    onClick={handleSubmit}
+                                    disabled={!canSubmit || isLoading}
+                                    className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300"
+                                >
+                                    {isLoading
+                                        ? "Enregistrement..."
+                                        : "Ajouter une transaction"}
                                 </Button>
                             </div>
                         </div>

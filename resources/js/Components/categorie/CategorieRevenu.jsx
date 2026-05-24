@@ -1,15 +1,15 @@
-import { categories } from "@/constant";
+
 import { Plus } from "lucide-react";
 import React from "react";
 
-const CategorieRevenu = ({ setOpenModal }) => {
+const CategorieRevenu = ({ categories, ConfigIcon, setOpenModal }) => {
     return (
         <div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                 {categories
-                    .filter((c) => c.type === "revenu")
-                    .map(({ id, name, icon, color, transaction }) => {
-                        const Icon = icon;
+                   .filter((c) => c.type === "revenu")
+                    .map(({ id, nom, icon, couleur, transactions_count }) => {
+                       const Icon = ConfigIcon[icon];
 
                         return (
                             <div
@@ -19,7 +19,7 @@ const CategorieRevenu = ({ setOpenModal }) => {
                                 {/* Icon */}
                                 <div
                                     className={`w-10 h-10 rounded-full flex items-center justify-center text-white mb-4`}
-                                    style={{ backgroundColor: color }}
+                                    style={{ backgroundColor: couleur }}
                                 >
                                     <Icon size={16} />
                                 </div>
@@ -28,17 +28,17 @@ const CategorieRevenu = ({ setOpenModal }) => {
                                 <div className="flex gap-2 place-items-center mb-1">
                                     <div
                                         className="w-2 h-2 rounded-full"
-                                        style={{ backgroundColor: color }}
+                                        style={{ backgroundColor: couleur }}
                                     />
                                     <p className="text-md font-semibold text-gray-900">
-                                        {name}
+                                        {nom}
                                     </p>
                                 </div>
 
                                 {/* NOmbre de transaction */}
                                 <div>
                                     <p className="text-sm text-muted-foreground">
-                                        {transaction} transactions
+                                        {transactions_count} transactions
                                     </p>
                                 </div>
                             </div>

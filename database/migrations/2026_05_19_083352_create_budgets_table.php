@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('configurations', function (Blueprint $table) {
+        Schema::create('budgets', function (Blueprint $table) {
             $table->id();
-            $table->string('devise')->default('fcfa');
-            $table->string('theme')->default('clair');
-            $table->string('langue')->default('francais');
-            $table->foreignId('user_id')->constrained();
+            
+            $table->integer('montant_alloue');
+            $table->integer('mois');
+            $table->integer('annee');
+
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('configurations');
+        Schema::dropIfExists('budgets');
     }
 };

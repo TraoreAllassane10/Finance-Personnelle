@@ -1,85 +1,34 @@
-import { Card, CardContent } from "@/Components/ui/card";
-
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, router, useForm, usePage } from "@inertiajs/react";
-import { FileSpreadsheet, X } from "lucide-react";
+import { Head, usePage } from "@inertiajs/react";
 import React, { useState } from "react";
-
-import Notification from "@/Components/Notification";
-
-import { getMonthRegister } from "@/services/helpers";
 import { TableTransaction } from "@/Components/transaction/TableTransaction";
-import { Input } from "@/Components/ui/input";
-import { Button } from "@/Components/ui/button";
+import { TableTransactionNotFound } from "@/Components/transaction/TableTransactionNotFound";
+import ModalTransactionUpdate from "@/Components/transaction/ModalTransactionUpdate";
 
 const Depense = () => {
-    const depenses = usePage().props.depenses || [];
-    const [notify, setNotify] = useState(false);
+    const { depenses } = usePage().props;
+    const [updateTransactionId, setUpdateTransactionId] = useState(null);
+    const [openModal, setOpenModal] = useState(false);
 
-    const { data, setData, post, processing, errors, reset } = useForm({
-        date: "",
-        montant: "",
-        category_id: "",
-        description: "",
-    });
 
-    //Etats pour les filtres
-    const [selectedMonth, setSelectedMonth] = useState("");
-    const [selectedAmount, setSelectedAmount] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("");
-
-    const fileredDepenses = depenses
-        .filter((depense) => {
-            //Filtrer par mois
-            if (
-                selectedMonth &&
-                getMonthRegister(depense.date) !== Number(selectedMonth)
-            ) {
-                return false;
-            }
-
-            //Filtrer par ctegorie
-            if (
-                selectedCategory &&
-                depense.category?.id !== Number(selectedCategory)
-            ) {
-                return false;
-            }
-
-            return true;
-        })
-        .sort((a, b) => {
-            if (selectedAmount === "0") return a.montant - b.montant;
-            if (selectedAmount === "1") return b.montant - a.montant;
-
-            return 0;
-        });
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        post(route("depenses.store"), {
-            onSuccess: () => {
-                (reset(), SetShowModal(false));
-                setNotify(true);
-            },
-        });
-    };
-
-    const resetFiltrer = () => {
-        setSelectedMonth("");
-        setSelectedAmount("");
-        setSelectedCategory("");
-        setNotify(false);
-    };
-
-    const handleExcel = () => {
-        window.location.href = route("depenses.excel");
-    };
+    // const resetFiltrer = () => {
+    //     setSelectedMonth("");
+    //     setSelectedAmount("");
+    //     setSelectedCategory("");
+    // };
 
     return (
         <div>
             <AuthenticatedLayout>
                 <Head title="Depenses" />
+
+                {/* Modal de modification d'une transaction */}
+                {openModal && (
+                    <ModalTransactionUpdate
+                        updateTransactionId={updateTransactionId}
+                        setOpenModal={setOpenModal}
+                    />
+                )}
 
                 {/* Entete de la page */}
                 <section className="mb-6">
@@ -92,7 +41,7 @@ const Depense = () => {
                 </section>
 
                 {/* Section de filtre */}
-                <Card className="mb-4 px-6 py-4">
+                {/* <Card className="mb-4 px-6 py-4">
                     <div className="flex justify-between ">
                         <div className="flex flex-wrap gap-4">
                             <div>
@@ -125,9 +74,18 @@ const Depense = () => {
                             </Button>
                         </div>
                     </div>
-                </Card>
+                </Card> */}
 
-                <TableTransaction datas={fileredDepenses} name="depense" />
+                {depenses.length === 0 ? (
+                    <TableTransactionNotFound typeTransaction="depense" />
+                ) : (
+                    <TableTransaction
+                        setUpdateTransactionId={setUpdateTransactionId}
+                        setOpenModalUpdate={setOpenModal}
+                        datas={depenses}
+                        name="depense"
+                    />
+                )}
             </AuthenticatedLayout>
         </div>
     );

@@ -2,15 +2,28 @@ import AddCategorieModal from "@/Components/categorie/AddCategorieModal";
 import CategorieDepense from "@/Components/categorie/CategorieDepense";
 import { Button } from "@/Components/ui/button";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
-import { Plus } from "lucide-react";
+import { Head, usePage } from "@inertiajs/react";
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator";
 import CategorieRevenu from "@/Components/categorie/CategorieRevenu";
+import { Banknote, Car, House, Plus, Salad, ShoppingBag, Wallet, Wifi } from "lucide-react";
+
+const ConfigIcon = {
+    "Wallet": Wallet,
+    "Banknote": Banknote,
+    "Salad": Salad,
+    "Car": Car,
+    "ShoppingBag": ShoppingBag,
+    "House" : House,
+    "Wifi" : Wifi
+};
 
 const Index = () => {
+    const { categories } = usePage().props;
+
     const [openModal, setOpenModal] = useState(false);
+
 
     return (
         <AuthenticatedLayout>
@@ -21,9 +34,7 @@ const Index = () => {
 
             <section className="flex justify-between place-items-center mb-8">
                 <div className="flex flex-col gap-1">
-                    <h2 className="text-3xl font-bold">
-                        Catégories
-                    </h2>
+                    <h2 className="text-3xl font-bold">Catégories</h2>
                     <p className="text-sm text-muted-foreground">
                         Gérer vos catégories de revenus et de dépense
                     </p>
@@ -45,14 +56,14 @@ const Index = () => {
                     </TabsTrigger>
                     <TabsTrigger value="revenu">Catégories Revenu</TabsTrigger>
                 </TabsList>
-               
-                <Separator className='my-2' />
+
+                <Separator className="my-2" />
 
                 <TabsContent value="depense">
-                    <CategorieDepense setOpenModal={setOpenModal} />
+                    <CategorieDepense categories={categories} ConfigIcon={ConfigIcon} setOpenModal={setOpenModal} />
                 </TabsContent>
                 <TabsContent value="revenu">
-                    <CategorieRevenu setOpenModal={setOpenModal} />
+                    <CategorieRevenu categories={categories} ConfigIcon={ConfigIcon} setOpenModal={setOpenModal} />
                 </TabsContent>
             </Tabs>
         </AuthenticatedLayout>

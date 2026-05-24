@@ -1,4 +1,4 @@
-import { Link, router } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import {
     LayoutDashboard,
     TrendingUp,
@@ -11,8 +11,8 @@ import {
     Banknote,
     ChartColumnDecreasingIcon,
     Wallet2,
-    User,
     Box,
+    UserCircle,
 } from "lucide-react";
 import React from "react";
 
@@ -60,6 +60,8 @@ const mainMenu = [
 ];
 
 export const Sidebar = () => {
+    const { user } = usePage().props.auth;
+
     const handleLogout = (e) => {
         e.preventDefault();
         router.post(route("logout"));
@@ -170,9 +172,9 @@ export const Sidebar = () => {
 
                 <div className="flex flex-col gap-2 mx-4 absolute bottom-4 left-0 border-t pt-2 w-[90%]">
                     <div className="flex gap-2 px-2 py-2 hover:bg-blue-50 hover:text-blue-600 hover:border-r-4 hover:border-blue-600 hover:rounded-md group transition duration-300">
-                        <User className="text-gray-700 group-hover:text-blue-600" />
+                        <UserCircle className="text-gray-700 group-hover:text-blue-600" />
                         <Link className="text-md text-gray-800 group-hover:text-blue-600 group-hover:font-semibold">
-                            Compte
+                            {user.name}
                         </Link>
                     </div>
 

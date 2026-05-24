@@ -23,13 +23,13 @@ class RevenusController extends Controller
     public function index()
     {
 
-        $revenuService = $this->revenuService->all();
+        // $revenuService = $this->revenuService->all();
 
         return Inertia::render('Revenus/Revenus', [
-            "revenus" => $revenuService[0],
-            "revenusChart" => $revenuService[1],
-            "categories" => $revenuService[2],
-            "totalRevenus" => $revenuService[3]
+            // "revenus" => $revenuService[0],
+            // "revenusChart" => $revenuService[1],
+            // "categories" => $revenuService[2],
+            // "totalRevenus" => $revenuService[3]
         ]);
     }
 

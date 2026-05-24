@@ -21,11 +21,11 @@ class EpargneController extends Controller
 
     public function index()
     {
-        $epargneService = $this->epargneService->all();
+        // $epargneService = $this->epargneService->all();
 
         return Inertia::render('Epargnes/Epargnes', [
-            'epargnes' => $epargneService[0],
-            'totalEpargne' => $epargneService[1]
+            // 'epargnes' => $epargneService[0],
+            // 'totalEpargne' => $epargneService[1]
         ]);
     }
 

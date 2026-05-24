@@ -1,6 +1,7 @@
 import React from "react";
 import {
     Table,
+    TableBody,
     TableCell,
     TableHead,
     TableHeader,
@@ -16,22 +17,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Card } from "@/Components/ui/card";
-import { Link, router } from "@inertiajs/react";
-
+import { router } from "@inertiajs/react";
 import { MoreHorizontalIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+import useTransaction from "@/hooks/useTransaction";
 
-export const TableTransaction = ({ datas, name }) => {
+export const TableTransaction = ({ datas, setUpdateTransactionId, setOpenModalUpdate }) => {
+    const { deleteTransaction } = useTransaction();
+
     const handleDeleteRevenu = (id) => {
-        router.delete(route("revenus.delete", id), {
-            onSuccess: () => {},
-        });
-    };
+        deleteTransaction(id);
 
-    const handleDeleteDepense = (id) => {
-        router.delete(route("depenses.delete", id), {
-            onSuccess: () => {},
-        });
+        router.reload(0);
     };
 
     return (
@@ -55,18 +53,38 @@ export const TableTransaction = ({ datas, name }) => {
                             ACTIONS
                         </TableHead>
                     </TableRow>
+                </TableHeader>
+
+                <TableBody>
                     {datas.map((data) => (
                         <TableRow key={data.id}>
                             <TableCell className="text-muted-foreground">
                                 {new Date(data.date).toLocaleDateString()}
                             </TableCell>
-                            <TableCell className="text-muted-foreground">
+                            <TableCell className="text-slate-800 font-bold">
                                 {data.description}
                             </TableCell>
-                            <TableCell className="text-muted-foreground">
-                                {data.category?.name}
+                            <TableCell className={`text-muted-foreground`}>
+                                <span
+                                    style={{
+                                        backgroundColor: data.category?.couleur,
+                                        color: "white",
+                                        fontWeight: "bold",
+                                    }}
+                                    className="px-4 py-1 text-center rounded-full"
+                                >
+                                    {data.category?.nom}
+                                </span>
                             </TableCell>
-                            <TableCell className="text-muted-foreground">
+                            <TableCell
+                                className={cn(
+                                    " font-bold",
+                                    data.type === "revenu"
+                                        ? "text-green-600"
+                                        : "text-red-600",
+                                )}
+                            >
+                                {data.type === "revenu" ? "+" : "-"}
                                 {data.montant.toLocaleString("fr-CI", {
                                     style: "currency",
                                     currency: "XOF",
@@ -87,11 +105,21 @@ export const TableTransaction = ({ datas, name }) => {
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() => {
+                                                setUpdateTransactionId(data.id);
+                                                setOpenModalUpdate(true);
+                                            }}
+                                        >
                                             Modifier
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem variant="destructive">
+                                        <DropdownMenuItem
+                                            onClick={() =>
+                                                handleDeleteRevenu(data.id)
+                                            }
+                                            variant="destructive"
+                                        >
                                             Supprimer
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
@@ -99,7 +127,7 @@ export const TableTransaction = ({ datas, name }) => {
                             </TableCell>
                         </TableRow>
                     ))}
-                </TableHeader>
+                </TableBody>
             </Table>
         </Card>
     );

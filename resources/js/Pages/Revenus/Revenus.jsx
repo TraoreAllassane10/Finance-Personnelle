@@ -1,88 +1,34 @@
-import { Card } from "@/Components/ui/card";
-
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, useForm, usePage } from "@inertiajs/react";
-import { FileSpreadsheet, X } from "lucide-react";
+import { Head, usePage } from "@inertiajs/react";
 import React, { useState } from "react";
-
-import Notification from "@/Components/Notification";
-
-import { getMonthRegister } from "@/services/helpers";
 import { TableTransaction } from "@/Components/transaction/TableTransaction";
-import { Button } from "@/Components/ui/button";
-import { Input } from "@/Components/ui/input";
+import { TableTransactionNotFound } from "@/Components/transaction/TableTransactionNotFound";
+import ModalTransactionUpdate from "@/Components/transaction/ModalTransactionUpdate";
 
 export default function Revenus() {
-    const revenus = usePage().props.revenus || [];
-    const totalRevenus = usePage().props.totalRevenus;
-    const categories = usePage().props.categories || [];
-    const [showModal, SetShowModal] = useState(false);
-    const [notify, setNotify] = useState(false);
-
-    const { data, setData, post, processing, errors, reset } = useForm({
-        date: "",
-        montant: "",
-        category_id: "",
-        description: "",
-    });
-
-    //Etats pour les filtres
-    const [selectedMonth, setSelectedMonth] = useState("");
-    const [selectedAmount, setSelectedAmount] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("");
-
-    const fileredRevenus = revenus
-        .filter((revenu) => {
-            //Filtrer par mois
-            if (
-                selectedMonth &&
-                getMonthRegister(revenu.date) !== Number(selectedMonth)
-            ) {
-                return false;
-            }
-
-            //Filtrer par ctegorie
-            if (
-                selectedCategory &&
-                revenu.category?.id !== Number(selectedCategory)
-            ) {
-                return false;
-            }
-
-            return true;
-        })
-        .sort((a, b) => {
-            if (selectedAmount === "0") return a.montant - b.montant;
-            if (selectedAmount === "1") return b.montant - a.montant;
-
-            return 0;
-        });
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        post(route("revenus.store"), {
-            onSuccess: () => {
-                (reset(), SetShowModal(false), setNotify(true));
-            },
-        });
-    };
+    const { revenus } = usePage().props;
+    const [updateTransactionId, setUpdateTransactionId] = useState(null);
+    const [openModal, setOpenModal] = useState(false);
 
     const resetFiltrer = () => {
         setSelectedMonth("");
         setSelectedAmount("");
         setSelectedCategory("");
-        setNotify(false);
-    };
-
-    const handleExcel = () => {
-        window.location.href = route("revenus.excel");
     };
 
     return (
         <div>
             <AuthenticatedLayout>
                 <Head title="Revenus" />
- 
+
+                {/* Modal de modification d'une transaction */}
+                {openModal && (
+                    <ModalTransactionUpdate
+                        updateTransactionId={updateTransactionId}
+                        setOpenModal={setOpenModal}
+                    />
+                )}
+
                 {/* Entete de la page */}
                 <section className="mb-6">
                     <div className="space-y-1">
@@ -94,7 +40,7 @@ export default function Revenus() {
                 </section>
 
                 {/* Section de filtre */}
-                <Card className="mb-4 px-6 py-4">
+                {/* <Card className="mb-4 px-6 py-4">
                     <div className="flex justify-between ">
                         <div className="flex flex-wrap gap-4">
                             <div>
@@ -127,10 +73,18 @@ export default function Revenus() {
                             </Button>
                         </div>
                     </div>
-                </Card>
+                </Card> */}
 
-                {/* Table d'affichage */}
-                <TableTransaction datas={fileredRevenus} name="revenus" />
+                {revenus.length === 0 ? (
+                    <TableTransactionNotFound typeTransaction="revenu" />
+                ) : (
+                    <TableTransaction
+                        setUpdateTransactionId={setUpdateTransactionId}
+                        setOpenModalUpdate={setOpenModal}
+                        datas={revenus}
+                        name="revenus"
+                    />
+                )}
             </AuthenticatedLayout>
         </div>
     );

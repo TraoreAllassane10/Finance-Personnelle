@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('nom');
+            $table->string('type');
+            $table->string('couleur');
+            $table->string('icon')->nullable();
+            $table->boolean('isArchived')->default(0);
+
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

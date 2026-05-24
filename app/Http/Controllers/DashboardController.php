@@ -2,45 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
+use App\Enums\TypeTransaction;
 use Inertia\Inertia;
-use App\Models\Depense;
-use App\Models\Revenus;
-use App\Services\Chart\GroupByDate;
-use Illuminate\Support\Facades\Auth;
+use App\Services\TransactionService;
 
 class DashboardController extends Controller
 {
+
+    public function __construct(
+        protected TransactionService $transactionService
+    ) {}
     public function index()
     {
-        $totalRevenus = 0;
-        $totalDepenses = 0;
+        // Les statistiques
+        $totalRevenu = $this->transactionService->getMontantTotalRevenu();
+        $totalDepense = $this->transactionService->getMontantTotalDepense();
 
-        $revenus = Revenus::where('user_id', Auth::id())->get();
-        $depenses = Depense::where('user_id', Auth::id())->get();
+        // Les 5 dernieres transactions
+        $recenteTransactions = $this->transactionService->getRecenteTransaction();
 
-        //La somme de tous les revenus
-        for ($i=0; $i < $revenus->count(); $i++) {
-            $totalRevenus += $revenus[$i]->montant;
-        }
+        $transactions = $this->transactionService->getTransactions();
 
-        //La somme de toutes les depenses
-        for ($i=0; $i < $depenses->count(); $i++) {
-            $totalDepenses += $depenses[$i]->montant;
-        }
+        // Regroupement des données par Date pour le graph de comparaison des depense et revenus
+        $transactionParDate = $transactions->groupBy("date")
+            ->map(function ($transactions, $date) {
+                return [
+                    'date' => $date,
+                    'revenu' => $transactions->where("type", TypeTransaction::REVENU->value)->sum('montant'),
+                    'depense' => $transactions->where("type", TypeTransaction::DEPENSE->value)->sum('montant'),
+                ];
+            })->values();
 
-        //Graphique de revenus
-        $revenusParDate = (new GroupByDate())->group($revenus);
-
-        //Graphique de depense
-        $depensesParDate = (new GroupByDate())->group($depenses);
+        // Regroupement des transactions par categorie
+        $transactionParCategorie = $transactions->where('type', TypeTransaction::DEPENSE->value)->groupBy('category_id')
+            ->map(function ($transactions, $categorieId) {
+                return [
+                    'categorie' => $transactions[0]->category->nom,
+                    'montant' => $transactions->sum('montant'),
+                    'fill' => $transactions[0]->category->couleur
+                ];
+            })->values();
 
         return Inertia::render('Dashboard', [
-            "totalRevenus" =>  $totalRevenus,
-            "totalDepenses" => $totalDepenses,
-            "total" => $totalRevenus - $totalDepenses,
-            "revenusChart" => $revenusParDate,
-            "depensesChart" => $depensesParDate
+            "totalRevenu" =>  $totalRevenu,
+            "totalDepense" => $totalDepense,
+            "soldeNet" => $totalRevenu - $totalDepense,
+            "totalEpargne" => 0,
+            "recenteTransactions" => $recenteTransactions,
+
+            "chartData" => [
+                "transactionParDate" => $transactionParDate,
+                "transactionParCategorie" => $transactionParCategorie
+            ]
         ]);
     }
 }

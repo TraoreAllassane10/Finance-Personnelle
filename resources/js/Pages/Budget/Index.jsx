@@ -11,26 +11,69 @@ import {
 } from "@/Components/ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
-import { budgets } from "@/constant";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import {
     CircleAlert,
     SlidersHorizontal,
+    TrendingDown,
     TrendingUp,
     TriangleAlert,
+    Wallet,
 } from "lucide-react";
 import React, { useState } from "react";
+import { formatMontant } from "../lib/utils";
 
 const Index = () => {
+    const { categories, budgets, montantTotalBudget, montantTotalDepense } =
+        usePage().props;
+
+    console.log(budgets);
+
     const [openModal, setOpenModal] = useState(false);
+
+    // Calcul du montant restant
+    const montantRestant =
+        Number(montantTotalBudget) - Number(montantTotalDepense);
+
+    // Calcule de la progression
+    const progression =
+        montantTotalBudget > 0
+            ? Math.ceil((montantTotalDepense * 100) / montantTotalBudget)
+            : 0;
+
+    let nombreBudgetProgressionSuperieur80 = 0;
+    let nombreBudgetProgressionSuperieur100 = 0;
+
+    budgets.forEach((budget) => {
+        const progression =
+            budget.montant_alloue > 0
+                ? Math.ceil(
+                      (Number(budget.category.montant_depense) * 100) /
+                          budget.montant_alloue,
+                  )
+                : 0;
+
+        // Hors budget
+        if (progression > 100) {
+            nombreBudgetProgressionSuperieur100 += 1;
+        } // Limite proche
+        else if (progression > 80 && progression < 100) {
+            nombreBudgetProgressionSuperieur80 += 1;
+        }
+    });
 
     return (
         <AuthenticatedLayout>
             <Head title="Budget" />
 
             {/* Modal de définition de budget */}
-            {openModal && <AddBudgetModal setOpenModal={setOpenModal} />}
+            {openModal && (
+                <AddBudgetModal
+                    categories={categories}
+                    setOpenModal={setOpenModal}
+                />
+            )}
 
             {/* Entete de la page */}
             <section className="flex justify-between place-items-center mb-6">
@@ -62,9 +105,15 @@ const Index = () => {
                                 </CardDescription>
                             </div>
 
-                            <div className="flex gap-2 bg-green-100 text-green-600 text-xs px-1 py-0.5 font-bold place-items-center rounded-xl">
-                                <TrendingUp size={16} /> En bonne voie
-                            </div>
+                            {Number(montantRestant) < 0 ? (
+                                <div className="flex gap-2 bg-red-100 text-red-600 text-xs px-1 py-0.5 font-bold place-items-center rounded-xl">
+                                    <TrendingDown size={16} /> Hors budget
+                                </div>
+                            ) : (
+                                <div className="flex gap-2 bg-green-100 text-green-600 text-xs px-1 py-0.5 font-bold place-items-center rounded-xl">
+                                    <TrendingUp size={16} /> En bonne voie
+                                </div>
+                            )}
                         </div>
                     </CardHeader>
 
@@ -77,11 +126,11 @@ const Index = () => {
                                     Dépensé
                                 </span>
                                 <span className="ml-auto font-bold">
-                                    350 000 fcfa
+                                    {formatMontant(montantTotalDepense)}
                                 </span>
                             </FieldLabel>
                             <Progress
-                                value={66}
+                                value={progression}
                                 id="progress-upload"
                                 className="h-3"
                                 classNameIndicator="bg-blue-600"
@@ -90,10 +139,17 @@ const Index = () => {
 
                         <div className="flex justify-between w-full">
                             <p className="text-muted-foreground">
-                                Total alloué : 1 000 000 fcfa
+                                Total alloué :{" "}
+                                {formatMontant(montantTotalBudget)}
                             </p>
-                            <p className="text-green-500">
-                                Restant : 650 000 fcfa
+                            <p
+                                className={
+                                    Number(montantRestant) < 0
+                                        ? "text-red-600"
+                                        : "text-green-600"
+                                }
+                            >
+                                Restant : {formatMontant(montantRestant)}
                             </p>
                         </div>
                     </CardFooter>
@@ -109,7 +165,9 @@ const Index = () => {
                             Limite proche
                         </div>
 
-                        <p className="text-2xl font-bold">1</p>
+                        <p className="text-2xl font-bold">
+                            {nombreBudgetProgressionSuperieur80}
+                        </p>
 
                         <p className="text-sm text-muted-foreground">
                             Categorie {">"} 80
@@ -125,7 +183,9 @@ const Index = () => {
                             Hors budget
                         </div>
 
-                        <p className="text-2xl font-bold">0</p>
+                        <p className="text-2xl font-bold">
+                            {nombreBudgetProgressionSuperieur100}
+                        </p>
 
                         <p className="text-sm text-muted-foreground">
                             Categorie {">"} 100
@@ -140,11 +200,29 @@ const Index = () => {
                     Répartition par catégorie
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    {budgets.map((budget) => (
-                        <BudgetCard key={budget.id} budget={budget} />
-                    ))}
-                </div>
+                {budgets.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        {budgets.map((budget) => (
+                            <BudgetCard key={budget.id} budget={budget} />
+                        ))}
+                    </div>
+                ) : (
+                    <Card>
+                        <CardContent className="flex flex-col items-center justify-center gap-4 p-6">
+                            <Wallet size={32} className="text-gray-400" />
+                            <p className="text-gray-800">
+                                Aucun budget defini pour le mois en cours
+                            </p>
+                            <Button
+                                variant={"outline"}
+                                onClick={() => setOpenModal(true)}
+                            >
+                                <SlidersHorizontal />
+                                Definir les budgets
+                            </Button>
+                        </CardContent>
+                    </Card>
+                )}
             </section>
         </AuthenticatedLayout>
     );
