@@ -1,4 +1,18 @@
-import { Banknote, Car, House, Salad, ShoppingBag, Wallet, Wifi, X } from "lucide-react";
+import {
+    Car,
+    House,
+    Briefcase,
+    CreditCard,
+    ShoppingCart,
+    HeartPulse,
+    Gamepad2,
+    Smartphone,
+    PiggyBank,
+    UtensilsCrossed,
+    Plane,
+    RefreshCw,
+    X,
+} from "lucide-react";
 import React, { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -14,18 +28,34 @@ import { cn } from "@/lib/utils";
 import useCategorie from "@/hooks/useCategorie";
 
 const couleurs = [
-    "#25ced1",
-    "#c5dca0",
-    "#818aa3",
-    "#fff07c",
-    "#3a506b",
-    "#ff5154",
-    "#83e8ba",
-    "#3c3c3c",
-    "#ff8c42",
+    { hex: "#22c55e", label: "Revenu" },
+    { hex: "#ef4444", label: "Dépense" },
+    { hex: "#3b82f6", label: "Bleu" },
+    { hex: "#8b5cf6", label: "Violet" },
+    { hex: "#f59e0b", label: "Ambre" },
+    { hex: "#ec4899", label: "Rose" },
+    { hex: "#14b8a6", label: "Cyan" },
+    { hex: "#f97316", label: "Orange" },
+    { hex: "#64748b", label: "Ardoise" },
+    { hex: "#a3e635", label: "Lime" },
+    { hex: "#06b6d4", label: "Ciel" },
+    { hex: "#e11d48", label: "Cramoisie" },
 ];
 
-const icons = [Wallet, Banknote, Salad, Car, ShoppingBag, House, Wifi];
+const icons = [
+    { name: "Salaire", component: Briefcase },
+    { name: "Carte", component: CreditCard },
+    { name: "Courses", component: ShoppingCart },
+    { name: "Transport", component: Car },
+    { name: "Logement", component: House },
+    { name: "Santé", component: HeartPulse },
+    { name: "Loisirs", component: Gamepad2 },
+    { name: "Téléphone", component: Smartphone },
+    { name: "Épargne", component: PiggyBank },
+    { name: "Restaurant", component: UtensilsCrossed },
+    { name: "Voyage", component: Plane },
+    { name: "Abonnements", component: RefreshCw },
+];
 
 const AddCategorieModal = ({ setOpenModal }) => {
     const [data, setData] = useState({
@@ -114,62 +144,51 @@ const AddCategorieModal = ({ setOpenModal }) => {
                                 </div>
 
                                 {/* Choix couleur */}
-                                <div className="w-full flex flex-col gap-2">
-                                    <Label className="text-xs font-bold text-muted-foreground">
-                                        Couleur
-                                    </Label>
-
-                                    <div className="flex gap-2">
-                                        {couleurs.map((couleur) => (
-                                            <div
-                                                onClick={() =>
-                                                    handleChange(
-                                                        "couleur",
-                                                        couleur,
-                                                    )
-                                                }
-                                                className={cn(
-                                                    "w-8 h-8 rounded-full cursor-pointer",
-                                                    data.couleur === couleur &&
-                                                        "border-4 border-blue-600",
-                                                )}
-                                                style={{
-                                                    backgroundColor: couleur,
-                                                }}
-                                            />
-                                        ))}
-                                    </div>
+                                <div className="flex flex-wrap gap-2">
+                                    {couleurs.map(({ hex, label }) => (
+                                        <div
+                                            key={hex}
+                                            onClick={() =>
+                                                handleChange("couleur", hex)
+                                            }
+                                            title={label}
+                                            className="relative w-8 h-8 rounded-full cursor-pointer hover:scale-110 transition-transform"
+                                            style={{ backgroundColor: hex }}
+                                        >
+                                            {data.couleur === hex && (
+                                                <span className="absolute inset-0 flex items-center justify-center">
+                                                    <span className="w-3 h-3 rounded-full bg-white opacity-90 shadow-sm" />
+                                                </span>
+                                            )}
+                                        </div>
+                                    ))}
                                 </div>
 
                                 {/* Choix d'icon */}
-                                <div className="w-full flex flex-col gap-2">
-                                    <Label className="text-xs font-bold text-muted-foreground">
-                                        Icon
-                                    </Label>
-
-                                    <div className="flex gap-4 items-center place-items-center">
-                                        {icons.map((icon) => {
-                                            const Icon = icon;
-
-                                            return (
-                                                <Icon
-                                                    onClick={() =>
-                                                        handleChange(
-                                                            "icon",
-                                                            icon.displayName,
-                                                        )
-                                                    }
-                                                    className={cn(
-                                                        "cursor-pointer",
-                                                        data.icon ==
-                                                            icon.displayName &&
-                                                            "text-blue-600",
-                                                    )}
-                                                    size={32}
-                                                />
-                                            );
-                                        })}
-                                    </div>
+                                <div className="flex flex-wrap gap-2">
+                                    {icons.map(({ name, component: Icon }) => (
+                                        <div
+                                            key={name}
+                                            onClick={() =>
+                                                handleChange(
+                                                    "icon",
+                                                    Icon.displayName,
+                                                )
+                                            }
+                                            title={name}
+                                            className={cn(
+                                                "w-11 h-11 flex flex-col items-center justify-center gap-0.5 rounded-lg cursor-pointer border transition",
+                                                data.icon === Icon.displayName
+                                                    ? "border-blue-500 bg-blue-50 text-blue-600"
+                                                    : "border-gray-200 bg-gray-50 text-gray-500 hover:border-gray-300",
+                                            )}
+                                        >
+                                            <Icon size={20} />
+                                            <span className="text-[8px] leading-tight text-center">
+                                                {name}
+                                            </span>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
