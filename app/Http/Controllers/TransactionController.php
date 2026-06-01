@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\transaction\CreateTransactionRequest;
 use App\Http\Requests\transaction\UpdateTransactionRequest;
 use App\Models\Transaction;
+use App\Services\CategorieService;
 use App\Services\TransactionService;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -13,16 +14,19 @@ use Inertia\Inertia;
 class TransactionController extends Controller
 {
     public function __construct(
-        protected TransactionService $transactionService
+        protected TransactionService $transactionService,
+        protected CategorieService $categorieService
     ) {}
 
     public function revenus()
     {
         try {
             $revenus = $this->transactionService->revenus();
+            $categories = $this->categorieService->getCategoriesDeRevenu();
 
             return Inertia::render('Revenus/Revenus', [
-                "revenus" => $revenus
+                "revenus" => $revenus,
+                "categories" => $categories
             ]);
         } catch (Exception $e) {
             Log::error('Erreur survenu lors de la recuperation des revenus', ['erreur' => $e->getMessage()]);
@@ -33,9 +37,11 @@ class TransactionController extends Controller
     {
         try {
             $depenses = $this->transactionService->depenses();
+            $categories = $this->categorieService->getCategoriesDeDepense();
 
             return Inertia::render('Depenses/Depense', [
-                "depenses" => $depenses
+                "depenses" => $depenses,
+                "categories" => $categories
             ]);
         } catch (Exception $e) {
             Log::error('Erreur survenu lors de la recuperation des depenses', ['erreur' => $e->getMessage()]);

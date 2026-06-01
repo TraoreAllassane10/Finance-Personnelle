@@ -11,11 +11,23 @@ class CategorieService
         protected CategorieRepository $categorieRepository
     ) {}
 
-    public function getCategories() {
+    public function getCategories()
+    {
         return $this->categorieRepository->all();
     }
 
-    public function createCategory(array $data) {
+    public function getCategoriesDeRevenu()
+    {
+        return $this->categorieRepository->categoriesDeRevenu();
+    }
+
+    public function getCategoriesDeDepense()
+    {
+        return $this->categorieRepository->categoriesDeDepense();
+    }
+
+    public function createCategory(array $data)
+    {
         return $this->categorieRepository->store($data);
     }
 }

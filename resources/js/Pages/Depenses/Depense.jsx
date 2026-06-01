@@ -4,18 +4,38 @@ import React, { useState } from "react";
 import { TableTransaction } from "@/Components/transaction/TableTransaction";
 import { TableTransactionNotFound } from "@/Components/transaction/TableTransactionNotFound";
 import ModalTransactionUpdate from "@/Components/transaction/ModalTransactionUpdate";
+import { Card } from "@/Components/ui/card";
+import { Button } from "@/Components/ui/button";
+import { X } from "lucide-react";
+import { Input } from "@/Components/ui/input";
 
 const Depense = () => {
-    const { depenses } = usePage().props;
+    const { depenses, categories } = usePage().props;
     const [updateTransactionId, setUpdateTransactionId] = useState(null);
     const [openModal, setOpenModal] = useState(false);
+    const [dateSearch, setDateSearch] = useState("");
+    const [categorieSearch, setCategorieSearch] = useState("");
 
+    const canSearch = dateSearch || categorieSearch;
 
-    // const resetFiltrer = () => {
-    //     setSelectedMonth("");
-    //     setSelectedAmount("");
-    //     setSelectedCategory("");
-    // };
+    const filterDepenses = depenses.filter((revenu) => {
+        if (categorieSearch && dateSearch) {
+            return (
+                dateSearch === revenu.date &&
+                categorieSearch == revenu.category_id
+            );
+        } else if (dateSearch) {
+            return dateSearch === revenu.date;
+        } else if (categorieSearch) {
+            return categorieSearch == revenu.category_id;
+        }
+        return revenu;
+    });
+
+    const resetFiltrer = () => {
+        setCategorieSearch("");
+        setDateSearch("");
+    };
 
     return (
         <div>
@@ -41,40 +61,54 @@ const Depense = () => {
                 </section>
 
                 {/* Section de filtre */}
-                {/* <Card className="mb-4 px-6 py-4">
+                <Card className="mb-4 px-6 py-4">
                     <div className="flex justify-between ">
                         <div className="flex flex-wrap gap-4">
                             <div>
-                                <Input type="date" />
+                                <Input
+                                    type="date"
+                                    value={dateSearch}
+                                    onChange={(e) =>
+                                        setDateSearch(e.target.value)
+                                    }
+                                />
                             </div>
 
                             <div className="relative flex items-center w-[180px]">
                                 <select
+                                    value={categorieSearch}
                                     onChange={(e) =>
-                                        setSelectedAmount(e.target.value)
+                                        setCategorieSearch(e.target.value)
                                     }
-                                    value={selectedAmount}
                                     className="block w-full rounded-md border border-gray-300 bg-white py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 >
-                                    <option value="" disabled>
-                                        Trier
+                                    <option value="tout">
+                                        Toutes les catégories
                                     </option>
-                                    <option value="0">Moins élevé</option>
-                                    <option value="1">Plus élevé</option>
+                                    {categories.map((categorie) => (
+                                        <option
+                                            key={categorie.id}
+                                            value={categorie.id}
+                                        >
+                                            {categorie.nom}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
 
-                            <Button
-                                variant={"ghost"}
-                                onClick={resetFiltrer}
-                                className=" text-sm"
-                            >
-                                <X />
-                                Réinitialiser
-                            </Button>
+                            {canSearch && (
+                                <Button
+                                    variant={"ghost"}
+                                    className=" text-sm"
+                                    onClick={resetFiltrer}
+                                >
+                                    <X />
+                                    Réinitialiser
+                                </Button>
+                            )}
                         </div>
                     </div>
-                </Card> */}
+                </Card>
 
                 {depenses.length === 0 ? (
                     <TableTransactionNotFound typeTransaction="depense" />
@@ -82,7 +116,7 @@ const Depense = () => {
                     <TableTransaction
                         setUpdateTransactionId={setUpdateTransactionId}
                         setOpenModalUpdate={setOpenModal}
-                        datas={depenses}
+                        datas={filterDepenses}
                         name="depense"
                     />
                 )}
