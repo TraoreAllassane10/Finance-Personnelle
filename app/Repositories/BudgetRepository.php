@@ -24,7 +24,9 @@ class BudgetRepository
 
     public function montantTotalAlloue()
     {
-        return Budget::where('user_id', Auth::user()->id)->sum("montant_alloue");
+        return Budget::where('user_id', Auth::user()->id)
+            ->where('mois', now()->month)
+            ->sum("montant_alloue");
     }
 
     // Montant total des depenses dans les budgets definir 
@@ -58,7 +60,8 @@ class BudgetRepository
             ->exists();
     }
 
-    public function delete(Budget $budget) {
+    public function delete(Budget $budget)
+    {
         return $budget->delete();
     }
 }
