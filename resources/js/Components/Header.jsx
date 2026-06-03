@@ -6,7 +6,7 @@ const Header = ({ setOpenModal }) => {
     return (
         <div className="bg-white px-8 py-2 shadow-sm border-r sticky top-0 z-10">
             <div className="flex justify-between place-items-center">
-                <div className="flex px-2 place-items-center rounded-md border focus:outline-none hover:ring-2 hover:ring-blue-500 text-muted-foreground">
+                <div className="md:flex hidden  px-2 place-items-center rounded-md border focus:outline-none hover:ring-2 hover:ring-blue-500 text-muted-foreground">
                     <Search size={20} />
                     <input
                         type="search"
@@ -15,7 +15,7 @@ const Header = ({ setOpenModal }) => {
                     />
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-end justify-end place-items-center">
                     <div className="flex gap-4 place-items-center border-r-2 pr-4">
                         <Bell className="text-gray-500" size={20} />
                     </div>

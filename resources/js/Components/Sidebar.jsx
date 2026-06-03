@@ -70,64 +70,67 @@ export const Sidebar = () => {
     return (
         <>
             {/* Menu Mobile */}
-            <div className="block lg:hidden fixed z-50 bottom-0 left-0 w-full bg-blue-500 shadow-sm border-r">
+            <div className="block lg:hidden fixed z-50 bottom-0 left-0 w-full bg-white shadow-sm border-t border-gray-200">
                 <div className="">
-                    <div className="flex flex-row gap-8 px-10 text-white  flex-wrap my-4">
+                    <div className="flex flex-row gap-7 px-10 text-white  my-4">
                         <div className="flex  py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
                             <Link
                                 href={route("dashboard")}
-                                className="text-xl text-gray-800 hover:text-indigo-800"
+                                className="text-xl text-gray-800"
                             >
                                 <LayoutDashboard
-                                    className="text-white"
-                                    size={20}
+                                    className="text-gray-500"
+                                    size={24}
                                 />
                             </Link>
                         </div>
 
-                        <div className="flex py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
+                        <div className="flex py-2 hover:bg-opacity-5 transition">
                             <Link
                                 href={route("revenus")}
-                                className="text-xl text-gray-800 hover:text-indigo-800"
+                                className="text-xl text-gray-800"
                             >
-                                <TrendingUp className="text-white" size={20} />
-                            </Link>
-                        </div>
-
-                        <div className="flex py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
-                            <Link
-                                href={route("depenses")}
-                                className="text-xl text-gray-800 hover:text-indigo-800"
-                            >
-                                <Wallet className="text-white" size={20} />
-                            </Link>
-                        </div>
-
-                        <div className="flex  py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
-                            <Link href={route("epargnes")}>
-                                <ClipboardCheck
-                                    className="text-white"
-                                    size={20}
+                                <Banknote
+                                    className="text-gray-500"
+                                    size={24}
                                 />
                             </Link>
                         </div>
 
-                        <div className="flex py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
+                        <div className="flex py-2  transition">
+                            <Link
+                                href={route("depenses")}
+                                className="text-xl text-gray-800"
+                            >
+                                <Wallet2 className="text-gray-500" size={24} />
+                            </Link>
+                        </div>
+
+                        <div className="flex  py-2  transition">
+                            <Link href={route("epargnes")}>
+                                <PiggyBank
+                                    className="text-gray-500"
+                                    size={24}
+                                />
+                            </Link>
+                        </div>
+
+                        <div className="flex  py-2  transition">
+                            <Link href={route("budgets")}>
+                                <Wallet2
+                                    className="text-gray-500"
+                                    size={24}
+                                />
+                            </Link>
+                        </div>
+
+                        <div className="flex py-2 transition">
                             <Link
                                 href={route("parametres")}
                                 className=" hover:text-indigo-800"
                             >
-                                <Settings className="text-white" size={20} />
+                                <Settings className="text-white" size={24} />
                             </Link>
-                        </div>
-
-                        <div className="flex  py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
-                            <button
-                                onClick={handleLogout}
-                                className=" text-white rounded-md transition"
-                            >
-                                <LogOut size={20} className="text-white" />
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -178,7 +181,10 @@ export const Sidebar = () => {
                         </Link>
                     </div>
 
-                    <div onClick={handleLogout} className="flex gap-2 px-2 py-2 hover:bg-blue-50 hover:text-blue-600 hover:border-r-4 hover:border-blue-600 hover:rounded-md group transition duration-300">
+                    <div
+                        onClick={handleLogout}
+                        className="flex gap-2 px-2 py-2 hover:bg-blue-50 hover:text-blue-600 hover:border-r-4 hover:border-blue-600 hover:rounded-md group transition duration-300"
+                    >
                         <LogOut className="text-gray-700 group-hover:text-blue-600" />
                         <Link className="text-md text-gray-800 group-hover:text-blue-600 group-hover:font-semibold">
                             Déconnexion

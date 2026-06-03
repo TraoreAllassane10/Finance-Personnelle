@@ -185,8 +185,8 @@ export default function Dashboard() {
             {/* Entete de la page */}
             <section className="flex justify-between place-items-center mb-6">
                 <div>
-                    <h1 className="text-3xl font-bold">Dashbaord</h1>
-                    <p className="text-sm text-muted-foreground">
+                    <h1 className="text-lg md:text-3xl font-bold">Dashbaord</h1>
+                    <p className="text-sm md:text-xs text-muted-foreground">
                         Bienvenue, voici une vue d'ensemble de votre situation
                         financière.
                     </p>
@@ -218,8 +218,8 @@ export default function Dashboard() {
             <CardStatistiques stats={dashbaordStats} className="mb-6" />
 
             {/* Le graphique */}
-            <section className="flex gap-4 mb-6 w-full">
-                <Card className="pt-0 w-3/4">
+            <section className="grid grid-cols-3 gap-4 mb-6">
+                <Card className="pt-0 col-span-3 md:col-span-2">
                     <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                         <div className="grid flex-1 gap-1">
                             <CardTitle>Revenu - Dépense</CardTitle>
@@ -342,7 +342,7 @@ export default function Dashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="flex flex-col w-1/4">
+                <Card className="flex flex-col col-span-3 md:col-span-1">
                     <CardHeader className="items-center pb-0">
                         <CardTitle>Dépense par catégorie</CardTitle>
                     </CardHeader>
@@ -378,8 +378,8 @@ export default function Dashboard() {
             </section>
 
             {/* Recentes transactions et objectifs d'epargnes */}
-            <section className="flex gap-4 w-full">
-                <Card className="pt-0 w-3/4">
+            <section className="grid grid-cols-3 gap-4 w-full">
+                <Card className="pt-0 col-span-3 md:col-span-2">
                     <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                         <div className="grid flex-1 gap-1">
                             <CardTitle>Récentes transactions</CardTitle>
@@ -443,7 +443,7 @@ export default function Dashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="flex flex-col w-1/4">
+                <Card className="flex flex-col col-span-3 md:col-span-1">
                     <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                         <CardTitle>Objectifs d'epargne</CardTitle>
                     </CardHeader>
