@@ -12,7 +12,9 @@ class CategorieRepository
     public function all()
     {
         return Category::where('user_id', Auth::user()->id)
-            ->withCount('transactions')->get();
+            ->withCount(['transactions' => function($query) {
+                $query->whereMonth("date", now()->month);
+            }])->get();
     }
 
     public function categoriesDeRevenu()
