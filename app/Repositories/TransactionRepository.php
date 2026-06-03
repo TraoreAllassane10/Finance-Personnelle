@@ -31,6 +31,7 @@ class TransactionRepository
     {
         return Transaction::with('category')
             ->where('user_id', Auth::user()->id)
+            ->whereMonth("date", now()->month)
             ->where('type', $typeTransaction)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -40,6 +41,7 @@ class TransactionRepository
     {
         return Transaction::where("type", TypeTransaction::DEPENSE->value)
             ->where('user_id', Auth::user()->id)
+            ->whereMonth("date", now()->month)
             ->sum("montant");
     }
 
@@ -47,12 +49,14 @@ class TransactionRepository
     {
         return Transaction::where("type", TypeTransaction::REVENU->value)
             ->where('user_id', Auth::user()->id)
+            ->whereMonth("date", now()->month)
             ->sum("montant");
     }
 
     public function recenteTransaction()
     {
         return Transaction::where("user_id", Auth::user()->id)
+            ->whereMonth("date", now()->month)
             ->latest()
             ->limit(5)
             ->get();
