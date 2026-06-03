@@ -18,20 +18,6 @@ const Depense = () => {
 
     const canSearch = monthSearch || categorieSearch;
 
-    // const filterDepenses = depenses.filter((revenu) => {
-    //     if (categorieSearch && dateSearch) {
-    //         return (
-    //             dateSearch === revenu.date &&
-    //             categorieSearch == revenu.category_id
-    //         );
-    //     } else if (dateSearch) {
-    //         return dateSearch === revenu.date;
-    //     } else if (categorieSearch) {
-    //         return categorieSearch == revenu.category_id;
-    //     }
-    //     return revenu;
-    // });
-
     const handleSearch = async () => {
         try {
             router.get("/depenses", {

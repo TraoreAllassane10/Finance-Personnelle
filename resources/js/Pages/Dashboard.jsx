@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import {
     Area,
     AreaChart,
@@ -33,7 +33,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import CardStatistiques from "@/Components/dashboard/CardStatistiques";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Table,
     TableCell,
@@ -104,7 +104,10 @@ export default function Dashboard() {
         totalEpargne,
         recenteTransactions,
         chartData,
+        periodeSelected
     } = usePage().props;
+
+    const [periode, setPeriode] = useState(periodeSelected ?? "mois");
 
     const dashbaordStats = [
         {
@@ -147,25 +150,31 @@ export default function Dashboard() {
         },
     ];
 
-    const [timeRange, setTimeRange] = useState("7d");
+    const [timeRange, setTimeRange] = useState("30d");
 
     const filteredData = chartData.transactionParDate.filter((item) => {
         const date = new Date(item.date);
-        const referenceDate = new Date("2026-01-01");
-        let daysToSubtract = 7;
+        const referenceDate = new Date("2026-06-03");
+        let daysToSubtract = 30;
 
-        if (timeRange === "30d") {
-            daysToSubtract = 30;
+        if (timeRange === "7d") {
+            daysToSubtract = 7;
         } else if (timeRange === "90d") {
             daysToSubtract = 90;
         }
         const startDate = new Date(referenceDate);
-        
+
         startDate.setDate(startDate.getDate() - daysToSubtract);
         return date >= startDate;
     });
 
-    const [month, setMonth] = useState("")
+    const handlePeriode = (periode) => {
+        try {
+            router.get("/dashboard", { periode: periode });
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <AuthenticatedLayout>
@@ -182,10 +191,22 @@ export default function Dashboard() {
                 </div>
 
                 <div className="flex gap-3 p-1 border border-gray-300 bg-white rounded-md">
-                    <button className="bg-blue-600 px-2 text-white rounded-md text-md">
+                    <button
+                        onClick={() => {
+                            setPeriode("mois");
+                            handlePeriode("mois");
+                        }}
+                        className={`${periode == "mois" && "bg-blue-600 text-white"} px-2 rounded-md text-md text-muted-foreground"`}
+                    >
                         Mois
                     </button>
-                    <button className="text-md text-muted-foreground">
+                    <button
+                        onClick={() => {
+                            setPeriode("annee");
+                            handlePeriode("annee");
+                        }}
+                        className={`${periode == "annee" && "bg-blue-600 text-white"} px-2 rounded-md text-md text-muted-foreground"`}
+                    >
                         Annee
                     </button>
                 </div>

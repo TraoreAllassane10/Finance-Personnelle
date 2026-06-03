@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Enums\TypeTransaction;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class TransactionRepository
 {
@@ -14,6 +13,22 @@ class TransactionRepository
     {
         return Transaction::with('category')
             ->where('user_id', Auth::user()->id)
+            ->orderBy('date')
+            ->get();
+    }
+
+    public function  transactionParPeriode(string $periode)
+    {
+        $query = Transaction::with('category')
+            ->where('user_id', Auth::user()->id);
+
+        if ($periode == "annee") {
+            $query->whereYear("date", now()->year);
+        } else {
+            $query->whereMonth("date", now()->month);
+        }
+
+        return $query
             ->orderBy('date')
             ->get();
     }
@@ -57,27 +72,45 @@ class TransactionRepository
         //     ->get();
     }
 
-    public function montantTotalDepense()
+    public function montantTotalDepense(string $periode)
     {
-        return Transaction::where("type", TypeTransaction::DEPENSE->value)
-            ->where('user_id', Auth::user()->id)
-            ->whereMonth("date", now()->month)
-            ->sum("montant");
+        $query = Transaction::where("type", TypeTransaction::DEPENSE->value)
+            ->where('user_id', Auth::user()->id);
+
+        if ($periode == "annee") {
+            $query->whereYear("date", now()->year);
+        } else {
+            $query->whereMonth("date", now()->month);
+        }
+
+        return  $query->sum("montant");
     }
 
-    public function montantTotalRevenu()
+    public function montantTotalRevenu(string $periode)
     {
-        return Transaction::where("type", TypeTransaction::REVENU->value)
-            ->where('user_id', Auth::user()->id)
-            ->whereMonth("date", now()->month)
-            ->sum("montant");
+        $query = Transaction::where("type", TypeTransaction::REVENU->value)
+            ->where('user_id', Auth::user()->id);
+
+        if ($periode == "annee") {
+            $query->whereYear("date", now()->year);
+        } else {
+            $query->whereMonth("date", now()->month);
+        }
+
+        return $query->sum("montant");
     }
 
-    public function recenteTransaction()
+    public function recenteTransaction(string $periode)
     {
-        return Transaction::where("user_id", Auth::user()->id)
-            ->whereMonth("date", now()->month)
-            ->latest()
+        $query = Transaction::where("user_id", Auth::user()->id);
+
+        if ($periode == "annee") {
+            $query->whereYear("date", now()->year);
+        } else {
+            $query->whereMonth("date", now()->month);
+        }
+
+        return $query->latest()
             ->limit(5)
             ->get();
     }

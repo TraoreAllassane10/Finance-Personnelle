@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\TypeTransaction;
 use Inertia\Inertia;
 use App\Services\TransactionService;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -12,14 +13,16 @@ class DashboardController extends Controller
     public function __construct(
         protected TransactionService $transactionService
     ) {}
-    public function index()
+    public function index(Request $request)
     {
+        $periode = $request->periode ?? "mois";
+
         // Les statistiques
-        $totalRevenu = $this->transactionService->getMontantTotalRevenu();
-        $totalDepense = $this->transactionService->getMontantTotalDepense();
+        $totalRevenu = $this->transactionService->getMontantTotalRevenu($periode);
+        $totalDepense = $this->transactionService->getMontantTotalDepense($periode);
 
         // Les 5 dernieres transactions
-        $recenteTransactions = $this->transactionService->getRecenteTransaction();
+        $recenteTransactions = $this->transactionService->getRecenteTransaction($periode);
 
         $transactions = $this->transactionService->getTransactions();
 
@@ -34,7 +37,8 @@ class DashboardController extends Controller
             })->values();
 
         // Regroupement des transactions par categorie
-        $transactionParCategorie = $transactions->where('type', TypeTransaction::DEPENSE->value)->groupBy('category_id')
+        $transactioParPeriode = $this->transactionService->getTransactionParPeriode($periode);
+        $transactionParCategorie = $transactioParPeriode->where('type', TypeTransaction::DEPENSE->value)->groupBy('category_id')
             ->map(function ($transactions, $categorieId) {
                 return [
                     'categorie' => $transactions[0]->category->nom,
@@ -49,7 +53,7 @@ class DashboardController extends Controller
             "soldeNet" => $totalRevenu - $totalDepense,
             "totalEpargne" => 0,
             "recenteTransactions" => $recenteTransactions,
-
+            "periodeSelected" => $periode,
             "chartData" => [
                 "transactionParDate" => $transactionParDate,
                 "transactionParCategorie" => $transactionParCategorie
