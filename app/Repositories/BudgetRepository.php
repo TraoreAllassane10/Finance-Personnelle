@@ -12,9 +12,15 @@ class BudgetRepository
     {
         return Budget::with(['category' => function ($query) {
             $query->with(["transactions" => function ($query) {
-                $query->whereMonth("date", now()->month);
+                $query->whereMonth('date', now()->month)
+                    ->whereYear('date', now()->year);
             }])
-                ->withSum("transactions as montant_depense", "montant");
+                ->withSum([
+                    "transactions as montant_depense" => function ($query) {
+                        $query->whereMonth('date', now()->month)
+                            ->whereYear('date', now()->year);
+                    }
+                ], "montant");
         }])
             ->where('user_id', Auth::user()->id)
             ->where('mois', now()->month)
