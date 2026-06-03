@@ -102,9 +102,11 @@ export default function Dashboard() {
         totalDepense,
         soldeNet,
         totalEpargne,
+        variationRevenu,
+        variationDepense,
         recenteTransactions,
         chartData,
-        periodeSelected
+        periodeSelected,
     } = usePage().props;
 
     const [periode, setPeriode] = useState(periodeSelected ?? "mois");
@@ -116,10 +118,10 @@ export default function Dashboard() {
             icon: TrendingUp,
             bgColor: "bg-green-100",
             color: "text-green-600",
-            trend: "up",
+            trend: variationRevenu > 0 ? "up" : "down",
             trendColor: "text-green-600",
-            trendIcon: ArrowUp,
-            trendText: "5% par rapport au mois dernier",
+            trendIcon: variationRevenu > 0 ? ArrowUp : ArrowDown,
+            trendText: `${variationRevenu.toFixed(0)}% par rapport au mois dernier`,
         },
         {
             nom: "Total des dépenses",
@@ -127,10 +129,10 @@ export default function Dashboard() {
             icon: TrendingDown,
             bgColor: "bg-red-100",
             color: "text-red-600",
-            trend: "down",
+            trend: variationDepense > 0 ? "up" : "down",
             trendColor: "text-red-600",
-            trendIcon: ArrowDown,
-            trendText: "10% par rapport au mois dernier",
+            trendIcon: variationDepense > 0 ? ArrowUp : ArrowDown,
+            trendText: ` ${variationDepense.toFixed(0)}% par rapport au mois dernier`,
         },
         {
             nom: "Solde Net",

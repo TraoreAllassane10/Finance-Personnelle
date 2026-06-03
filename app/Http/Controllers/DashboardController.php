@@ -47,9 +47,19 @@ class DashboardController extends Controller
                 ];
             })->values();
 
+
+        // Calcule de variation par rapport au mois dernier
+        $montantTotalRevenuMoisDernier = $this->transactionService->getMontantTotalRevenuMoisDernier();
+        $montantTotalDepenseMoisDernier = $this->transactionService->getMontantTotalDepenseMoisDernier();
+
+        $variationRevenu = $montantTotalRevenuMoisDernier > 0 ? (($totalRevenu - $montantTotalRevenuMoisDernier) / $montantTotalRevenuMoisDernier) * 100 : 0;
+        $variationDepense = $montantTotalDepenseMoisDernier > 0 ? (($totalDepense - $montantTotalDepenseMoisDernier) / $montantTotalDepenseMoisDernier) * 100 : 0;
+
         return Inertia::render('Dashboard', [
             "totalRevenu" =>  $totalRevenu,
+            "variationRevenu" => $variationRevenu,
             "totalDepense" => $totalDepense,
+            "variationDepense" => $variationDepense,
             "soldeNet" => $totalRevenu - $totalDepense,
             "totalEpargne" => 0,
             "recenteTransactions" => $recenteTransactions,

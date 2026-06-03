@@ -32,7 +32,8 @@ class TransactionService
     }
 
     // Recupere les transactions par periode
-    public function getTransactionParPeriode(string $periode) {
+    public function getTransactionParPeriode(string $periode)
+    {
         return $this->transactionRepository->transactionParPeriode($periode);
     }
 
@@ -46,6 +47,18 @@ class TransactionService
     public function getMontantTotalRevenu(string $periode)
     {
         return (int) $this->transactionRepository->montantTotalRevenu($periode);
+    }
+
+    // Recupere le montant total des revenus du mois dernier
+    public function getMontantTotalRevenuMoisDernier()
+    {
+        return (int) $this->transactionRepository->montantTotalRevenuMoisDernier();
+    }
+
+     // Recupere le montant total des depenses du mois dernier
+    public function getMontantTotalDepenseMoisDernier()
+    {
+        return (int) $this->transactionRepository->montantTotalDepenseMoisDernier();
     }
 
     // Recupere les dernieres transactions

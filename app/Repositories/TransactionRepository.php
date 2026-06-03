@@ -25,7 +25,8 @@ class TransactionRepository
         if ($periode == "annee") {
             $query->whereYear("date", now()->year);
         } else {
-            $query->whereMonth("date", now()->month);
+            $query->whereMonth("date", now()->month)
+                ->whereYear("date", now()->year);
         }
 
         return $query
@@ -63,15 +64,9 @@ class TransactionRepository
             ->where('type', $typeTransaction)
             ->orderBy('created_at', 'desc')
             ->get();
-
-        // return Transaction::with('category')
-        //     ->where('user_id', Auth::user()->id)
-        //     ->whereMonth("date", now()->month)
-        //     ->where('type', $typeTransaction)
-        //     ->orderBy('created_at', 'desc')
-        //     ->get();
     }
 
+    // Total des depenses selon la periode (mois en cours ou l'annee en cours)
     public function montantTotalDepense(string $periode)
     {
         $query = Transaction::where("type", TypeTransaction::DEPENSE->value)
@@ -80,12 +75,14 @@ class TransactionRepository
         if ($periode == "annee") {
             $query->whereYear("date", now()->year);
         } else {
-            $query->whereMonth("date", now()->month);
+            $query->whereMonth("date", now()->month)
+                ->whereYear("date", now()->year);
         }
 
         return  $query->sum("montant");
     }
 
+    // Total des revenus selon la periode (mois en cours ou l'annee en cours)
     public function montantTotalRevenu(string $periode)
     {
         $query = Transaction::where("type", TypeTransaction::REVENU->value)
@@ -94,10 +91,31 @@ class TransactionRepository
         if ($periode == "annee") {
             $query->whereYear("date", now()->year);
         } else {
-            $query->whereMonth("date", now()->month);
+            $query->whereMonth("date", now()->month)
+                ->whereYear("date", now()->year);
         }
 
         return $query->sum("montant");
+    }
+
+    // Total des revenus du mois dernier
+    public function montantTotalRevenuMoisDernier()
+    {
+        return Transaction::where("type", TypeTransaction::REVENU->value)
+            ->where('user_id', Auth::user()->id)
+            ->whereMonth("date", now()->subMonth()->month)
+            ->whereYear("date", now()->subMonth()->year)
+            ->sum("montant");
+    }
+
+    // Total des depenses du mois dernier
+    public function montantTotalDepenseMoisDernier()
+    {
+        return Transaction::where("type", TypeTransaction::DEPENSE->value)
+            ->where('user_id', Auth::user()->id)
+            ->whereMonth("date", now()->subMonth()->month)
+            ->whereYear("date", now()->subMonth()->year)
+            ->sum("montant");
     }
 
     public function recenteTransaction(string $periode)
@@ -107,7 +125,8 @@ class TransactionRepository
         if ($periode == "annee") {
             $query->whereYear("date", now()->year);
         } else {
-            $query->whereMonth("date", now()->month);
+            $query->whereMonth("date", now()->month)
+                ->whereYear("date", now()->year);
         }
 
         return $query->latest()
