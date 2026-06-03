@@ -165,6 +165,8 @@ export default function Dashboard() {
         return date >= startDate;
     });
 
+    const [month, setMonth] = useState("")
+
     return (
         <AuthenticatedLayout>
             <Head title="Dashboard" />

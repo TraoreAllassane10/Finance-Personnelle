@@ -12,17 +12,22 @@ class TransactionService
         protected TransactionRepository $transactionRepository
     ) {}
 
-    public function revenus()
+    public function revenus(array|null $date, string|null $categorie)
     {
-        return $this->transactionRepository->allRevenu();
+        $year = $date ? $date[0] : now()->year;
+        $month = $date ? $date[1] : now()->month;
+        return $this->transactionRepository->allRevenu($year, $month, $categorie);
     }
 
-    public function depenses()
+    public function depenses(array|null $date, string|null $categorie)
     {
-        return $this->transactionRepository->allDepense();
+        $year = $date ? $date[0] : now()->year;
+        $month = $date ? $date[1] : now()->month;
+        return $this->transactionRepository->allDepense($year, $month, $categorie);
     }
 
-    public function getTransactions() {
+    public function getTransactions()
+    {
         return $this->transactionRepository->all();
     }
 

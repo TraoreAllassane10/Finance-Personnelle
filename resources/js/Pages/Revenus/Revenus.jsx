@@ -14,28 +14,27 @@ export default function Revenus() {
 
     const [updateTransactionId, setUpdateTransactionId] = useState(null);
     const [openModal, setOpenModal] = useState(false);
-    const [dateSearch, setDateSearch] = useState("");
     const [categorieSearch, setCategorieSearch] = useState("");
+    const [monthSearch, setMonthSearch] = useState("");
 
-    const canSearch = dateSearch || categorieSearch;
+    const canSearch = categorieSearch || monthSearch;
 
-    const filterRevenus = revenus.filter((revenu) => {
-        if (categorieSearch && dateSearch) {
-            return (
-                dateSearch === revenu.date &&
-                categorieSearch == revenu.category_id
-            );
-        } else if (dateSearch) {
-            return dateSearch === revenu.date;
-        } else if (categorieSearch) {
-            return categorieSearch == revenu.category_id;
+    const handleSearch = async () => {
+        try {
+            router.get("/revenus", {
+                categorie: categorieSearch,
+                date: monthSearch,
+            });
+        } catch (error) {
+            console.log(error);
         }
-        return revenu;
-    });
+    };
 
     const resetFiltrer = () => {
         setCategorieSearch("");
-        setDateSearch("");
+        setMonthSearch("");
+
+        router.visit("/revenus");
     };
 
     return (
@@ -67,10 +66,10 @@ export default function Revenus() {
                         <div className="flex flex-wrap gap-4">
                             <div>
                                 <Input
-                                    type="date"
-                                    value={dateSearch}
+                                    type="month"
+                                    value={monthSearch}
                                     onChange={(e) =>
-                                        setDateSearch(e.target.value)
+                                        setMonthSearch(e.target.value)
                                     }
                                 />
                             </div>
@@ -101,12 +100,21 @@ export default function Revenus() {
                                 <Button
                                     variant={"ghost"}
                                     className=" text-sm"
-                                    onClick={resetFiltrer}
+                                    onClick={handleSearch}
                                 >
-                                    <X />
-                                    Réinitialiser
+                                    <Search />
+                                    Rechercher
                                 </Button>
                             )}
+
+                            <Button
+                                variant={"ghost"}
+                                className=" text-sm"
+                                onClick={resetFiltrer}
+                            >
+                                <X />
+                                Réinitialiser
+                            </Button>
                         </div>
                     </div>
                 </Card>
@@ -117,7 +125,7 @@ export default function Revenus() {
                     <TableTransaction
                         setUpdateTransactionId={setUpdateTransactionId}
                         setOpenModalUpdate={setOpenModal}
-                        datas={filterRevenus}
+                        datas={revenus}
                         name="revenus"
                     />
                 )}

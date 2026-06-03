@@ -1,40 +1,53 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import React, { useState } from "react";
 import { TableTransaction } from "@/Components/transaction/TableTransaction";
 import { TableTransactionNotFound } from "@/Components/transaction/TableTransactionNotFound";
 import ModalTransactionUpdate from "@/Components/transaction/ModalTransactionUpdate";
 import { Card } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
-import { X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Input } from "@/Components/ui/input";
 
 const Depense = () => {
     const { depenses, categories } = usePage().props;
     const [updateTransactionId, setUpdateTransactionId] = useState(null);
     const [openModal, setOpenModal] = useState(false);
-    const [dateSearch, setDateSearch] = useState("");
     const [categorieSearch, setCategorieSearch] = useState("");
+    const [monthSearch, setMonthSearch] = useState("");
 
-    const canSearch = dateSearch || categorieSearch;
+    const canSearch = monthSearch || categorieSearch;
 
-    const filterDepenses = depenses.filter((revenu) => {
-        if (categorieSearch && dateSearch) {
-            return (
-                dateSearch === revenu.date &&
-                categorieSearch == revenu.category_id
-            );
-        } else if (dateSearch) {
-            return dateSearch === revenu.date;
-        } else if (categorieSearch) {
-            return categorieSearch == revenu.category_id;
+    // const filterDepenses = depenses.filter((revenu) => {
+    //     if (categorieSearch && dateSearch) {
+    //         return (
+    //             dateSearch === revenu.date &&
+    //             categorieSearch == revenu.category_id
+    //         );
+    //     } else if (dateSearch) {
+    //         return dateSearch === revenu.date;
+    //     } else if (categorieSearch) {
+    //         return categorieSearch == revenu.category_id;
+    //     }
+    //     return revenu;
+    // });
+
+    const handleSearch = async () => {
+        try {
+            router.get("/depenses", {
+                categorie: categorieSearch,
+                date: monthSearch,
+            });
+        } catch (error) {
+            console.log(error);
         }
-        return revenu;
-    });
+    };
 
     const resetFiltrer = () => {
         setCategorieSearch("");
-        setDateSearch("");
+        setMonthSearch("");
+
+        router.visit("depenses");
     };
 
     return (
@@ -66,10 +79,10 @@ const Depense = () => {
                         <div className="flex flex-wrap gap-4">
                             <div>
                                 <Input
-                                    type="date"
-                                    value={dateSearch}
+                                    type="month"
+                                    value={monthSearch}
                                     onChange={(e) =>
-                                        setDateSearch(e.target.value)
+                                        setMonthSearch(e.target.value)
                                     }
                                 />
                             </div>
@@ -100,12 +113,20 @@ const Depense = () => {
                                 <Button
                                     variant={"ghost"}
                                     className=" text-sm"
-                                    onClick={resetFiltrer}
+                                    onClick={handleSearch}
                                 >
-                                    <X />
-                                    Réinitialiser
+                                    <Search />
+                                    Rechercher
                                 </Button>
                             )}
+                            <Button
+                                variant={"ghost"}
+                                className=" text-sm"
+                                onClick={resetFiltrer}
+                            >
+                                <X />
+                                Réinitialiser
+                            </Button>
                         </div>
                     </div>
                 </Card>
@@ -116,7 +137,7 @@ const Depense = () => {
                     <TableTransaction
                         setUpdateTransactionId={setUpdateTransactionId}
                         setOpenModalUpdate={setOpenModal}
-                        datas={filterDepenses}
+                        datas={depenses}
                         name="depense"
                     />
                 )}

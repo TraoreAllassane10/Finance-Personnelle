@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Enums\TypeTransaction;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TransactionRepository
 {
@@ -17,24 +18,43 @@ class TransactionRepository
             ->get();
     }
 
-    public function allRevenu()
+    public function allRevenu(string|null $year, string|null $month, string|null $categorie)
     {
-        return $this->fetchTransaction(TypeTransaction::REVENU->value);
+        return $this->fetchTransaction(TypeTransaction::REVENU->value, $year, $month, $categorie);
     }
 
-    public function allDepense()
+    public function allDepense(string|null $year, string|null $month, string|null $categorie)
     {
-        return $this->fetchTransaction(TypeTransaction::DEPENSE->value);
+        return $this->fetchTransaction(TypeTransaction::DEPENSE->value, $year, $month, $categorie);
     }
 
-    public function fetchTransaction(string $typeTransaction)
+    public function fetchTransaction(string $typeTransaction, string|null $year, string|null $month, string|null $categorie)
     {
-        return Transaction::with('category')
+        $query = Transaction::query()->with('category');
+
+        $query
+            ->when($year, function ($query) use ($year) {
+                $query->whereYear("date", $year);
+            })
+            ->when($month, function ($query) use ($month) {
+                $query->whereMonth("date", $month);
+            })
+            ->when($categorie, function ($query) use ($categorie) {
+                $query->where("category_id", $categorie);
+            });
+
+        return $query
             ->where('user_id', Auth::user()->id)
-            ->whereMonth("date", now()->month)
             ->where('type', $typeTransaction)
             ->orderBy('created_at', 'desc')
             ->get();
+
+        // return Transaction::with('category')
+        //     ->where('user_id', Auth::user()->id)
+        //     ->whereMonth("date", now()->month)
+        //     ->where('type', $typeTransaction)
+        //     ->orderBy('created_at', 'desc')
+        //     ->get();
     }
 
     public function montantTotalDepense()
