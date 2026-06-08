@@ -23,9 +23,11 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import useCompteEpargne from "@/hooks/useCompteEpargne";
 import { formatMontant } from "../lib/utils";
+import useObjectifEpargne from "@/hooks/useObjectifEpargne";
+import { Progress } from "@/Components/ui/progress";
 
 const Epargnes = () => {
-    const { compte_epargnes } = usePage().props || [];
+    const { compte_epargnes, objectif_epargnes } = usePage().props || [];
 
     const [openCompte, setOpenCompte] = useState(false);
     const [openModalObjectif, setOpenModalObjectif] = useState(false);
@@ -59,6 +61,20 @@ const Epargnes = () => {
         useCompteEpargne();
     const handleSubmitCompte = () => {
         createCompteEpargne({ nom: compte });
+    };
+
+    // Enregistrement d'un objectif d'epargne
+    const { createObjectifEpargne, isLoading: loadingObjectif } =
+        useObjectifEpargne();
+
+    const canSubmitObjectif = data.nom && data.date_limite && data.montant;
+
+    const handleSubmitObjectif = () => {
+        createObjectifEpargne({
+            nom: data.nom,
+            montant_cible: data.montant,
+            date_echeance: data.date_limite,
+        });
     };
 
     return (
@@ -225,8 +241,11 @@ const Epargnes = () => {
                                         Annuler
                                     </Button>
                                     <Button
-                                        // disabled={!canSubmit || isLoading}
-                                        // onClick={handleSubmit}
+                                        disabled={
+                                            !canSubmitObjectif ||
+                                            loadingObjectif
+                                        }
+                                        onClick={handleSubmitObjectif}
                                         className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300"
                                     >
                                         Ajouter l'objectif
@@ -434,7 +453,11 @@ const Epargnes = () => {
                                         {compte.nom}
                                     </h2>
                                     <p className="text-muted-foreground text-xs">
-                                       {formatMontant(compte.montant_total_compte ? montant_total_compte : 0)}
+                                        {formatMontant(
+                                            compte.montant_total_compte
+                                                ? montant_total_compte
+                                                : 0,
+                                        )}
                                     </p>
                                 </div>
                             </div>
@@ -455,37 +478,48 @@ const Epargnes = () => {
                     </CardHeader>
 
                     <CardContent className="mt-4 space-y-6">
-                        <div className="flex gap-4">
-                            <div className="flex justify-center items-center border-4 border-gray-500 rounded-full p-1 text-sm">
-                                80%
-                            </div>
+                        {objectif_epargnes.map((objectif) => {
+                            const progression =
+                                objectif.montant_cible > 0
+                                    ? Math.ceil(
+                                          (objectif.montant_total_epargne /
+                                              objectif.montant_cible) *
+                                              100,
+                                      )
+                                    : 0;
 
-                            <div className="w-full">
-                                <h3 className="text-xl font-semibold">
-                                    Fond d'urgence
-                                </h3>
-                                <div className="flex justify-between text-muted-foreground text-xs">
-                                    <span>300000 fcfa</span>
-                                    <span>sur 500000 fcfa</span>
+                            return (
+                                <div className="flex items-center gap-4">
+                                    <div className="w-full">
+                                        <h3 className="text-xl font-semibold truncate">
+                                            {objectif.nom}
+                                        </h3>
+
+                                        <div className="flex justify-between text-muted-foreground text-xs">
+                                            <span>
+                                                {" "}
+                                                {formatMontant(
+                                                    objectif.montant_total_epargne ??
+                                                        0,
+                                                )}
+                                            </span>
+                                            <span>
+                                                sur{" "}
+                                                {formatMontant(
+                                                    objectif.montant_cible,
+                                                )}
+                                            </span>
+                                        </div>
+
+                                        <Progress
+                                            value={progression}
+                                            classNameIndicator="bg-green-600"
+                                            id="progress-upload"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-4">
-                            <div className="flex justify-center items-center border-4 border-gray-500 rounded-full p-1 text-sm">
-                                80%
-                            </div>
-
-                            <div className="w-full">
-                                <h3 className="text-xl font-semibold">
-                                    Nouvelle voiture
-                                </h3>
-                                <div className="flex justify-between text-muted-foreground text-xs">
-                                    <span>3 000 000 fcfa</span>
-                                    <span>sur 5 000 000 fcfa</span>
-                                </div>
-                            </div>
-                        </div>
+                            );
+                        })}
 
                         <Button
                             variant={"outline"}

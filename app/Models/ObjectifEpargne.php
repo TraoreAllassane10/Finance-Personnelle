@@ -9,4 +9,10 @@ class ObjectifEpargne extends Model
 {
     /** @use HasFactory<\Database\Factories\ObjectifEpargneFactory> */
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function versements() {
+        return $this->hasMany(Versement::class);
+    }
 }

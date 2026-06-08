@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompteEpargneController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EpargneController;
+use App\Http\Controllers\ObjectifEpargneController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
@@ -54,6 +55,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/categories', 'index')->name('categories');
         Route::get('/categories/all', 'categories')->name('categories.all');
         Route::post('/categories/store', 'store')->name('categories.store');
+    });
+
+    // Routes Objectif Epargnes
+    Route::controller(ObjectifEpargneController::class)->group(function () {
+        Route::post('/objectifs-epargnes', 'store')->name('objectifs.store');
     });
 
     // Routes Comptes Epargnes

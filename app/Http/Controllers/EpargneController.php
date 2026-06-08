@@ -10,20 +10,24 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Http\Requests\EpargneRequest;
 use App\Services\CompteEpargneServices;
 use App\Services\EpargneServices;
+use App\Services\ObjectifEpargneService;
 
 class EpargneController extends Controller
 {
     public function __construct(
         protected EpargneServices $epargneServices,
-        protected CompteEpargneServices $compteEpargneServices
+        protected CompteEpargneServices $compteEpargneServices,
+        protected ObjectifEpargneService $objectifEpargneService
     ) {}
 
     public function index()
     {
         $comptesEpargnes = $this->compteEpargneServices->getCompteEpargnes();
+        $objectifEpargnes = $this->objectifEpargneService->getObjectifEpargnes();
 
         return Inertia::render('Epargnes/Epargnes', [
-            "compte_epargnes" => $comptesEpargnes
+            "compte_epargnes" => $comptesEpargnes,
+            "objectif_epargnes" => $objectifEpargnes
         ]);
     }
 

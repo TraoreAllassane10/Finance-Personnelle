@@ -2,13 +2,24 @@
 
 namespace App\Services;
 
+use App\Repositories\ObjectifEpargneRepository;
+use Illuminate\Support\Facades\Auth;
+
 class ObjectifEpargneService
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
+
+    public function __construct(
+        protected ObjectifEpargneRepository $objectifEpargneRepository
+    ) {}
+
+    public function getObjectifEpargnes()
     {
-        //
+        return $this->objectifEpargneRepository->all();
+    }
+
+    public function createObjectifEpargne(array $data)
+    {
+        $data['user_id'] = Auth::user()->id;
+        return $this->objectifEpargneRepository->create($data);
     }
 }
