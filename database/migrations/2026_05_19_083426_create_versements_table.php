@@ -18,6 +18,7 @@ return new class extends Migration
 
             $table->foreignId('compte_epargne_id')->nullable()->cascadeOnDelete();
             $table->foreignId('objectif_epargne_id')->nullable()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

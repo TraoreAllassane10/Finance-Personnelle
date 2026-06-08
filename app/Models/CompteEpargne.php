@@ -10,7 +10,7 @@ class CompteEpargne extends Model
     /** @use HasFactory<\Database\Factories\CompteEpargneFactory> */
     use HasFactory;
 
-    protected $fillable = ['nom'];
+    protected $fillable = ['nom', 'user_id'];
 
     public function versements()
     {

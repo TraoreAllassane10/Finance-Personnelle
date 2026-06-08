@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('compte_epargnes', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

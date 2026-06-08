@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\CompteEpargneRepository;
+use Illuminate\Support\Facades\Auth;
 
 class CompteEpargneServices
 {
@@ -17,6 +18,7 @@ class CompteEpargneServices
 
     public function createCompteEpargne(array $data)
     {
+        $data["user_id"] = Auth::user()->id;
         return $this->compteEpargneRepository->create($data);
     }
 }
