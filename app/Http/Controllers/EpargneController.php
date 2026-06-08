@@ -8,30 +8,28 @@ use App\Services\Excel\ExcelEpargne;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Http\Requests\EpargneRequest;
+use App\Services\CompteEpargneServices;
 use App\Services\EpargneServices;
 
 class EpargneController extends Controller
 {
-    protected $epargneService;
-
-    public function __construct(EpargneServices $epargneService)
-    {
-        $this->epargneService = $epargneService;
-    }
+    public function __construct(
+        protected EpargneServices $epargneServices,
+        protected CompteEpargneServices $compteEpargneServices
+    ) {}
 
     public function index()
     {
-        // $epargneService = $this->epargneService->all();
+        $comptesEpargnes = $this->compteEpargneServices->getCompteEpargnes();
 
         return Inertia::render('Epargnes/Epargnes', [
-            // 'epargnes' => $epargneService[0],
-            // 'totalEpargne' => $epargneService[1]
+            "compte_epargnes" => $comptesEpargnes
         ]);
     }
 
     public function store(EpargneRequest $request)
     {
-        $this->epargneService->create($request);
+        // $this->epargneService->create($request);
 
         return redirect()->back()->with("success", 'Une epargne ajoutée');
     }
@@ -45,14 +43,14 @@ class EpargneController extends Controller
 
     public function update(EpargneRequest $request, Epargne $epargne)
     {
-        $this->epargneService->update($epargne, $request);
+        // $this->epargneService->update($epargne, $request);
 
         return redirect()->route('epargnes');
     }
 
     public function destroy(Epargne $epargne)
     {
-        $this->epargneService->delete($epargne->id);
+        // $this->epargneService->delete($epargne->id);
         return redirect()->back()->with('success', "Epargne supprimé");
     }
 

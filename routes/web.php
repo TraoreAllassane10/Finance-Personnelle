@@ -3,11 +3,13 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CompteEpargneController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EpargneController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
+use App\Models\CompteEpargne;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -52,6 +54,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/categories', 'index')->name('categories');
         Route::get('/categories/all', 'categories')->name('categories.all');
         Route::post('/categories/store', 'store')->name('categories.store');
+    });
+
+    // Routes Comptes Epargnes
+    Route::controller(CompteEpargneController::class)->group(function () {
+        Route::post('/comptes-epargnes', 'store')->name('comptes.store');
     });
 
     Route::get("/parametres", function () {

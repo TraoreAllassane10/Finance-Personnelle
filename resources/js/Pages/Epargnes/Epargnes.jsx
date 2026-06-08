@@ -21,15 +21,17 @@ import { depotRecent } from "@/constant";
 import { useState } from "react";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
+import useCompteEpargne from "@/hooks/useCompteEpargne";
+import { formatMontant } from "../lib/utils";
 
 const Epargnes = () => {
-    const { epargnes } = usePage().props || [];
+    const { compte_epargnes } = usePage().props || [];
 
     const [openCompte, setOpenCompte] = useState(false);
     const [openModalObjectif, setOpenModalObjectif] = useState(false);
     const [openModalVersement, setOpenModalVersement] = useState(false);
 
-    const [compte, setCompte] = useState();
+    const [compte, setCompte] = useState("");
 
     const [data, setData] = useState({
         nom: "",
@@ -50,6 +52,13 @@ const Epargnes = () => {
 
     const handleChangeVersement = (key, value) => {
         setDataVersement((prev) => ({ ...prev, [key]: value }));
+    };
+
+    // Enregistrement d'un compte d'epargne
+    const { createCompteEpargne, isLoading: loadingCompte } =
+        useCompteEpargne();
+    const handleSubmitCompte = () => {
+        createCompteEpargne({ nom: compte });
     };
 
     return (
@@ -108,8 +117,8 @@ const Epargnes = () => {
                                         Annuler
                                     </Button>
                                     <Button
-                                        // disabled={!canSubmit || isLoading}
-                                        // onClick={handleSubmit}
+                                        disabled={!compte || loadingCompte}
+                                        onClick={handleSubmitCompte}
                                         className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300"
                                     >
                                         Ajouter le compte
@@ -414,35 +423,22 @@ const Epargnes = () => {
                     </CardHeader>
 
                     <CardContent className="mt-2 flex gap-4">
-                        <div className="flex gap-2 place-items-center border border-gray-200 p-4 w-1/2 rounded-lg">
-                            <div className="bg-slate-100 flex items-center justify-center p-1 rounded-sm">
-                                <Wallet className="text-yellow-500" />
-                            </div>
+                        {compte_epargnes.map((compte) => (
+                            <div className="flex gap-2 place-items-center border border-gray-200 p-4 w-1/2 rounded-lg">
+                                <div className="bg-slate-100 flex items-center justify-center p-1 rounded-sm">
+                                    <Wallet className="text-yellow-500" />
+                                </div>
 
-                            <div className="flex flex-col ">
-                                <h2 className="text-gray-800 font-semibold text-xl">
-                                    Epargne Principal
-                                </h2>
-                                <p className="text-muted-foreground text-xs">
-                                    10 000 000 fcfa
-                                </p>
+                                <div className="flex flex-col ">
+                                    <h2 className="text-gray-800 font-semibold text-xl">
+                                        {compte.nom}
+                                    </h2>
+                                    <p className="text-muted-foreground text-xs">
+                                       {formatMontant(compte.montant_total_compte ? montant_total_compte : 0)}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-
-                        <div className="flex gap-2 place-items-center border border-gray-200 p-4 w-1/2 rounded-lg">
-                            <div className="bg-slate-100 flex items-center justify-center p-1 rounded-sm">
-                                <Wallet className="text-yellow-500" />
-                            </div>
-
-                            <div className="flex flex-col ">
-                                <h2 className="text-gray-800 font-semibold text-xl">
-                                    Fond de vacance
-                                </h2>
-                                <p className="text-muted-foreground text-sm">
-                                    500 000 fcfa
-                                </p>
-                            </div>
-                        </div>
+                        ))}
                     </CardContent>
                 </Card>
             </section>
