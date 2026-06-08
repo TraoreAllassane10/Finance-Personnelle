@@ -24,7 +24,11 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import useTransaction from "@/hooks/useTransaction";
 
-export const TableTransaction = ({ datas, setUpdateTransactionId, setOpenModalUpdate }) => {
+export const TableTransaction = ({
+    datas,
+    setUpdateTransactionId,
+    setOpenModalUpdate,
+}) => {
     const { deleteTransaction } = useTransaction();
 
     const handleDeleteRevenu = (id) => {
@@ -33,24 +37,26 @@ export const TableTransaction = ({ datas, setUpdateTransactionId, setOpenModalUp
         router.reload(0);
     };
 
+    console.log(datas);
+
     return (
         <Card className="mb-8 border border-gray-100 rounded-xl transition-all duration-300">
             <Table>
                 <TableHeader>
                     <TableRow className="bg-gray-50">
-                        <TableHead className="font-semibold text-muted-foreground">
+                        <TableHead className="font-bold text-muted-foreground">
                             DATE
                         </TableHead>
-                        <TableHead className="font-semibold text-muted-foreground">
+                        <TableHead className="font-bold text-muted-foreground">
                             DESCRIPTION
                         </TableHead>
-                        <TableHead className="font-semibold text-muted-foreground">
+                        <TableHead className="font-bold text-muted-foreground">
                             CATEGORIE
                         </TableHead>
-                        <TableHead className="font-semibold text-muted-foreground">
+                        <TableHead className="font-bold text-muted-foreground">
                             MONTANT
                         </TableHead>
-                        <TableHead className="font-semibold text-muted-foreground">
+                        <TableHead className="font-bold text-muted-foreground">
                             ACTIONS
                         </TableHead>
                     </TableRow>
@@ -59,20 +65,20 @@ export const TableTransaction = ({ datas, setUpdateTransactionId, setOpenModalUp
                 <TableBody>
                     {datas.map((data) => (
                         <TableRow key={data.id}>
-                            <TableCell className="text-muted-foreground">
+                            <TableCell className="text-muted-foreground font-semibold">
                                 {new Date(data.date).toLocaleDateString()}
                             </TableCell>
-                            <TableCell className="text-slate-800 font-bold">
+                            <TableCell className="text-gray-800 font-semibold">
                                 {data.description}
                             </TableCell>
-                            <TableCell className={`text-muted-foreground`}>
+                            <TableCell className={`text-muted-foreground `}>
                                 <span
                                     style={{
                                         backgroundColor: data.category?.couleur,
                                         color: "white",
-                                        fontWeight: "bold",
+                                        fontWeight: "500",
                                     }}
-                                    className="px-4 py-1 text-center rounded-full"
+                                    className={`px-2 py-0.5 text-center rounded-full`}
                                 >
                                     {data.category?.nom}
                                 </span>

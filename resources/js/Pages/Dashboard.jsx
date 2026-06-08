@@ -405,12 +405,12 @@ export default function Dashboard() {
                                 </TableRow>
                                 {recenteTransactions.map((data) => (
                                     <TableRow key={data.id}>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="text-muted-foreground font-semibold">
                                             {new Date(
                                                 data.date,
                                             ).toLocaleDateString()}
                                         </TableCell>
-                                        <TableCell className="text-gray-800 font-bold">
+                                        <TableCell className="text-gray-800 font-semibold">
                                             {data.description}
                                         </TableCell>
                                         <TableCell className="text-muted-foreground">
@@ -419,9 +419,9 @@ export default function Dashboard() {
                                                     backgroundColor:
                                                         data.category?.couleur,
                                                     color: "white",
-                                                    fontWeight: "bold",
+                                                    fontWeight: "500",
                                                 }}
-                                                className="px-4 py-1 text-center rounded-full w-fit"
+                                                className={`px-2 py-0.5 text-center rounded-full`}
                                             >
                                                 {data.category?.nom}
                                             </span>
