@@ -13,8 +13,13 @@ import {
     ArrowUp,
     GoalIcon,
     Landmark,
+    PiggyBankIcon,
+    Plus,
     PlusCircle,
+    PlusIcon,
+    SlidersHorizontal,
     Wallet,
+    Wallet2Icon,
     X,
 } from "lucide-react";
 import { useState } from "react";
@@ -27,7 +32,8 @@ import { Progress } from "@/Components/ui/progress";
 import useVersement from "@/hooks/useVersement";
 
 const Epargnes = () => {
-    const { compte_epargnes, objectif_epargnes, versements, total_epargne } = usePage().props || [];
+    const { compte_epargnes, objectif_epargnes, versements, total_epargne } =
+        usePage().props || [];
 
     const [openCompte, setOpenCompte] = useState(false);
     const [openModalObjectif, setOpenModalObjectif] = useState(false);
@@ -380,7 +386,12 @@ const Epargnes = () => {
                                             <option value=""></option>
                                             {objectif_epargnes.map(
                                                 (objectif) => (
-                                                    <option key={objectif.id} value={objectif.id}>{objectif.nom}</option>
+                                                    <option
+                                                        key={objectif.id}
+                                                        value={objectif.id}
+                                                    >
+                                                        {objectif.nom}
+                                                    </option>
                                                 ),
                                             )}
                                         </select>
@@ -442,7 +453,7 @@ const Epargnes = () => {
                     </div>
 
                     <div className="text-gray-800 font-bold text-xl">
-                        {formatMontant(total_epargne)} 
+                        {formatMontant(total_epargne)}
                     </div>
 
                     <div className="flex gap-2 mt-8">
@@ -461,37 +472,59 @@ const Epargnes = () => {
                 <Card className="col-span-3 md:col-span-2">
                     <CardHeader className="border-b border-gray-200 text-gray-800 font-semibold text-xl">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-sm md:text-lg"> Comptes actifs</h2>
+                            <div className="flex items-center gap-2">
+                                <PiggyBankIcon className="text-yellow-500" />
+                                <h2 className="text-sm md:text-lg">
+                                    {" "}
+                                    Comptes actifs
+                                </h2>
+                            </div>
+
                             <Button
                                 variant={"outline"}
                                 onClick={() => setOpenCompte(true)}
                             >
+                                <PlusIcon />
                                 Ajout un compte
                             </Button>
                         </div>
                     </CardHeader>
 
                     <CardContent className="mt-2 flex gap-4">
-                        {compte_epargnes.map((compte) => (
-                            <div className="flex flex-wrap gap-2 place-items-center border border-gray-200 p-4 w-1/2 rounded-lg">
-                                <div className="bg-slate-100 flex items-center justify-center p-1 rounded-sm">
-                                    <Wallet className="text-yellow-500" />
-                                </div>
-
-                                <div className="flex flex-col ">
-                                    <h2 className="text-gray-800 font-semibold text-xl">
-                                        {compte.nom}
-                                    </h2>
-                                    <p className="text-muted-foreground text-xs">
-                                        {formatMontant(
-                                            compte.montant_total_compte
-                                                ? Number(compte.montant_total_compte)
-                                                : 0,
-                                        )}
-                                    </p>
-                                </div>
+                        {compte_epargnes.length === 0 ? (
+                            <div className="flex flex-col items-center justify-center gap-4 p-6 w-full">
+                                <PiggyBankIcon
+                                    size={32}
+                                    className="text-gray-400"
+                                />
+                                <p className="text-gray-800">
+                                    Aucun compte bancaire ajouté
+                                </p>
                             </div>
-                        ))}
+                        ) : (
+                            compte_epargnes.map((compte) => (
+                                <div className="flex flex-wrap gap-2 place-items-center border border-gray-200 p-4 w-1/2 rounded-lg">
+                                    <div className="bg-slate-100 flex items-center justify-center p-1 rounded-sm">
+                                        <Wallet className="text-yellow-500" />
+                                    </div>
+
+                                    <div className="flex flex-col ">
+                                        <h2 className="text-gray-800 font-semibold text-xl">
+                                            {compte.nom}
+                                        </h2>
+                                        <p className="text-muted-foreground text-xs">
+                                            {formatMontant(
+                                                compte.montant_total_compte
+                                                    ? Number(
+                                                          compte.montant_total_compte,
+                                                      )
+                                                    : 0,
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))
+                        )}
                     </CardContent>
                 </Card>
             </section>
@@ -508,48 +541,57 @@ const Epargnes = () => {
                     </CardHeader>
 
                     <CardContent className="mt-4 space-y-6">
-                        {objectif_epargnes.map((objectif) => {
-                            const progression =
-                                objectif.montant_cible > 0
-                                    ? Math.ceil(
-                                          (objectif.montant_total_epargne /
-                                              objectif.montant_cible) *
-                                              100,
-                                      )
-                                    : 0;
+                        {objectif_epargnes.length === 0 ? (
+                            <div className="flex flex-col items-center justify-center gap-4 p-6 w-full">
+                                <GoalIcon size={32} className="text-gray-400" />
+                                <p className="text-gray-800">
+                                    Aucun objectif ajouté
+                                </p>
+                            </div>
+                        ) : (
+                            objectif_epargnes.map((objectif) => {
+                                const progression =
+                                    objectif.montant_cible > 0
+                                        ? Math.ceil(
+                                              (objectif.montant_total_epargne /
+                                                  objectif.montant_cible) *
+                                                  100,
+                                          )
+                                        : 0;
 
-                            return (
-                                <div className="flex items-center gap-4">
-                                    <div className="w-full">
-                                        <h3 className="text-xl font-semibold truncate">
-                                            {objectif.nom}
-                                        </h3>
+                                return (
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-full">
+                                            <h3 className="text-xl font-semibold truncate">
+                                                {objectif.nom}
+                                            </h3>
 
-                                        <div className="flex justify-between text-muted-foreground text-xs">
-                                            <span>
-                                                {" "}
-                                                {formatMontant(
-                                                    objectif.montant_total_epargne ??
-                                                        0,
-                                                )}
-                                            </span>
-                                            <span>
-                                                sur{" "}
-                                                {formatMontant(
-                                                    objectif.montant_cible,
-                                                )}
-                                            </span>
+                                            <div className="flex justify-between text-muted-foreground text-xs">
+                                                <span>
+                                                    {" "}
+                                                    {formatMontant(
+                                                        objectif.montant_total_epargne ??
+                                                            0,
+                                                    )}
+                                                </span>
+                                                <span>
+                                                    sur{" "}
+                                                    {formatMontant(
+                                                        objectif.montant_cible,
+                                                    )}
+                                                </span>
+                                            </div>
+
+                                            <Progress
+                                                value={progression}
+                                                classNameIndicator="bg-green-600"
+                                                id="progress-upload"
+                                            />
                                         </div>
-
-                                        <Progress
-                                            value={progression}
-                                            classNameIndicator="bg-green-600"
-                                            id="progress-upload"
-                                        />
                                     </div>
-                                </div>
-                            );
-                        })}
+                                );
+                            })
+                        )}
 
                         <Button
                             variant={"outline"}
@@ -571,52 +613,62 @@ const Epargnes = () => {
                                 variant={"outline"}
                                 onClick={() => setOpenModalVersement(true)}
                             >
+                                <PlusIcon/>
                                 Ajouter un versement
                             </Button>
                         </div>
                     </CardHeader>
 
-                    <CardContent className="mt-2 flex gap-4">
-                        <Table>
-                            <TableHeader>
-                                <TableRow className="bg-gray-50">
-                                    <TableHead className="font-semibold text-muted-foreground">
-                                        DATE
-                                    </TableHead>
-                                    <TableHead className="font-semibold text-muted-foreground">
-                                        COMPTE
-                                    </TableHead>
-                                    <TableHead className="font-semibold text-muted-foreground">
-                                        MONTANT
-                                    </TableHead>
-                                </TableRow>
-                                {versements.map((data) => (
-                                    <TableRow key={data.id}>
-                                        <TableCell className="text-muted-foreground">
-                                            {new Date(
-                                                data.date,
-                                            ).toLocaleDateString()}
-                                        </TableCell>
-
-                                        <TableCell className="text-muted-foreground">
-                                            {data.compte.nom}
-                                        </TableCell>
-                                        <TableCell className="text-muted-foreground">
-                                            <span className={` font-bold`}>
-                                                {data.montant_verse.toLocaleString(
-                                                    "fr-CI",
-                                                    {
-                                                        style: "currency",
-                                                        currency: "XOF",
-                                                    },
-                                                )}
-                                            </span>
-                                        </TableCell>
+                    {versements.length === 0 ? (
+                        <CardContent className="flex flex-col items-center justify-center gap-4 p-6 w-full">
+                            <Wallet2Icon size={32} className="text-gray-400" />
+                            <p className="text-gray-800">
+                                Aucun virement ajouté
+                            </p>
+                        </CardContent>
+                    ) : (
+                        <CardContent className="mt-2 flex gap-4">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow className="bg-gray-50">
+                                        <TableHead className="font-semibold text-muted-foreground">
+                                            DATE
+                                        </TableHead>
+                                        <TableHead className="font-semibold text-muted-foreground">
+                                            COMPTE
+                                        </TableHead>
+                                        <TableHead className="font-semibold text-muted-foreground">
+                                            MONTANT
+                                        </TableHead>
                                     </TableRow>
-                                ))}
-                            </TableHeader>
-                        </Table>
-                    </CardContent>
+                                    {versements.map((data) => (
+                                        <TableRow key={data.id}>
+                                            <TableCell className="text-muted-foreground">
+                                                {new Date(
+                                                    data.date,
+                                                ).toLocaleDateString()}
+                                            </TableCell>
+
+                                            <TableCell className="text-muted-foreground">
+                                                {data.compte.nom}
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground">
+                                                <span className={` font-bold`}>
+                                                    {data.montant_verse.toLocaleString(
+                                                        "fr-CI",
+                                                        {
+                                                            style: "currency",
+                                                            currency: "XOF",
+                                                        },
+                                                    )}
+                                                </span>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableHeader>
+                            </Table>
+                        </CardContent>
+                    )}
                 </Card>
             </section>
         </AuthenticatedLayout>

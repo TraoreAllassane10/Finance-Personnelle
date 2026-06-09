@@ -10,7 +10,7 @@ class VersementRepository
 
     public function all()
     {
-        return Versement::all();
+        return Versement::where('user_id', Auth::user()->id)->get();
     }
 
     public function create(array $data)
