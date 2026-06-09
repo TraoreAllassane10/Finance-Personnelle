@@ -25,6 +25,7 @@ import useCompteEpargne from "@/hooks/useCompteEpargne";
 import { formatMontant } from "../lib/utils";
 import useObjectifEpargne from "@/hooks/useObjectifEpargne";
 import { Progress } from "@/Components/ui/progress";
+import useVersement from "@/hooks/useVersement";
 
 const Epargnes = () => {
     const { compte_epargnes, objectif_epargnes } = usePage().props || [];
@@ -74,6 +75,23 @@ const Epargnes = () => {
             nom: data.nom,
             montant_cible: data.montant,
             date_echeance: data.date_limite,
+        });
+    };
+
+    // Enregistrement d'un versement
+    const { createVersement, isLoading: loadingVersement } = useVersement();
+    const canSubmitVersement =
+        dataVersement.compte &&
+        dataVersement.date &&
+        dataVersement.montant &&
+        dataVersement.objectif;
+        
+    const handleSubmitVersement = () => {
+        createVersement({
+            date: dataVersement.date,
+            montant_verse: dataVersement.montant,
+            compte_epargne_id: dataVersement.compte,
+            objectif_epargne_id: dataVersement.objectif,
         });
     };
 
@@ -333,8 +351,15 @@ const Epargnes = () => {
                                             }
                                             className="h-7 py-1 text-muted-foreground placeholder:text-muted-foreground/50 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                         >
-                                            <option>Epargne Principal</option>
-                                            <option>Fond de vacance</option>
+                                            <option value=""></option>
+                                            {compte_epargnes.map((compte) => (
+                                                <option
+                                                    key={compte.id}
+                                                    value={compte.id}
+                                                >
+                                                    {compte.nom}
+                                                </option>
+                                            ))}
                                         </select>
                                     </div>
 
@@ -353,9 +378,12 @@ const Epargnes = () => {
                                             }
                                             className="h-7 py-1 text-muted-foreground placeholder:text-muted-foreground/50 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
                                         >
-                                            <option></option>
-                                            <option>Fond d'urgence</option>
-                                            <option>Nouvelle voiture</option>
+                                            <option value=""></option>
+                                            {objectif_epargnes.map(
+                                                (objectif) => (
+                                                    <option key={objectif.id} value={objectif.id}>{objectif.nom}</option>
+                                                ),
+                                            )}
                                         </select>
                                     </div>
                                 </div>
@@ -376,8 +404,11 @@ const Epargnes = () => {
                                         Annuler
                                     </Button>
                                     <Button
-                                        // disabled={!canSubmit || isLoading}
-                                        // onClick={handleSubmit}
+                                        disabled={
+                                            !canSubmitVersement ||
+                                            loadingVersement
+                                        }
+                                        onClick={handleSubmitVersement}
                                         className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300"
                                     >
                                         Ajouter le versement
@@ -455,7 +486,7 @@ const Epargnes = () => {
                                     <p className="text-muted-foreground text-xs">
                                         {formatMontant(
                                             compte.montant_total_compte
-                                                ? montant_total_compte
+                                                ? Number(compte.montant_total_compte)
                                                 : 0,
                                         )}
                                     </p>

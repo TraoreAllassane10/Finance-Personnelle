@@ -9,4 +9,12 @@ class Versement extends Model
 {
     /** @use HasFactory<\Database\Factories\VersementFactory> */
     use HasFactory;
+
+    protected $guarded = [];
+
+    // protected $with = ["compte"];
+
+    public function compte() {
+        return $this->belongsTo(CompteEpargne::class);
+    }
 }

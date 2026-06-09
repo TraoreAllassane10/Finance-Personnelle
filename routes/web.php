@@ -10,7 +10,7 @@ use App\Http\Controllers\ObjectifEpargneController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
-use App\Models\CompteEpargne;
+use App\Http\Controllers\VersementController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -39,11 +39,6 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/epargnes', [EpargneController::class, 'index'])->name('epargnes');
-    Route::post('/epargnes', [EpargneController::class, 'store'])->name('epargnes.store');
-    Route::get('/epargnes/{epargne}', [EpargneController::class, 'edit'])->name('epargnes.edit');
-    Route::put("/epargnes/{epargne}", [EpargneController::class, 'update'])->name('epargnes.update');
-    Route::delete('/epargnes/{epargne}', [EpargneController::class, 'destroy'])->name('epargnes.delete');
-
 
     Route::controller(BudgetController::class)->group(function () {
         Route::get('/budgets', 'index')->name('budgets');
@@ -65,6 +60,11 @@ Route::middleware('auth')->group(function () {
     // Routes Comptes Epargnes
     Route::controller(CompteEpargneController::class)->group(function () {
         Route::post('/comptes-epargnes', 'store')->name('comptes.store');
+    });
+
+    // Routes Versements
+    Route::controller(VersementController::class)->group(function () {
+        Route::post('/versements', 'store')->name('versements.store');
     });
 
     Route::get("/parametres", function () {
