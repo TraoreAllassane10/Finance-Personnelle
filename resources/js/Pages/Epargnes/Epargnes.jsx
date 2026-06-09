@@ -431,9 +431,9 @@ const Epargnes = () => {
             </section>
 
             {/* Carte Total et compte actifs */}
-            <section className="flex gap-4 mb-6">
+            <section className="grid md:grid-cols-3  gap-4 mb-6">
                 {/* Carte Total */}
-                <Card className="w-1/4 p-4 bg-gradient-to-br from-white to-yellow-50">
+                <Card className="col-span-3 md:col-span-1 p-4 bg-gradient-to-br from-white to-yellow-50">
                     <div className="flex place-items-center gap-2 mb-4">
                         <Landmark size={16} className="text-yellow-500" />
                         <span className="text-sm text-muted-foreground uppercase">
@@ -458,22 +458,22 @@ const Epargnes = () => {
                 </Card>
 
                 {/* Carte de compte actifs */}
-                <Card className="w-3/4">
+                <Card className="col-span-3 md:col-span-2">
                     <CardHeader className="border-b border-gray-200 text-gray-800 font-semibold text-xl">
                         <div className="flex items-center justify-between">
-                            <h2> Comptes actifs</h2>
+                            <h2 className="text-sm md:text-lg"> Comptes actifs</h2>
                             <Button
                                 variant={"outline"}
                                 onClick={() => setOpenCompte(true)}
                             >
-                                Ajout un compte d'epargne
+                                Ajout un compte
                             </Button>
                         </div>
                     </CardHeader>
 
                     <CardContent className="mt-2 flex gap-4">
                         {compte_epargnes.map((compte) => (
-                            <div className="flex gap-2 place-items-center border border-gray-200 p-4 w-1/2 rounded-lg">
+                            <div className="flex flex-wrap gap-2 place-items-center border border-gray-200 p-4 w-1/2 rounded-lg">
                                 <div className="bg-slate-100 flex items-center justify-center p-1 rounded-sm">
                                     <Wallet className="text-yellow-500" />
                                 </div>
@@ -497,9 +497,9 @@ const Epargnes = () => {
             </section>
 
             {/* Carte objectifs et virement recent */}
-            <section className="flex gap-4">
+            <section className="grid grid-cols-3 gap-4">
                 {/* Carte des objectifs */}
-                <Card className="w-[30%]">
+                <Card className="col-span-3 md:col-span-1">
                     <CardHeader className="border-b border-gray-200 text-gray-800 font-semibold text-xl">
                         <div className="flex items-center gap-2">
                             <GoalIcon className="text-yellow-500" />
@@ -563,7 +563,7 @@ const Epargnes = () => {
                 </Card>
 
                 {/* Carte des dépôts recents */}
-                <Card className="w-[70%]">
+                <Card className="col-span-3 md:col-span-2">
                     <CardHeader className="border-b border-gray-200 text-gray-800 font-semibold text-xl">
                         <div className="flex justify-between">
                             <h2>Dépôts récents</h2>
