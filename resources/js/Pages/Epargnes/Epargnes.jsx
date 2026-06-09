@@ -28,7 +28,7 @@ import { Progress } from "@/Components/ui/progress";
 import useVersement from "@/hooks/useVersement";
 
 const Epargnes = () => {
-    const { compte_epargnes, objectif_epargnes } = usePage().props || [];
+    const { compte_epargnes, objectif_epargnes, versements } = usePage().props || [];
 
     const [openCompte, setOpenCompte] = useState(false);
     const [openModalObjectif, setOpenModalObjectif] = useState(false);
@@ -85,7 +85,7 @@ const Epargnes = () => {
         dataVersement.date &&
         dataVersement.montant &&
         dataVersement.objectif;
-        
+
     const handleSubmitVersement = () => {
         createVersement({
             date: dataVersement.date,
@@ -591,7 +591,7 @@ const Epargnes = () => {
                                         MONTANT
                                     </TableHead>
                                 </TableRow>
-                                {depotRecent.map((data) => (
+                                {versements.map((data) => (
                                     <TableRow key={data.id}>
                                         <TableCell className="text-muted-foreground">
                                             {new Date(
@@ -600,11 +600,11 @@ const Epargnes = () => {
                                         </TableCell>
 
                                         <TableCell className="text-muted-foreground">
-                                            {data.compte}
+                                            {data.compte.nom}
                                         </TableCell>
                                         <TableCell className="text-muted-foreground">
                                             <span className={` font-bold`}>
-                                                {data.montant.toLocaleString(
+                                                {data.montant_verse.toLocaleString(
                                                     "fr-CI",
                                                     {
                                                         style: "currency",

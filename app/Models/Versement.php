@@ -12,9 +12,9 @@ class Versement extends Model
 
     protected $guarded = [];
 
-    // protected $with = ["compte"];
+    protected $with = ["compte"];
 
     public function compte() {
-        return $this->belongsTo(CompteEpargne::class);
+        return $this->belongsTo(CompteEpargne::class, "compte_epargne_id");
     }
 }
