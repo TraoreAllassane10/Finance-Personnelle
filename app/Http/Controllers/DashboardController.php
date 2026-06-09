@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TypeTransaction;
+use App\Services\ObjectifEpargneService;
 use Inertia\Inertia;
 use App\Services\TransactionService;
+use App\Services\VersementService;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
 
     public function __construct(
-        protected TransactionService $transactionService
+        protected TransactionService $transactionService,
+        protected VersementService $versementService,
+        protected ObjectifEpargneService $objectifEpargneService
     ) {}
     public function index(Request $request)
     {
@@ -20,9 +24,13 @@ class DashboardController extends Controller
         // Les statistiques
         $totalRevenu = $this->transactionService->getMontantTotalRevenu($periode);
         $totalDepense = $this->transactionService->getMontantTotalDepense($periode);
+        $totalEpargne = $this->versementService->getMontantTotalVersementParPeriode($periode);
 
         // Les 5 dernieres transactions
         $recenteTransactions = $this->transactionService->getRecenteTransaction($periode);
+
+        // Les objectifs active
+        $objectifs_epargnes = $this->objectifEpargneService->getObjectifEpargnes();
 
         $transactions = $this->transactionService->getTransactions();
 
@@ -61,8 +69,9 @@ class DashboardController extends Controller
             "totalDepense" => $totalDepense,
             "variationDepense" => $variationDepense,
             "soldeNet" => $totalRevenu - $totalDepense,
-            "totalEpargne" => 0,
+            "totalEpargne" => $totalEpargne,
             "recenteTransactions" => $recenteTransactions,
+            "objectifs_epargnes" => $objectifs_epargnes,
             "periodeSelected" => $periode,
             "chartData" => [
                 "transactionParDate" => $transactionParDate,

@@ -21,4 +21,16 @@ class VersementService
         $data['user_id'] = Auth::user()->id;
         return $this->versementRepository->create($data);
     }
+
+    // Montant total des versements
+    public function getMontantTotalVersement()
+    {
+        return $this->versementRepository->totalVersement();
+    }
+
+    // Montant total des versement par periode
+    public function getMontantTotalVersementParPeriode(string $periode)
+    {
+        return $this->versementRepository->totalVersementParPeriode($periode);
+    }
 }

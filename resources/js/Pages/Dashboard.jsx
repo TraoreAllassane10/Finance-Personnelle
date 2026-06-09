@@ -33,7 +33,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import CardStatistiques from "@/Components/dashboard/CardStatistiques";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Table,
     TableCell,
@@ -107,6 +107,7 @@ export default function Dashboard() {
         recenteTransactions,
         chartData,
         periodeSelected,
+        objectifs_epargnes,
     } = usePage().props;
 
     const [periode, setPeriode] = useState(periodeSelected ?? "mois");
@@ -449,49 +450,40 @@ export default function Dashboard() {
                     </CardHeader>
                     <CardContent className="flex-1">
                         <div className="flex flex-col gap-4 mt-4">
-                            <Field className="w-full max-w-sm">
-                                <FieldLabel htmlFor="progress-upload">
-                                    <div className={"flex flex-col "}>
-                                        <h3 className="text-gray-800 font-bold text-sm">
-                                            Nouvelle voiture
-                                        </h3>
-                                        <p className="text-muted-foreground text-xs">
-                                            5000000 fcfa / 7000000 fcfa
-                                        </p>
-                                    </div>
-                                    <span className="ml-auto t-primary">
-                                        66%
-                                    </span>
-                                </FieldLabel>
+                            {objectifs_epargnes.map((objectif) => {
+                                const progression =
+                                    objectif.montant_cible > 0
+                                        ? Math.ceil(
+                                              (objectif.montant_total_epargne /
+                                                  objectif.montant_cible) *
+                                                  100,
+                                          )
+                                        : 0;
 
-                                <Progress
-                                    value={66}
-                                    classNameIndicator="bg-blue-600"
-                                    id="progress-upload"
-                                />
-                            </Field>
+                                return (
+                                    <Field className="w-full max-w-sm">
+                                        <FieldLabel htmlFor="progress-upload">
+                                            <div className={"flex flex-col "}>
+                                                <h3 className="text-gray-800 font-bold text-sm">
+                                                    {objectif.nom}
+                                                </h3>
+                                                <p className="text-muted-foreground text-xs">
+                                                   {formatMontant(objectif.montant_total_epargne)} / {formatMontant(objectif.montant_cible)}
+                                                </p>
+                                            </div>
+                                            <span className="ml-auto t-primary">
+                                                {progression}%
+                                            </span>
+                                        </FieldLabel>
 
-                            <Field className="w-full max-w-sm">
-                                <FieldLabel htmlFor="progress-upload">
-                                    <div className={"flex flex-col "}>
-                                        <h3 className="text-gray-800 font-bold text-sm">
-                                            Fond d'urgence
-                                        </h3>
-                                        <p className="text-muted-foreground text-xs">
-                                            100000 fcfa / 300000 fcfa
-                                        </p>
-                                    </div>
-                                    <span className="ml-auto text-green-600">
-                                        65%
-                                    </span>
-                                </FieldLabel>
-
-                                <Progress
-                                    value={65}
-                                    classNameIndicator="bg-green-600"
-                                    id="progress-upload"
-                                />
-                            </Field>
+                                        <Progress
+                                            value={progression}
+                                            classNameIndicator="bg-green-600"
+                                            id="progress-upload"
+                                        />
+                                    </Field>
+                                );
+                            })}
                         </div>
                     </CardContent>
                 </Card>

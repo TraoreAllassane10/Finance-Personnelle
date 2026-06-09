@@ -23,10 +23,14 @@ class EpargneController extends Controller
         $objectifEpargnes = $this->objectifEpargneService->getObjectifEpargnes();
         $versements = $this->versementService->getVersements();
 
+        // Montant total des versements -> correspond au montant total epargné
+        $totalEpargne = $this->versementService->getMontantTotalVersement();
+
         return Inertia::render('Epargnes/Epargnes', [
             "compte_epargnes" => $comptesEpargnes,
             "objectif_epargnes" => $objectifEpargnes,
-            "versements" => $versements
+            "versements" => $versements,
+            "total_epargne" => $totalEpargne
         ]);
     }
 

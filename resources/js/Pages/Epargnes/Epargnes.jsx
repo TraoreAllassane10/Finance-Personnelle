@@ -17,7 +17,6 @@ import {
     Wallet,
     X,
 } from "lucide-react";
-import { depotRecent } from "@/constant";
 import { useState } from "react";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
@@ -28,7 +27,7 @@ import { Progress } from "@/Components/ui/progress";
 import useVersement from "@/hooks/useVersement";
 
 const Epargnes = () => {
-    const { compte_epargnes, objectif_epargnes, versements } = usePage().props || [];
+    const { compte_epargnes, objectif_epargnes, versements, total_epargne } = usePage().props || [];
 
     const [openCompte, setOpenCompte] = useState(false);
     const [openModalObjectif, setOpenModalObjectif] = useState(false);
@@ -443,7 +442,7 @@ const Epargnes = () => {
                     </div>
 
                     <div className="text-gray-800 font-bold text-xl">
-                        15 000 000 fcfa
+                        {formatMontant(total_epargne)} 
                     </div>
 
                     <div className="flex gap-2 mt-8">
