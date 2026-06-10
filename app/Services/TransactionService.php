@@ -12,36 +12,59 @@ class TransactionService
         protected TransactionRepository $transactionRepository
     ) {}
 
-    public function revenus()
+    public function revenus(array|null $date, string|null $categorie)
     {
-        return $this->transactionRepository->allRevenu();
+        $year = $date ? $date[0] : now()->year;
+        $month = $date ? $date[1] : now()->month;
+        return $this->transactionRepository->allRevenu($year, $month, $categorie);
     }
 
-    public function depenses()
+    public function depenses(array|null $date, string|null $categorie)
     {
-        return $this->transactionRepository->allDepense();
+        $year = $date ? $date[0] : now()->year;
+        $month = $date ? $date[1] : now()->month;
+        return $this->transactionRepository->allDepense($year, $month, $categorie);
     }
 
-    public function getTransactions() {
+    public function getTransactions()
+    {
         return $this->transactionRepository->all();
     }
 
-    // Recupere le montant total des depenses
-    public function getMontantTotalDepense()
+    // Recupere les transactions par periode
+    public function getTransactionParPeriode(string $periode)
     {
-        return (int) $this->transactionRepository->montantTotalDepense();
+        return $this->transactionRepository->transactionParPeriode($periode);
+    }
+
+    // Recupere le montant total des depenses
+    public function getMontantTotalDepense(string $periode)
+    {
+        return (int) $this->transactionRepository->montantTotalDepense($periode);
     }
 
     // Recupere le montant total des revenus
-    public function getMontantTotalRevenu()
+    public function getMontantTotalRevenu(string $periode)
     {
-        return (int) $this->transactionRepository->montantTotalRevenu();
+        return (int) $this->transactionRepository->montantTotalRevenu($periode);
+    }
+
+    // Recupere le montant total des revenus du mois dernier
+    public function getMontantTotalRevenuMoisDernier()
+    {
+        return (int) $this->transactionRepository->montantTotalRevenuMoisDernier();
+    }
+
+     // Recupere le montant total des depenses du mois dernier
+    public function getMontantTotalDepenseMoisDernier()
+    {
+        return (int) $this->transactionRepository->montantTotalDepenseMoisDernier();
     }
 
     // Recupere les dernieres transactions
-    public function getRecenteTransaction()
+    public function getRecenteTransaction(string $periode)
     {
-        return $this->transactionRepository->recenteTransaction();
+        return $this->transactionRepository->recenteTransaction($periode);
     }
 
     // Recupere une transaction

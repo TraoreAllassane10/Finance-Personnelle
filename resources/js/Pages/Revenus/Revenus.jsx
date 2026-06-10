@@ -1,19 +1,40 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import React, { useState } from "react";
 import { TableTransaction } from "@/Components/transaction/TableTransaction";
 import { TableTransactionNotFound } from "@/Components/transaction/TableTransactionNotFound";
 import ModalTransactionUpdate from "@/Components/transaction/ModalTransactionUpdate";
+import { Card } from "@/Components/ui/card";
+import { Input } from "@/Components/ui/input";
+import { Button } from "@/Components/ui/button";
+import { Search, X } from "lucide-react";
 
 export default function Revenus() {
-    const { revenus } = usePage().props;
+    const { revenus, categories } = usePage().props;
+
     const [updateTransactionId, setUpdateTransactionId] = useState(null);
     const [openModal, setOpenModal] = useState(false);
+    const [categorieSearch, setCategorieSearch] = useState("");
+    const [monthSearch, setMonthSearch] = useState("");
+
+    const canSearch = categorieSearch || monthSearch;
+
+    const handleSearch = async () => {
+        try {
+            router.get("/revenus", {
+                categorie: categorieSearch,
+                date: monthSearch,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const resetFiltrer = () => {
-        setSelectedMonth("");
-        setSelectedAmount("");
-        setSelectedCategory("");
+        setCategorieSearch("");
+        setMonthSearch("");
+
+        router.visit("/revenus");
     };
 
     return (
@@ -40,40 +61,63 @@ export default function Revenus() {
                 </section>
 
                 {/* Section de filtre */}
-                {/* <Card className="mb-4 px-6 py-4">
+                <Card className="mb-4 px-6 py-4">
                     <div className="flex justify-between ">
                         <div className="flex flex-wrap gap-4">
                             <div>
-                                <Input type="date" />
+                                <Input
+                                    type="month"
+                                    value={monthSearch}
+                                    onChange={(e) =>
+                                        setMonthSearch(e.target.value)
+                                    }
+                                />
                             </div>
 
                             <div className="relative flex items-center w-[180px]">
                                 <select
+                                    value={categorieSearch}
                                     onChange={(e) =>
-                                        setSelectedAmount(e.target.value)
+                                        setCategorieSearch(e.target.value)
                                     }
-                                    value={selectedAmount}
                                     className="block w-full rounded-md border border-gray-300 bg-white py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 >
-                                    <option value="" disabled>
-                                        Trier
+                                    <option value="tout">
+                                        Toutes les catégories
                                     </option>
-                                    <option value="0">Moins élevé</option>
-                                    <option value="1">Plus élevé</option>
+                                    {categories.map((categorie) => (
+                                        <option
+                                            key={categorie.id}
+                                            value={categorie.id}
+                                        >
+                                            {categorie.nom}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
 
+                            {canSearch && (
+                                <Button
+                                    variant={"ghost"}
+                                    className=" text-sm"
+                                    onClick={handleSearch}
+                                >
+                                    <Search />
+                                    Rechercher
+                                </Button>
+                            )}
+
                             <Button
                                 variant={"ghost"}
-                                onClick={resetFiltrer}
                                 className=" text-sm"
+                                onClick={resetFiltrer}
                             >
                                 <X />
                                 Réinitialiser
                             </Button>
                         </div>
                     </div>
-                </Card> */}
+                </Card>
 
                 {revenus.length === 0 ? (
                     <TableTransactionNotFound typeTransaction="revenu" />

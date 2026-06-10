@@ -4,13 +4,23 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
 import {
     Banknote,
+    Briefcase,
     Car,
+    CreditCard,
+    Gamepad2,
+    HeartPulse,
     House,
     MoreHorizontalIcon,
     MoreVerticalIcon,
     Option,
+    PiggyBank,
+    Plane,
+    RefreshCw,
     Salad,
     ShoppingBag,
+    ShoppingCart,
+    Smartphone,
+    UtensilsCrossed,
     Wallet,
     Wifi,
 } from "lucide-react";
@@ -24,13 +34,23 @@ import {
 import useBudget from "@/hooks/useBudget";
 
 const ConfigIcon = {
-    Wallet: Wallet,
-    Banknote: Banknote,
-    Salad: Salad,
+    Briefcase: Briefcase,
+    CreditCard: CreditCard,
+    ShoppingCart: ShoppingCart,
     Car: Car,
-    ShoppingBag: ShoppingBag,
     House: House,
-    Wifi: Wifi,
+    HeartPulse: HeartPulse,
+    Gamepad2: Gamepad2,
+    Smartphone: Smartphone,
+    PiggyBank: PiggyBank,
+    UtensilsCrossed: UtensilsCrossed,
+    Plane: Plane,
+    RefreshCw: RefreshCw,
+    Salad: Salad,
+    Banknote: Banknote,
+    ShoppingBag: ShoppingBag,
+    Wallet: Wallet,
+    Wifi: Wifi
 };
 
 const BudgetCard = ({ budget }) => {

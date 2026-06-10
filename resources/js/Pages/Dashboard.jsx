@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import {
     Area,
     AreaChart,
@@ -102,9 +102,15 @@ export default function Dashboard() {
         totalDepense,
         soldeNet,
         totalEpargne,
+        variationRevenu,
+        variationDepense,
         recenteTransactions,
         chartData,
+        periodeSelected,
+        objectifs_epargnes,
     } = usePage().props;
+
+    const [periode, setPeriode] = useState(periodeSelected ?? "mois");
 
     const dashbaordStats = [
         {
@@ -113,10 +119,10 @@ export default function Dashboard() {
             icon: TrendingUp,
             bgColor: "bg-green-100",
             color: "text-green-600",
-            trend: "up",
+            trend: variationRevenu > 0 ? "up" : "down",
             trendColor: "text-green-600",
-            trendIcon: ArrowUp,
-            trendText: "5% par rapport au mois dernier",
+            trendIcon: variationRevenu > 0 ? ArrowUp : ArrowDown,
+            trendText: `${variationRevenu.toFixed(0)}% par rapport au mois dernier`,
         },
         {
             nom: "Total des dépenses",
@@ -124,10 +130,10 @@ export default function Dashboard() {
             icon: TrendingDown,
             bgColor: "bg-red-100",
             color: "text-red-600",
-            trend: "down",
+            trend: variationDepense > 0 ? "up" : "down",
             trendColor: "text-red-600",
-            trendIcon: ArrowDown,
-            trendText: "10% par rapport au mois dernier",
+            trendIcon: variationDepense > 0 ? ArrowUp : ArrowDown,
+            trendText: ` ${variationDepense.toFixed(0)}% par rapport au mois dernier`,
         },
         {
             nom: "Solde Net",
@@ -147,23 +153,31 @@ export default function Dashboard() {
         },
     ];
 
-    const [timeRange, setTimeRange] = useState("7d");
+    const [timeRange, setTimeRange] = useState("30d");
 
     const filteredData = chartData.transactionParDate.filter((item) => {
         const date = new Date(item.date);
-        const referenceDate = new Date("2026-01-01");
-        let daysToSubtract = 7;
+        const referenceDate = new Date("2026-06-03");
+        let daysToSubtract = 30;
 
-        if (timeRange === "30d") {
-            daysToSubtract = 30;
+        if (timeRange === "7d") {
+            daysToSubtract = 7;
         } else if (timeRange === "90d") {
             daysToSubtract = 90;
         }
         const startDate = new Date(referenceDate);
-        
+
         startDate.setDate(startDate.getDate() - daysToSubtract);
         return date >= startDate;
     });
+
+    const handlePeriode = (periode) => {
+        try {
+            router.get("/dashboard", { periode: periode });
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <AuthenticatedLayout>
@@ -172,18 +186,30 @@ export default function Dashboard() {
             {/* Entete de la page */}
             <section className="flex justify-between place-items-center mb-6">
                 <div>
-                    <h1 className="text-3xl font-bold">Dashbaord</h1>
-                    <p className="text-sm text-muted-foreground">
+                    <h1 className="text-lg md:text-3xl font-bold">Dashbaord</h1>
+                    <p className="text-sm md:text-xs text-muted-foreground">
                         Bienvenue, voici une vue d'ensemble de votre situation
                         financière.
                     </p>
                 </div>
 
                 <div className="flex gap-3 p-1 border border-gray-300 bg-white rounded-md">
-                    <button className="bg-blue-600 px-2 text-white rounded-md text-md">
+                    <button
+                        onClick={() => {
+                            setPeriode("mois");
+                            handlePeriode("mois");
+                        }}
+                        className={`${periode == "mois" && "bg-blue-600 text-white"} px-2 rounded-md text-md text-muted-foreground"`}
+                    >
                         Mois
                     </button>
-                    <button className="text-md text-muted-foreground">
+                    <button
+                        onClick={() => {
+                            setPeriode("annee");
+                            handlePeriode("annee");
+                        }}
+                        className={`${periode == "annee" && "bg-blue-600 text-white"} px-2 rounded-md text-md text-muted-foreground"`}
+                    >
                         Annee
                     </button>
                 </div>
@@ -193,8 +219,8 @@ export default function Dashboard() {
             <CardStatistiques stats={dashbaordStats} className="mb-6" />
 
             {/* Le graphique */}
-            <section className="flex gap-4 mb-6 w-full">
-                <Card className="pt-0 w-3/4">
+            <section className="grid grid-cols-3 gap-4 mb-6">
+                <Card className="pt-0 col-span-3 md:col-span-2">
                     <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                         <div className="grid flex-1 gap-1">
                             <CardTitle>Revenu - Dépense</CardTitle>
@@ -317,7 +343,7 @@ export default function Dashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="flex flex-col w-1/4">
+                <Card className="flex flex-col col-span-3 md:col-span-1">
                     <CardHeader className="items-center pb-0">
                         <CardTitle>Dépense par catégorie</CardTitle>
                     </CardHeader>
@@ -353,8 +379,8 @@ export default function Dashboard() {
             </section>
 
             {/* Recentes transactions et objectifs d'epargnes */}
-            <section className="flex gap-4 w-full">
-                <Card className="pt-0 w-3/4">
+            <section className="grid grid-cols-3 gap-4 w-full">
+                <Card className="pt-0 col-span-3 md:col-span-2">
                     <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                         <div className="grid flex-1 gap-1">
                             <CardTitle>Récentes transactions</CardTitle>
@@ -380,12 +406,12 @@ export default function Dashboard() {
                                 </TableRow>
                                 {recenteTransactions.map((data) => (
                                     <TableRow key={data.id}>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="text-muted-foreground font-semibold">
                                             {new Date(
                                                 data.date,
                                             ).toLocaleDateString()}
                                         </TableCell>
-                                        <TableCell className="text-gray-800 font-bold">
+                                        <TableCell className="text-gray-800 font-semibold">
                                             {data.description}
                                         </TableCell>
                                         <TableCell className="text-muted-foreground">
@@ -394,9 +420,9 @@ export default function Dashboard() {
                                                     backgroundColor:
                                                         data.category?.couleur,
                                                     color: "white",
-                                                    fontWeight: "bold",
+                                                    fontWeight: "500",
                                                 }}
-                                                className="px-4 py-1 text-center rounded-full w-fit"
+                                                className={`px-2 py-0.5 text-center rounded-full`}
                                             >
                                                 {data.category?.nom}
                                             </span>
@@ -418,55 +444,46 @@ export default function Dashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="flex flex-col w-1/4">
+                <Card className="flex flex-col col-span-3 md:col-span-1">
                     <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                         <CardTitle>Objectifs d'epargne</CardTitle>
                     </CardHeader>
                     <CardContent className="flex-1">
                         <div className="flex flex-col gap-4 mt-4">
-                            <Field className="w-full max-w-sm">
-                                <FieldLabel htmlFor="progress-upload">
-                                    <div className={"flex flex-col "}>
-                                        <h3 className="text-gray-800 font-bold text-sm">
-                                            Nouvelle voiture
-                                        </h3>
-                                        <p className="text-muted-foreground text-xs">
-                                            5000000 fcfa / 7000000 fcfa
-                                        </p>
-                                    </div>
-                                    <span className="ml-auto t-primary">
-                                        66%
-                                    </span>
-                                </FieldLabel>
+                            {objectifs_epargnes.map((objectif) => {
+                                const progression =
+                                    objectif.montant_cible > 0
+                                        ? Math.ceil(
+                                              (objectif.montant_total_epargne /
+                                                  objectif.montant_cible) *
+                                                  100,
+                                          )
+                                        : 0;
 
-                                <Progress
-                                    value={66}
-                                    classNameIndicator="bg-blue-600"
-                                    id="progress-upload"
-                                />
-                            </Field>
+                                return (
+                                    <Field className="w-full max-w-sm">
+                                        <FieldLabel htmlFor="progress-upload">
+                                            <div className={"flex flex-col "}>
+                                                <h3 className="text-gray-800 font-bold text-sm">
+                                                    {objectif.nom}
+                                                </h3>
+                                                <p className="text-muted-foreground text-xs">
+                                                   {formatMontant(objectif.montant_total_epargne)} / {formatMontant(objectif.montant_cible)}
+                                                </p>
+                                            </div>
+                                            <span className="ml-auto t-primary">
+                                                {progression}%
+                                            </span>
+                                        </FieldLabel>
 
-                            <Field className="w-full max-w-sm">
-                                <FieldLabel htmlFor="progress-upload">
-                                    <div className={"flex flex-col "}>
-                                        <h3 className="text-gray-800 font-bold text-sm">
-                                            Fond d'urgence
-                                        </h3>
-                                        <p className="text-muted-foreground text-xs">
-                                            100000 fcfa / 300000 fcfa
-                                        </p>
-                                    </div>
-                                    <span className="ml-auto text-green-600">
-                                        65%
-                                    </span>
-                                </FieldLabel>
-
-                                <Progress
-                                    value={65}
-                                    classNameIndicator="bg-green-600"
-                                    id="progress-upload"
-                                />
-                            </Field>
+                                        <Progress
+                                            value={progression}
+                                            classNameIndicator="bg-green-600"
+                                            id="progress-upload"
+                                        />
+                                    </Field>
+                                );
+                            })}
                         </div>
                     </CardContent>
                 </Card>

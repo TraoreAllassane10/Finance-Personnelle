@@ -18,7 +18,7 @@ export const TableTransactionNotFound = ({ typeTransaction }) => {
                                 </h1>
                             </div>
                         ) : (
-                            <div className="flex flex-col items-center justify-center gap-4">
+                            <div className="flex flex-col items-center justify-center gap-4 p-10">
                                 <Wallet size={70} className="text-gray-400" />
                                 <h1 className="text-gray-500 text-lg">
                                     Aucune depense trouvée

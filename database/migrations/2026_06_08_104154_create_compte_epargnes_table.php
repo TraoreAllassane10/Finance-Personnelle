@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('versements', function (Blueprint $table) {
+        Schema::create('compte_epargnes', function (Blueprint $table) {
             $table->id();
-            $table->date("date");
-            $table->integer('montant_verse');
-
-            $table->foreignId('compte_epargne_id')->nullable()->cascadeOnDelete();
-            $table->foreignId('objectif_epargne_id')->nullable()->cascadeOnDelete();
+            $table->string('nom');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('versements');
+        Schema::dropIfExists('compte_epargnes');
     }
 };

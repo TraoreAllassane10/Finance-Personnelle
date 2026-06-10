@@ -76,12 +76,12 @@ const Index = () => {
             )}
 
             {/* Entete de la page */}
-            <section className="flex justify-between place-items-center mb-6">
+            <section className="flex justify-between gap-4 place-items-center mb-6">
                 <div className="space-y-1">
-                    <h1 className="text-3xl font-bold">
+                    <h1 className="text-sm md:text-3xl font-bold">
                         Gestionnaire de Budget Mensuel
                     </h1>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs md:text-sm text-muted-foreground">
                         Suivez et gerez vos allocations par catégorie pour ce
                         mois.
                     </p>
@@ -94,9 +94,9 @@ const Index = () => {
             </section>
 
             {/* Vue d'ensemble */}
-            <section className="flex gap-6 mb-6">
-                <Card className="w-[70%]">
-                    <CardHeader className="border border-gray-200">
+            <section className="grid grid-cols-3 gap-6 mb-6">
+                <Card className="col-span-3 md:col-span-2 p-4">
+                    <CardHeader className="border-b border-gray-200">
                         <div className="flex place-items-center justify-between">
                             <div>
                                 <CardTitle>Budget Mensuel Total</CardTitle>
@@ -155,7 +155,7 @@ const Index = () => {
                     </CardFooter>
                 </Card>
 
-                <div className="flex flex-col gap-8 w-[30%]">
+                <div className="flex flex-col gap-8 col-span-3 md:col-span-1">
                     <Card className="p-4">
                         <div className="flex gap-2 place-items-center text-sm text-muted-foreground">
                             <TriangleAlert

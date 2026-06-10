@@ -12,9 +12,15 @@ class BudgetRepository
     {
         return Budget::with(['category' => function ($query) {
             $query->with(["transactions" => function ($query) {
-                $query->whereMonth("date", now()->month);
+                $query->whereMonth('date', now()->month)
+                    ->whereYear('date', now()->year);
             }])
-                ->withSum("transactions as montant_depense", "montant");
+                ->withSum([
+                    "transactions as montant_depense" => function ($query) {
+                        $query->whereMonth('date', now()->month)
+                            ->whereYear('date', now()->year);
+                    }
+                ], "montant");
         }])
             ->where('user_id', Auth::user()->id)
             ->where('mois', now()->month)
@@ -24,7 +30,9 @@ class BudgetRepository
 
     public function montantTotalAlloue()
     {
-        return Budget::where('user_id', Auth::user()->id)->sum("montant_alloue");
+        return Budget::where('user_id', Auth::user()->id)
+            ->where('mois', now()->month)
+            ->sum("montant_alloue");
     }
 
     // Montant total des depenses dans les budgets definir 
@@ -58,7 +66,8 @@ class BudgetRepository
             ->exists();
     }
 
-    public function delete(Budget $budget) {
+    public function delete(Budget $budget)
+    {
         return $budget->delete();
     }
 }

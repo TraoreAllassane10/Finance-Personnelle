@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ObjectifEpargne extends Model
+class CompteEpargne extends Model
 {
-    /** @use HasFactory<\Database\Factories\ObjectifEpargneFactory> */
+    /** @use HasFactory<\Database\Factories\CompteEpargneFactory> */
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = ['nom', 'user_id'];
 
-    public function versements() {
+    public function versements()
+    {
         return $this->hasMany(Versement::class);
     }
 }
