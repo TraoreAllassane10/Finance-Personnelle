@@ -1,11 +1,8 @@
 import { Link, router, usePage } from "@inertiajs/react";
 import {
     LayoutDashboard,
-    TrendingUp,
-    Wallet,
     PiggyBank,
     Settings,
-    ClipboardCheck,
     LogOut,
     Landmark,
     Banknote,
@@ -41,6 +38,11 @@ const mainMenu = [
         name: "Budgets",
         icon: Wallet2,
         route: "budgets",
+    },
+    {
+        name: "Transactions Recurrentes",
+        icon: Wallet2,
+        route: "transaction-recurrentes",
     },
     {
         name: "categories",
@@ -90,10 +92,7 @@ export const Sidebar = () => {
                                 href={route("revenus")}
                                 className="text-xl text-gray-800"
                             >
-                                <Banknote
-                                    className="text-gray-500"
-                                    size={24}
-                                />
+                                <Banknote className="text-gray-500" size={24} />
                             </Link>
                         </div>
 
@@ -117,10 +116,7 @@ export const Sidebar = () => {
 
                         <div className="flex  py-2  transition">
                             <Link href={route("budgets")}>
-                                <Wallet2
-                                    className="text-gray-500"
-                                    size={24}
-                                />
+                                <Wallet2 className="text-gray-500" size={24} />
                             </Link>
                         </div>
 
@@ -162,8 +158,9 @@ export const Sidebar = () => {
                                 >
                                     <Icon className="text-gray-700 group-hover:text-blue-600" />
                                     <Link
-                                        href={route(`${item.route}`)}
-                                        className="text-md text-gray-800 group-hover:text-blue-600 group-hover:font-semibold"
+                                        // href={route(`/${item.route}`)}
+                                        href={`/${item.route}`}
+                                        className="text-md text-gray-800 group-hover:text-blue-600 group-hover:font-semibold truncate"
                                     >
                                         {item.name}
                                     </Link>
@@ -174,9 +171,9 @@ export const Sidebar = () => {
                 </div>
 
                 <div className="flex flex-col gap-2 mx-4 absolute bottom-4 left-0 border-t pt-2 w-[90%]">
-                    <div className="flex gap-2 px-2 py-2 hover:bg-blue-50 hover:text-blue-600 hover:border-r-4 hover:border-blue-600 hover:rounded-md group transition duration-300">
-                        <UserCircle className="text-gray-700 group-hover:text-blue-600" />
-                        <Link className="text-md text-gray-800 group-hover:text-blue-600 group-hover:font-semibold">
+                    <div className="flex gap-2 px-2 py-2">
+                        <UserCircle className="text-gray-700 " />
+                        <Link className="text-md text-gray-800 group-hover:font-semibold">
                             {user.name}
                         </Link>
                     </div>
