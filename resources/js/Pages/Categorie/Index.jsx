@@ -7,46 +7,8 @@ import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import CategorieRevenu from "@/Components/categorie/CategorieRevenu";
-import {
-    Banknote,
-    Car,
-    House,
-    Plus,
-    Salad,
-    ShoppingBag,
-    Wallet,
-    Wifi,
-    Briefcase,
-    CreditCard,
-    ShoppingCart,
-    HeartPulse,
-    Gamepad2,
-    Smartphone,
-    PiggyBank,
-    UtensilsCrossed,
-    Plane,
-    RefreshCw,
-} from "lucide-react";
-
-const ConfigIcon = {
-    Wallet: Wallet,
-    Banknote: Banknote,
-    Salad: Salad,
-    Car: Car,
-    ShoppingBag: ShoppingBag,
-    House: House,
-    Wifi: Wifi,
-    Briefcase: Briefcase,
-    CreditCard: CreditCard,
-    ShoppingCart: ShoppingCart,
-    HeartPulse: HeartPulse,
-    Gamepad2: Gamepad2,
-    Smartphone: Smartphone,
-    PiggyBank: PiggyBank,
-    UtensilsCrossed: UtensilsCrossed,
-    Plane: Plane,
-    RefreshCw: RefreshCw,
-};
+import { Plus } from "lucide-react";
+import { ConfigIcon } from "../lib/assets";
 
 const Index = () => {
     const { categories } = usePage().props;
