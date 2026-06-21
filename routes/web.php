@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/transaction-recurrentes', 'index')->name('transaction.recurrente.index');
         Route::post('/transaction-recurrentes', 'store')->name('transaction.recurrente.store');
         Route::put('/transaction-recurrentes/{transaction}', 'update')->name('transaction.recurrente.update');
-        Route::put('/transaction-recurrentes/{transaction}', 'destroy')->name('transaction.recurrente.destroy');
+        Route::delete('/transaction-recurrentes/{transaction}', 'destroy')->name('transaction.recurrente.destroy');
     });
 
     Route::get("/test", function () {

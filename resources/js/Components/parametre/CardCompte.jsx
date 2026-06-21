@@ -7,7 +7,7 @@ const CardCompte = () => {
     const { deleteAccount, isLoading } = useProfile();
 
     return (
-        <Card className="bg-red-100 border border-red-300 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
+        <Card className="bg-red-100 border border-red-300  border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
             <CardHeader className="border-b border-red-200">
                 <h2 className="text-red-700 text-md font-semibold">
                     Zone dangereuse
