@@ -1,7 +1,7 @@
 import ModalTransactionRecurrente from "@/Components/transaction/ModalTransactionRecurrente";
 import { Button } from "@/Components/ui/button";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { usePage } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import {
     MoreVerticalIcon,
     PauseIcon,
@@ -19,13 +19,19 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import useTransactionRecurrente from "@/hooks/useTransactionRecurrente";
 
 const Index = () => {
     const { transactions, frequences } = usePage().props;
 
     const [openModal, setOpenModal] = useState(false);
+    const {deleteTransaction} = useTransactionRecurrente()
 
-    const handleDelete = () => {};
+    const handleDelete = (id) => {
+        deleteTransaction(id);
+
+        router.visit("/transaction-recurrentes")
+    };
 
     return (
         <AuthenticatedLayout>
@@ -109,7 +115,7 @@ const Index = () => {
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuItem
-                                                onClick={handleDelete}
+                                                onClick={() => handleDelete(transaction.id)}
                                                 variant="destructive"
                                             >
                                                 Supprimer
