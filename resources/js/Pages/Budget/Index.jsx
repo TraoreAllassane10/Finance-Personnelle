@@ -95,7 +95,7 @@ const Index = () => {
 
             {/* Vue d'ensemble */}
             <section className="grid grid-cols-3 gap-6 mb-6">
-                <Card className="col-span-3 md:col-span-2 p-4">
+                <Card className="col-span-3 md:col-span-2 p-4 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
                     <CardHeader className="border-b border-gray-200">
                         <div className="flex place-items-center justify-between">
                             <div>
@@ -156,7 +156,7 @@ const Index = () => {
                 </Card>
 
                 <div className="flex flex-col gap-8 col-span-3 md:col-span-1">
-                    <Card className="p-4">
+                    <Card className="p-4 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
                         <div className="flex gap-2 place-items-center text-sm text-muted-foreground">
                             <TriangleAlert
                                 size={16}
@@ -174,7 +174,7 @@ const Index = () => {
                         </p>
                     </Card>
 
-                    <Card className="p-4">
+                    <Card className="p-4 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
                         <div className="flex gap-2 place-items-center text-sm text-muted-foreground">
                             <CircleAlert
                                 size={16}
@@ -207,7 +207,7 @@ const Index = () => {
                         ))}
                     </div>
                 ) : (
-                    <Card>
+                    <Card >
                         <CardContent className="flex flex-col items-center justify-center gap-4 p-6">
                             <Wallet size={32} className="text-gray-400" />
                             <p className="text-gray-800">

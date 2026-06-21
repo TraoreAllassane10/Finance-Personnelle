@@ -36,6 +36,7 @@ import CardStatistiques from "@/Components/dashboard/CardStatistiques";
 import { useState } from "react";
 import {
     Table,
+    TableBody,
     TableCell,
     TableHead,
     TableHeader,
@@ -45,13 +46,17 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/Components/ui/progress";
 import {
     ArrowDown,
+    ArrowDownIcon,
     ArrowUp,
+    ArrowUpIcon,
     Landmark,
+    PencilIcon,
     PiggyBank,
     TrendingDown,
     TrendingUp,
 } from "lucide-react";
 import { formatMontant } from "./lib/utils";
+import { cn } from "@/lib/utils";
 
 // Données pour le graphique Revenu - Depense
 export const description = "An interactive area chart";
@@ -220,7 +225,7 @@ export default function Dashboard() {
 
             {/* Le graphique */}
             <section className="grid grid-cols-3 gap-4 mb-6">
-                <Card className="pt-0 col-span-3 md:col-span-2">
+                <Card className="pt-0 col-span-3 md:col-span-2 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
                     <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                         <div className="grid flex-1 gap-1">
                             <CardTitle>Revenu - Dépense</CardTitle>
@@ -343,7 +348,7 @@ export default function Dashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="flex flex-col col-span-3 md:col-span-1">
+                <Card className="flex flex-col col-span-3 md:col-span-1 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
                     <CardHeader className="items-center pb-0">
                         <CardTitle>Dépense par catégorie</CardTitle>
                     </CardHeader>
@@ -380,7 +385,7 @@ export default function Dashboard() {
 
             {/* Recentes transactions et objectifs d'epargnes */}
             <section className="grid grid-cols-3 gap-4 w-full">
-                <Card className="pt-0 col-span-3 md:col-span-2">
+                <Card className="pt-0 col-span-3 md:col-span-2 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
                     <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                         <div className="grid flex-1 gap-1">
                             <CardTitle>Récentes transactions</CardTitle>
@@ -390,61 +395,104 @@ export default function Dashboard() {
                     <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
                         <Table>
                             <TableHeader>
-                                <TableRow className="bg-gray-50">
-                                    <TableHead className="font-semibold text-muted-foreground">
-                                        DATE
+                                <TableRow className="bg-muted/50 hover:bg-muted/50">
+                                    <TableHead className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground py-3 px-4">
+                                        Date
                                     </TableHead>
-                                    <TableHead className="font-semibold text-muted-foreground">
-                                        DESCRIPTION
+                                    <TableHead className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground py-3 px-4">
+                                        Description
                                     </TableHead>
-                                    <TableHead className="font-semibold text-muted-foreground">
-                                        CATEGORIE
+                                    <TableHead className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground py-3 px-4">
+                                        Catégorie
                                     </TableHead>
-                                    <TableHead className="font-semibold text-muted-foreground">
-                                        MONTANT
+                                    <TableHead className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground py-3 px-4">
+                                        Montant
                                     </TableHead>
                                 </TableRow>
+                            </TableHeader>
+
+                            <TableBody>
                                 {recenteTransactions.map((data) => (
-                                    <TableRow key={data.id}>
-                                        <TableCell className="text-muted-foreground font-semibold">
+                                    <TableRow
+                                        key={data.id}
+                                        className="border-b border-border/50 hover:bg-muted/30 transition-colors duration-100"
+                                    >
+                                        {/* Date */}
+                                        <TableCell className="py-3 px-4 text-xs text-muted-foreground whitespace-nowrap">
                                             {new Date(
                                                 data.date,
-                                            ).toLocaleDateString()}
+                                            ).toLocaleDateString("fr-CI", {
+                                                day: "2-digit",
+                                                month: "short",
+                                                year: "numeric",
+                                            })}
                                         </TableCell>
-                                        <TableCell className="text-gray-800 font-semibold">
-                                            {data.description}
+
+                                        {/* Description */}
+                                        <TableCell className="py-3 px-4">
+                                            <p className="text-sm font-medium text-foreground">
+                                                {data.description}
+                                            </p>
                                         </TableCell>
-                                        <TableCell className="text-muted-foreground">
+
+                                        {/* Catégorie */}
+                                        <TableCell className="py-3 px-4">
+                                            {data.category && (
+                                                <span
+                                                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium"
+                                                    style={{
+                                                        backgroundColor:
+                                                            data.category
+                                                                .couleur + "18",
+                                                        color: data.category
+                                                            .couleur,
+                                                    }}
+                                                >
+                                                    <span
+                                                        className="size-1.5 rounded-full flex-shrink-0"
+                                                        style={{
+                                                            backgroundColor:
+                                                                data.category
+                                                                    .couleur,
+                                                        }}
+                                                    />
+                                                    {data.category.nom}
+                                                </span>
+                                            )}
+                                        </TableCell>
+
+                                        {/* Montant */}
+                                        <TableCell className="py-3 px-4">
                                             <span
-                                                style={{
-                                                    backgroundColor:
-                                                        data.category?.couleur,
-                                                    color: "white",
-                                                    fontWeight: "500",
-                                                }}
-                                                className={`px-2 py-0.5 text-center rounded-full`}
+                                                className={cn(
+                                                    "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium",
+                                                    data.type === "revenu"
+                                                        ? "bg-emerald-50 text-emerald-700"
+                                                        : "bg-red-50 text-red-700",
+                                                )}
                                             >
-                                                {data.category?.nom}
-                                            </span>
-                                        </TableCell>
-                                        <TableCell className="text-muted-foreground">
-                                            <span
-                                                className={`${data.type === "revenu" ? "text-green-500" : "text-red-500"} font-bold`}
-                                            >
-                                                {data.type === "revenu"
-                                                    ? "+ "
-                                                    : "- "}
-                                                {formatMontant(data.montant)}
+                                                {data.type === "revenu" ? (
+                                                    <ArrowDownIcon size={11} />
+                                                ) : (
+                                                    <ArrowUpIcon size={11} />
+                                                )}
+                                                {data.montant.toLocaleString(
+                                                    "fr-CI",
+                                                    {
+                                                        style: "currency",
+                                                        currency: "XOF",
+                                                    },
+                                                )}
                                             </span>
                                         </TableCell>
                                     </TableRow>
                                 ))}
-                            </TableHeader>
+                            </TableBody>
                         </Table>
                     </CardContent>
                 </Card>
 
-                <Card className="flex flex-col col-span-3 md:col-span-1">
+                <Card className="flex flex-col col-span-3 md:col-span-1 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
                     <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                         <CardTitle>Objectifs d'epargne</CardTitle>
                     </CardHeader>
@@ -468,7 +516,13 @@ export default function Dashboard() {
                                                     {objectif.nom}
                                                 </h3>
                                                 <p className="text-muted-foreground text-xs">
-                                                   {formatMontant(objectif.montant_total_epargne)} / {formatMontant(objectif.montant_cible)}
+                                                    {formatMontant(
+                                                        objectif.montant_total_epargne,
+                                                    )}{" "}
+                                                    /{" "}
+                                                    {formatMontant(
+                                                        objectif.montant_cible,
+                                                    )}
                                                 </p>
                                             </div>
                                             <span className="ml-auto t-primary">

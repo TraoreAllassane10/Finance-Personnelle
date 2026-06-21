@@ -444,7 +444,7 @@ const Epargnes = () => {
             {/* Carte Total et compte actifs */}
             <section className="grid md:grid-cols-3  gap-4 mb-6">
                 {/* Carte Total */}
-                <Card className="col-span-3 md:col-span-1 p-4 bg-gradient-to-br from-white to-yellow-50">
+                <Card className="col-span-3 md:col-span-1 p-4 bg-gradient-to-br from-white to-yellow-50 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
                     <div className="flex place-items-center gap-2 mb-4">
                         <Landmark size={16} className="text-yellow-500" />
                         <span className="text-sm text-muted-foreground uppercase">
@@ -469,7 +469,7 @@ const Epargnes = () => {
                 </Card>
 
                 {/* Carte de compte actifs */}
-                <Card className="col-span-3 md:col-span-2">
+                <Card className="col-span-3 md:col-span-2 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
                     <CardHeader className="border-b border-gray-200 text-gray-800 font-semibold text-xl">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
@@ -532,7 +532,7 @@ const Epargnes = () => {
             {/* Carte objectifs et virement recent */}
             <section className="grid grid-cols-3 gap-4">
                 {/* Carte des objectifs */}
-                <Card className="col-span-3 md:col-span-1">
+                <Card className="col-span-3 md:col-span-1 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
                     <CardHeader className="border-b border-gray-200 text-gray-800 font-semibold text-xl">
                         <div className="flex items-center gap-2">
                             <GoalIcon className="text-yellow-500" />
@@ -605,7 +605,7 @@ const Epargnes = () => {
                 </Card>
 
                 {/* Carte des dépôts recents */}
-                <Card className="col-span-3 md:col-span-2">
+                <Card className="col-span-3 md:col-span-2 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
                     <CardHeader className="border-b border-gray-200 text-gray-800 font-semibold text-xl">
                         <div className="flex justify-between">
                             <h2>Dépôts récents</h2>

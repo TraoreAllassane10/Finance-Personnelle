@@ -1,4 +1,3 @@
-
 import { Plus } from "lucide-react";
 import React from "react";
 
@@ -7,14 +6,14 @@ const CategorieRevenu = ({ categories, ConfigIcon, setOpenModal }) => {
         <div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                 {categories
-                   .filter((c) => c.type === "revenu")
+                    .filter((c) => c.type === "revenu")
                     .map(({ id, nom, icon, couleur, transactions_count }) => {
-                       const Icon = ConfigIcon[icon];
+                        const Icon = ConfigIcon[icon];
 
                         return (
                             <div
                                 key={id}
-                                className="bg-white border border-gray-200 rounded-lg p-8 "
+                                className="bg-white border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150 p-8 "
                             >
                                 {/* Icon */}
                                 <div

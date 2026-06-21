@@ -6,10 +6,8 @@ import {
     LogOut,
     Landmark,
     Banknote,
-    ChartColumnDecreasingIcon,
     Wallet2,
     Box,
-    UserCircle,
 } from "lucide-react";
 import React from "react";
 import { cn } from "@/lib/utils";
@@ -20,9 +18,12 @@ const mainMenu = [
     { name: "Dépenses", icon: Wallet2, route: "depenses" },
     { name: "Épargnes", icon: PiggyBank, route: "epargnes" },
     { name: "Budgets", icon: Wallet2, route: "budgets" },
-    { name: "Transactions récurrentes", icon: Wallet2, route: "transaction-recurrentes" },
+    {
+        name: "Transactions récurrentes",
+        icon: Wallet2,
+        route: "transaction-recurrentes",
+    },
     { name: "Catégories", icon: Box, route: "categories" },
-    { name: "Rapports", icon: ChartColumnDecreasingIcon, route: "dashboard" },
     { name: "Paramètres", icon: Settings, route: "parametres" },
 ];
 
@@ -63,7 +64,7 @@ export const Sidebar = () => {
                                     "flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-colors",
                                     active
                                         ? "text-blue-600"
-                                        : "text-muted-foreground hover:text-foreground"
+                                        : "text-muted-foreground hover:text-foreground",
                                 )}
                             >
                                 <Icon size={20} />
@@ -78,7 +79,6 @@ export const Sidebar = () => {
 
             {/* Menu Desktop */}
             <div className="hidden lg:flex flex-col fixed w-56 h-full bg-background border-r border-border/60">
-
                 {/* Logo */}
                 <div className="flex items-center gap-2.5 px-5 py-5 border-b border-border/60">
                     <div className="size-7 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -103,7 +103,7 @@ export const Sidebar = () => {
                                     "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors duration-150 group",
                                     active
                                         ? "bg-blue-50 text-blue-600 font-medium"
-                                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
                                 )}
                             >
                                 <Icon
@@ -112,7 +112,7 @@ export const Sidebar = () => {
                                         "flex-shrink-0 transition-colors",
                                         active
                                             ? "text-blue-600"
-                                            : "text-muted-foreground group-hover:text-foreground"
+                                            : "text-muted-foreground group-hover:text-foreground",
                                     )}
                                 />
                                 <span className="truncate">{item.name}</span>

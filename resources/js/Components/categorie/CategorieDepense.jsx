@@ -12,7 +12,7 @@ const CategorieDepense = ({ categories, ConfigIcon, setOpenModal }) => {
                         return (
                             <div
                                 key={id}
-                                className="bg-white border border-gray-200 rounded-lg p-8 "
+                                className="bg-white border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150 p-8 "
                             >
                                 {/* Icon */}
                                 <div
