@@ -18,7 +18,8 @@ class TransactionRecurrente extends Model
         'description',
         'frequence',
         'active',
-        'user_id'
+        'user_id',
+        'next_run_at'
     ];
 
     protected $with = ['category'];

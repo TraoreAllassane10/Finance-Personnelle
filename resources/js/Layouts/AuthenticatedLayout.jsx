@@ -16,7 +16,7 @@ export default function AuthenticatedLayout({ header, children }) {
             {/* Modal d'ajout et de modification de transaction */}
             {open && <ModalTransaction typeModal="ajout" setOpenModal={setOpen} />}
 
-            <main className="lg:ml-[16.666667%]">
+            <main className="lg:ml-[224px]">
                 <Header setOpenModal={setOpen} />
 
                 <div className="px-8 py-10">{children}</div>
