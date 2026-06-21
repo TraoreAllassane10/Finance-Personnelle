@@ -28,7 +28,9 @@ class ProcessTransactionRecurrente extends Command
      */
     public function handle()
     {
-        $transactionRecurrentes = TransactionRecurrente::where("next_run_at", "<=", now())->get();
+        $transactionRecurrentes = TransactionRecurrente::where('active', 1)
+            ->where("next_run_at", "<=", now())
+            ->get();
 
         // Création d'une transaction pour chaque transaction recurrente trouvée
         foreach ($transactionRecurrentes as $recurrente) {

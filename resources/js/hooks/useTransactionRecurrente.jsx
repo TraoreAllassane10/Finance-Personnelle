@@ -126,10 +126,52 @@ export default function useTransactionRecurrente() {
         }
     };
 
+    const toggleActive = async (id) => {
+        try {
+            try {
+                setLoading(true);
+
+                await axios
+                    .get(`/transaction-recurrentes/${id}/toogle-active`)
+                    .then((response) => {
+                        if (response.data.success) {
+                            setLoading(false);
+
+                            toast.success(response.data.message, {
+                                position: "top-center",
+                            });
+                        } else {
+                            toast.error(response.data.message, {
+                                position: "top-center",
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        toast.error(
+                            "Erreur survenue lors de la mise à jour d'une transaction",
+                            { position: "top-center" },
+                        );
+                        console.log(
+                            "Erreur survenue lors de la mise à jour d'une transaction",
+                            error,
+                        );
+                    });
+            } catch (error) {
+                toast.error("Erreur survenue au niveau du serveur", {
+                    position: "top-center",
+                });
+                console.log("Erreur dans toggleActive", error);
+            } finally {
+                setLoading(false);
+            }
+        } catch (error) {}
+    };
+
     return {
         updateTransaction,
         createTransaction,
         deleteTransaction,
+        toggleActive,
         isLoading,
     };
 }

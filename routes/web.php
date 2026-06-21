@@ -74,7 +74,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/transaction-recurrentes', 'store')->name('transaction.recurrente.store');
         Route::put('/transaction-recurrentes/{transaction}', 'update')->name('transaction.recurrente.update');
         Route::delete('/transaction-recurrentes/{transaction}', 'destroy')->name('transaction.recurrente.destroy');
-    });
+        Route::get("/transaction-recurrentes/{transaction}/toogle-active", "toggleActive")->name("transaction.recurrente.toogle.active");
+        });
 
     Route::get("/test", function () {
         return response()->json('Ceci est un test');

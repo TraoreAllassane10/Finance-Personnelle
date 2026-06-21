@@ -25,12 +25,18 @@ const Index = () => {
     const { transactions, frequences } = usePage().props;
 
     const [openModal, setOpenModal] = useState(false);
-    const {deleteTransaction} = useTransactionRecurrente()
+    const { deleteTransaction, toggleActive } = useTransactionRecurrente();
 
     const handleDelete = (id) => {
         deleteTransaction(id);
 
-        router.visit("/transaction-recurrentes")
+        router.visit("/transaction-recurrentes");
+    };
+
+    const handleToggleActive = (id) => {
+        toggleActive(id);
+
+        router.visit("/transaction-recurrentes");
     };
 
     return (
@@ -115,7 +121,9 @@ const Index = () => {
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuItem
-                                                onClick={() => handleDelete(transaction.id)}
+                                                onClick={() =>
+                                                    handleDelete(transaction.id)
+                                                }
                                                 variant="destructive"
                                             >
                                                 Supprimer
@@ -163,6 +171,11 @@ const Index = () => {
                                         <button
                                             className="size-8 flex items-center justify-center rounded-full bg-red-50 text-red-500 hover:bg-red-100 border border-red-100 transition-colors duration-150"
                                             title="Mettre en pause"
+                                            onClick={() =>
+                                                handleToggleActive(
+                                                    transaction.id,
+                                                )
+                                            }
                                         >
                                             <PauseIcon size={13} />
                                         </button>
@@ -170,6 +183,11 @@ const Index = () => {
                                         <button
                                             className="size-8 flex items-center justify-center rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-100 transition-colors duration-150"
                                             title="Reprendre"
+                                            onClick={() =>
+                                                handleToggleActive(
+                                                    transaction.id,
+                                                )
+                                            }
                                         >
                                             <PlayIcon size={13} />
                                         </button>
