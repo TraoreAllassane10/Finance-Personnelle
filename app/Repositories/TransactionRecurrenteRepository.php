@@ -28,4 +28,11 @@ class TransactionRecurrenteRepository
     {
         return $transaction->delete();
     }
+
+    public function toggleActive(TransactionRecurrente $transaction)
+    {
+       return $transaction->update([
+            "active" => $transaction->active === 1 ? 0 : 1
+        ]);
+    }
 }

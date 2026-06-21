@@ -59,4 +59,9 @@ class TransactionRecurrenteService
     {
         return $this->transactionRecurrenteRepository->delete($transaction);
     }
+
+    public function toggleActive(TransactionRecurrente $transaction)
+    {
+       return $this->transactionRecurrenteRepository->toggleActive($transaction);
+    }
 }

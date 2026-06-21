@@ -65,4 +65,15 @@ class TransactionRecurrenteController extends Controller
             return response()->json(['success' => false, 'message' => 'Erreur survenu lors de la suppression d\'une transaction']);
         }
     }
+
+    public function toggleActive(TransactionRecurrente $transaction) {
+        try {
+            $this->transactionRecurrenteService->toggleActive($transaction);
+          
+            return response()->json(['success' => true, 'message' => 'Mise à jour reussie']);
+        } catch (Exception $e) {
+            Log::error('Erreur survenu lors de la mise à jour du champ active d\'une transaction recurrente', ['erreur' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => 'Erreur survenu lors de la mise à jour d\'une transaction recurrente']);
+        }
+    }
 }
