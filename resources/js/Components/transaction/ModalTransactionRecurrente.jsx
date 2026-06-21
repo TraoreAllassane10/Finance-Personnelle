@@ -2,7 +2,6 @@ import { Loader2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
 import {
     Select,
     SelectContent,
@@ -14,6 +13,7 @@ import { Button } from "../ui/button";
 import { router } from "@inertiajs/react";
 import useCategorie from "@/hooks/useCategorie";
 import useTransactionRecurrente from "@/hooks/useTransactionRecurrente";
+import { cn } from "@/lib/utils";
 
 const ModalTransactionRecurrente = ({ frequences, setOpenModal }) => {
     const [categories, setCategories] = useState([]);
@@ -42,14 +42,12 @@ const ModalTransactionRecurrente = ({ frequences, setOpenModal }) => {
     const { createTransaction, isLoading } = useTransactionRecurrente();
     const { getCategories, isLoading: isLoadingCategorie } = useCategorie();
 
-    // Recuperation des categories lors du montage du composant
     useEffect(() => {
-        async function fethCategories() {
+        async function fetchCategories() {
             const data = await getCategories();
             setCategories(data);
         }
-
-        fethCategories();
+        fetchCategories();
     }, []);
 
     useEffect(() => {
@@ -65,7 +63,6 @@ const ModalTransactionRecurrente = ({ frequences, setOpenModal }) => {
 
     const handleSubmit = async () => {
         await createTransaction(data);
-
         setData({
             type: "depense",
             montant: null,
@@ -74,204 +71,187 @@ const ModalTransactionRecurrente = ({ frequences, setOpenModal }) => {
             description: "",
             frequence: "",
         });
-
         setOpenModal(false);
-
         router.reload(0);
     };
+
+    const fieldClass =
+        "h-9 text-sm text-foreground placeholder:text-muted-foreground/50 border-border/60 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:border-blue-500 rounded-lg transition";
 
     if (isLoadingCategorie) {
         return (
             <div className="fixed inset-0 z-40 flex items-center justify-center">
-                <div className="absolute inset-0 bg-black/50 backdrop-blur-md"></div>
-
-                <Loader2 className=" animate-spin" />
+                <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+                <Loader2 className="animate-spin text-white" size={24} />
             </div>
         );
     }
 
     return (
         <div className="fixed inset-0 z-40 flex items-center justify-center">
-            <div className="absolute inset-0 bg-black/50 backdrop-blur-md"></div>
+            <div
+                className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                onClick={() => setOpenModal(false)}
+            />
 
-            <div className="bg-white w-[400px] rounded-lg absolute top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
-                <div className="p-4">
-                    {/* Entete */}
-                    <div className="flex justify-between place-items-center">
-                        <h2 className="text-md font-bold text-gray-600">
-                            Ajouter une transaction récurrente
-                        </h2>
+            <div className="bg-background w-[420px] rounded-xl border border-border/60 shadow-lg absolute top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
 
-                        <button onClick={() => setOpenModal(false)}>
-                            <X className="text-gray-600" />
-                        </button>
-                    </div>
-
-                    <hr className="w-full my-4 border-1 border-gray-300" />
-
-                    {/* Tabs de choix */}
-                    <div className="w-full bg-gray-100 rounded-lg p-1 mb-4">
-                        <div className="flex">
-                            <button
-                                onClick={() => {
-                                    handleChange("type", "depense");
-                                }}
-                                className={`w-1/2 py-1 text-sm font-medium text-gray-600 rounded-md transition duration-100 shadow-sm ${data.type === "depense" && "bg-white"}`}
-                            >
-                                Dépense
-                            </button>
-                            <button
-                                onClick={() => {
-                                    handleChange("type", "revenu");
-                                }}
-                                className={`w-1/2  text-sm font-medium text-gray-600 rounded-md transition duration-100 shadow-sm ${data.type === "revenu" && "bg-white"}`}
-                            >
-                                Revenu
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* champs de saisie */}
-                    <div className="mb-4">
-                        <div className="flex flex-col gap-4">
-                            {/* Montant */}
-                            <div className="w-full flex flex-col gap-2">
-                                <Label className="text-xs font-bold text-muted-foreground">
-                                    Montant
-                                </Label>
-                                <Input
-                                    value={data.montant}
-                                    onChange={(e) =>
-                                        handleChange("montant", e.target.value)
-                                    }
-                                    type="number"
-                                    placeholder="10000"
-                                    className="h-7 py-1 text-muted-foreground placeholder:text-muted-foreground/50 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
-                                />
-                            </div>
-
-                            {/* Date Echeance */}
-                            <div className="flex flex-col gap-2 ">
-                                <Label className="text-xs font-bold text-muted-foreground">
-                                    Date d'echéance
-                                </Label>
-                                <Input
-                                    type="date"
-                                    value={data.date_echeance}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            "date_echeance",
-                                            e.target.value,
-                                        )
-                                    }
-                                    className="h-7 py-1 text-sm text-muted-foreground  border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
-                                />
-                            </div>
-
-                            {/* Categorie */}
-                            <div className="flex flex-col gap-1 w-full">
-                                <div className="flex flex-col gap-2">
-                                    <Label className="text-xs font-bold text-muted-foreground">
-                                        Categorie
-                                    </Label>
-
-                                    <Select
-                                        value={data.category_id}
-                                        onValueChange={(value) =>
-                                            handleChange("category_id", value)
-                                        }
-                                        className="h-7 text-sm text-muted-foreground border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
-                                    >
-                                        <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="Sélectionner une catégorie" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {categories
-                                                .filter(
-                                                    (c) => c.type === data.type,
-                                                )
-                                                .map((categorie) => (
-                                                    <SelectItem
-                                                        value={categorie.id}
-                                                        key={categorie.id}
-                                                    >
-                                                        {categorie.nom}
-                                                    </SelectItem>
-                                                ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-
-                            {/* Description */}
-                            <div className="w-full flex flex-col gap-2">
-                                <Label className="text-xs font-bold text-muted-foreground">
-                                    Description
-                                </Label>
-                                <Input
-                                    type="text"
-                                    value={data.description}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            "description",
-                                            e.target.value,
-                                        )
-                                    }
-                                    placeholder="Ex: Courses hebdomadaires"
-                                    className="h-7 py-1 text-muted-foreground placeholder:text-muted-foreground/50 text-sm border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
-                                />
-                            </div>
-
-                            {/* Frequence */}
-                            <div className="flex flex-col gap-1 w-full">
-                                <div className="flex flex-col gap-2">
-                                    <Label className="text-xs font-bold text-muted-foreground">
-                                        Frequence
-                                    </Label>
-
-                                    <Select
-                                        value={data.frequence}
-                                        onValueChange={(value) =>
-                                            handleChange("frequence", value)
-                                        }
-                                        className="h-7 text-sm text-muted-foreground border-1 border-gray-200 rounded-md focus:ring-1 focus:ring-blue-600 transition"
-                                    >
-                                        <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="Sélectionner une frequence" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {frequences.map((fq) => (
-                                                <SelectItem value={fq}>
-                                                    {fq}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                {/* Header */}
+                <div className="flex items-center justify-between px-5 py-4 border-b border-border/60">
                     <div>
-                        <hr className="w-full my-4 border-1 border-gray-300" />
+                        <h2 className="text-sm font-semibold text-foreground">
+                            Nouvelle transaction récurrente
+                        </h2>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                            Définissez une transaction automatique
+                        </p>
+                    </div>
+                    <button
+                        onClick={() => setOpenModal(false)}
+                        className="size-7 flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted border border-border/50 transition-colors"
+                    >
+                        <X size={14} />
+                    </button>
+                </div>
 
-                        <div className="mt-2 flex gap-2 justify-end">
-                            <Button
-                                variant="outline"
-                                onClick={() => setOpenModal(false)}
-                                className="text-xs"
-                            >
-                                Annuler
-                            </Button>
-                            <Button
-                                disabled={!canSubmit || isLoading}
-                                onClick={handleSubmit}
-                                className="bg-blue-600 text-white text-xs rounded-md px-2 py-2 hover:bg-blue-800 transition duration-300"
-                            >
-                                Ajouter une transaction
-                            </Button>
+                <div className="px-5 py-4 space-y-4">
+
+                    {/* Toggle type */}
+                    <div className="w-full bg-muted rounded-lg p-1">
+                        <div className="flex gap-1">
+                            {[
+                                { value: "depense", label: "Dépense" },
+                                { value: "revenu", label: "Revenu" },
+                            ].map((tab) => (
+                                <button
+                                    key={tab.value}
+                                    onClick={() => handleChange("type", tab.value)}
+                                    className={cn(
+                                        "flex-1 py-1.5 text-xs font-medium rounded-md transition-all duration-150",
+                                        data.type === tab.value
+                                            ? tab.value === "depense"
+                                                ? "bg-background text-red-600 shadow-sm border border-border/50"
+                                                : "bg-background text-emerald-600 shadow-sm border border-border/50"
+                                            : "text-muted-foreground hover:text-foreground"
+                                    )}
+                                >
+                                    {tab.label}
+                                </button>
+                            ))}
                         </div>
                     </div>
+
+                    {/* Montant */}
+                    <div className="space-y-1.5">
+                        <Label className="text-xs font-medium text-muted-foreground">
+                            Montant
+                        </Label>
+                        <Input
+                            value={data.montant}
+                            onChange={(e) => handleChange("montant", e.target.value)}
+                            type="number"
+                            placeholder="10 000"
+                            className={fieldClass}
+                        />
+                    </div>
+
+                    {/* Date échéance + Fréquence */}
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1.5">
+                            <Label className="text-xs font-medium text-muted-foreground">
+                                Date d'échéance
+                            </Label>
+                            <Input
+                                type="date"
+                                value={data.date_echeance}
+                                onChange={(e) => handleChange("date_echeance", e.target.value)}
+                                className={fieldClass}
+                            />
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <Label className="text-xs font-medium text-muted-foreground">
+                                Fréquence
+                            </Label>
+                            <Select
+                                value={data.frequence}
+                                onValueChange={(value) => handleChange("frequence", value)}
+                            >
+                                <SelectTrigger className={cn(fieldClass, "w-full")}>
+                                    <SelectValue placeholder="Sélectionner" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {frequences.map((fq) => (
+                                        <SelectItem key={fq} value={fq}>
+                                            {fq}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+
+                    {/* Catégorie */}
+                    <div className="space-y-1.5">
+                        <Label className="text-xs font-medium text-muted-foreground">
+                            Catégorie
+                        </Label>
+                        <Select
+                            value={data.category_id}
+                            onValueChange={(value) => handleChange("category_id", value)}
+                        >
+                            <SelectTrigger className={cn(fieldClass, "w-full")}>
+                                <SelectValue placeholder="Sélectionner une catégorie" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {categories
+                                    .filter((c) => c.type === data.type)
+                                    .map((categorie) => (
+                                        <SelectItem
+                                            value={categorie.id}
+                                            key={categorie.id}
+                                        >
+                                            {categorie.nom}
+                                        </SelectItem>
+                                    ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {/* Description */}
+                    <div className="space-y-1.5">
+                        <Label className="text-xs font-medium text-muted-foreground">
+                            Description
+                        </Label>
+                        <Input
+                            type="text"
+                            value={data.description}
+                            onChange={(e) => handleChange("description", e.target.value)}
+                            placeholder="Ex: Abonnement Netflix"
+                            className={fieldClass}
+                        />
+                    </div>
+                </div>
+
+                {/* Footer */}
+                <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-border/60 bg-muted/30 rounded-b-xl">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setOpenModal(false)}
+                        className="text-xs h-8 border border-border/50"
+                    >
+                        Annuler
+                    </Button>
+                    <Button
+                        size="sm"
+                        disabled={!canSubmit || isLoading}
+                        onClick={handleSubmit}
+                        className="text-xs h-8 bg-blue-600 hover:bg-blue-700 text-white gap-1.5"
+                    >
+                        {isLoading && <Loader2 size={12} className="animate-spin" />}
+                        Ajouter
+                    </Button>
                 </div>
             </div>
         </div>

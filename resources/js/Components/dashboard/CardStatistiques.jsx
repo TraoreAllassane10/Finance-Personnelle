@@ -6,7 +6,7 @@ const CardStatistiques = ({ stats, className }) => {
     return (
         <div className={`grid grid-cols-1 md:grid-cols-4 gap-4 ${className}`}>
             {stats.map((stat) => (
-                <Card className="p-4" key={stat.nom}>
+                <Card className="p-4 border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150" key={stat.nom}>
                     <div className="flex justify-between">
                         <h3 className="text-sm text-muted-foreground">
                             {stat.nom}

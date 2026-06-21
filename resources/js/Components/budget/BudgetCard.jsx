@@ -81,7 +81,7 @@ const BudgetCard = ({ budget }) => {
     };
 
     return (
-        <Card>
+        <Card className="border border-border/60 shadow-none rounded-xl overflow-hidden hover:border-border/80 transition-colors duration-150">
             <CardHeader className="border-b">
                 <div className="flex items-center justify-between place-items-center">
                     <div className="flex gap-4 place-items-center">

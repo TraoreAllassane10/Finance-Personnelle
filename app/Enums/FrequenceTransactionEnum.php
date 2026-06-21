@@ -8,5 +8,5 @@ enum FrequenceTransactionEnum: string
     case HEBDOMADAIRE = "Hebdomadaire";
     case MENSUELLE = "Mensuelle";
     case ANNUELLE = "Annuelle";
-    case INDEFINIE = "Indefinie";
+    // case INDEFINIE = "Indefinie";
 }

@@ -6,63 +6,42 @@ import {
     LogOut,
     Landmark,
     Banknote,
-    ChartColumnDecreasingIcon,
     Wallet2,
     Box,
-    UserCircle,
 } from "lucide-react";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 const mainMenu = [
+    { name: "Dashboard", icon: LayoutDashboard, route: "dashboard" },
+    { name: "Revenus", icon: Banknote, route: "revenus" },
+    { name: "Dépenses", icon: Wallet2, route: "depenses" },
+    { name: "Épargnes", icon: PiggyBank, route: "epargnes" },
+    { name: "Budgets", icon: Wallet2, route: "budgets" },
     {
-        name: "Dashboard",
-        icon: LayoutDashboard,
-        route: "dashboard",
-    },
-    {
-        name: "Revenus",
-        icon: Banknote,
-        route: "revenus",
-    },
-    {
-        name: "Dépenses",
-        icon: Wallet2,
-        route: "depenses",
-    },
-    {
-        name: "Épargnes",
-        icon: PiggyBank,
-        route: "epargnes",
-    },
-    {
-        name: "Budgets",
-        icon: Wallet2,
-        route: "budgets",
-    },
-    {
-        name: "Transactions Recurrentes",
+        name: "Transactions récurrentes",
         icon: Wallet2,
         route: "transaction-recurrentes",
     },
-    {
-        name: "categories",
-        icon: Box,
-        route: "categories",
-    },
-    {
-        name: "Rapports",
-        icon: ChartColumnDecreasingIcon,
-        route: "dashboard",
-    },
-    {
-        name: "Paramètres",
-        icon: Settings,
-        route: "parametres",
-    },
+    { name: "Catégories", icon: Box, route: "categories" },
+    { name: "Paramètres", icon: Settings, route: "parametres" },
+];
+
+const mobileMenu = [
+    { icon: LayoutDashboard, route: "dashboard", label: "Dashboard" },
+    { icon: Banknote, route: "revenus", label: "Revenus" },
+    { icon: Wallet2, route: "depenses", label: "Dépenses" },
+    { icon: PiggyBank, route: "epargnes", label: "Épargnes" },
+    { icon: Wallet2, route: "budgets", label: "Budgets" },
+    { icon: Settings, route: "parametres", label: "Paramètres" },
 ];
 
 export const Sidebar = () => {
     const { user } = usePage().props.auth;
+    const currentUrl = usePage().url;
+
+    const isActive = (route) =>
+        currentUrl === `/${route}` || currentUrl.startsWith(`/${route}/`);
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -72,121 +51,104 @@ export const Sidebar = () => {
     return (
         <>
             {/* Menu Mobile */}
-            <div className="block lg:hidden fixed z-50 bottom-0 left-0 w-full bg-white shadow-sm border-t border-gray-200">
-                <div className="">
-                    <div className="flex flex-row gap-7 px-10 text-white  my-4">
-                        <div className="flex  py-2 hover:bg-indigo-900 hover:bg-opacity-5 transition">
+            <div className="block lg:hidden fixed z-50 bottom-0 left-0 w-full bg-background border-t border-border/60 shadow-sm">
+                <div className="flex justify-around items-center px-2 py-2">
+                    {mobileMenu.map((item) => {
+                        const Icon = item.icon;
+                        const active = isActive(item.route);
+                        return (
                             <Link
-                                href={route("dashboard")}
-                                className="text-xl text-gray-800"
+                                key={item.route}
+                                href={`/${item.route}`}
+                                className={cn(
+                                    "flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-colors",
+                                    active
+                                        ? "text-blue-600"
+                                        : "text-muted-foreground hover:text-foreground",
+                                )}
                             >
-                                <LayoutDashboard
-                                    className="text-gray-500"
-                                    size={24}
-                                />
+                                <Icon size={20} />
+                                <span className="text-[10px] font-medium">
+                                    {item.label}
+                                </span>
                             </Link>
-                        </div>
-
-                        <div className="flex py-2 hover:bg-opacity-5 transition">
-                            <Link
-                                href={route("revenus")}
-                                className="text-xl text-gray-800"
-                            >
-                                <Banknote className="text-gray-500" size={24} />
-                            </Link>
-                        </div>
-
-                        <div className="flex py-2  transition">
-                            <Link
-                                href={route("depenses")}
-                                className="text-xl text-gray-800"
-                            >
-                                <Wallet2 className="text-gray-500" size={24} />
-                            </Link>
-                        </div>
-
-                        <div className="flex  py-2  transition">
-                            <Link href={route("epargnes")}>
-                                <PiggyBank
-                                    className="text-gray-500"
-                                    size={24}
-                                />
-                            </Link>
-                        </div>
-
-                        <div className="flex  py-2  transition">
-                            <Link href={route("budgets")}>
-                                <Wallet2 className="text-gray-500" size={24} />
-                            </Link>
-                        </div>
-
-                        <div className="flex py-2 transition">
-                            <Link
-                                href={route("parametres")}
-                                className=" hover:text-indigo-800"
-                            >
-                                <Settings className="text-white" size={24} />
-                            </Link>
-                        </div>
-                    </div>
+                        );
+                    })}
                 </div>
             </div>
 
             {/* Menu Desktop */}
-            <div className="hidden lg:block fixed w-1/6 h-full bg-white shadow-sm border-r">
-                <div>
-                    {/* Logo et nom */}
-                    <div className="flex items-center gap-2 p-6">
-                        <Landmark
-                            size={24}
-                            className="text-white bg-blue-700 p-1 rounded-md"
-                        />
-                        <span className="text-xl font-semibold">
-                            FinanceApp
-                        </span>
+            <div className="hidden lg:flex flex-col fixed w-56 h-full bg-background border-r border-border/60">
+                {/* Logo */}
+                <div className="flex items-center gap-2.5 px-5 py-5 border-b border-border/60">
+                    <div className="size-7 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Landmark size={14} className="text-white" />
                     </div>
-
-                    {/* Menu */}
-                    <div className="flex flex-col gap-4 mx-4 my-2">
-                        {mainMenu.map((item, index) => {
-                            const Icon = item.icon;
-
-                            return (
-                                <div
-                                    key={index}
-                                    className="flex gap-2 px-2 py-2 hover:bg-blue-50 hover:text-blue-600 hover:border-r-4 hover:border-blue-600 hover:rounded-md group transition duration-300"
-                                >
-                                    <Icon className="text-gray-700 group-hover:text-blue-600" />
-                                    <Link
-                                        // href={route(`/${item.route}`)}
-                                        href={`/${item.route}`}
-                                        className="text-md text-gray-800 group-hover:text-blue-600 group-hover:font-semibold truncate"
-                                    >
-                                        {item.name}
-                                    </Link>
-                                </div>
-                            );
-                        })}
-                    </div>
+                    <span className="text-sm font-semibold text-foreground tracking-tight">
+                        FinanceApp
+                    </span>
                 </div>
 
-                <div className="flex flex-col gap-2 mx-4 absolute bottom-4 left-0 border-t pt-2 w-[90%]">
-                    <div className="flex gap-2 px-2 py-2">
-                        <UserCircle className="text-gray-700 " />
-                        <Link className="text-md text-gray-800 group-hover:font-semibold">
-                            {user.name}
-                        </Link>
+                {/* Nav items */}
+                <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+                    {mainMenu.map((item, index) => {
+                        const Icon = item.icon;
+                        const active = isActive(item.route);
+
+                        return (
+                            <Link
+                                key={index}
+                                href={`/${item.route}`}
+                                className={cn(
+                                    "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors duration-150 group",
+                                    active
+                                        ? "bg-blue-50 text-blue-600 font-medium"
+                                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                                )}
+                            >
+                                <Icon
+                                    size={16}
+                                    className={cn(
+                                        "flex-shrink-0 transition-colors",
+                                        active
+                                            ? "text-blue-600"
+                                            : "text-muted-foreground group-hover:text-foreground",
+                                    )}
+                                />
+                                <span className="truncate">{item.name}</span>
+                                {active && (
+                                    <span className="ml-auto size-1.5 rounded-full bg-blue-600 flex-shrink-0" />
+                                )}
+                            </Link>
+                        );
+                    })}
+                </nav>
+
+                {/* Footer utilisateur */}
+                <div className="px-3 py-3 border-t border-border/60 space-y-0.5">
+                    <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg">
+                        <div className="size-7 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                            <span className="text-xs font-medium text-muted-foreground uppercase">
+                                {user.name?.charAt(0)}
+                            </span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-foreground truncate">
+                                {user.name}
+                            </p>
+                        </div>
                     </div>
 
-                    <div
+                    <button
                         onClick={handleLogout}
-                        className="flex gap-2 px-2 py-2 hover:bg-blue-50 hover:text-blue-600 hover:border-r-4 hover:border-blue-600 hover:rounded-md group transition duration-300"
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-red-50 hover:text-red-600 transition-colors duration-150 group"
                     >
-                        <LogOut className="text-gray-700 group-hover:text-blue-600" />
-                        <Link className="text-md text-gray-800 group-hover:text-blue-600 group-hover:font-semibold">
-                            Déconnexion
-                        </Link>
-                    </div>
+                        <LogOut
+                            size={16}
+                            className="flex-shrink-0 group-hover:text-red-600 transition-colors"
+                        />
+                        <span>Déconnexion</span>
+                    </button>
                 </div>
             </div>
         </>
