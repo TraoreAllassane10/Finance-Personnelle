@@ -33,7 +33,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import CardStatistiques from "@/Components/dashboard/CardStatistiques";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Table,
     TableBody,
@@ -50,7 +50,6 @@ import {
     ArrowUp,
     ArrowUpIcon,
     Landmark,
-    PencilIcon,
     PiggyBank,
     TrendingDown,
     TrendingUp,
@@ -113,6 +112,7 @@ export default function Dashboard() {
         chartData,
         periodeSelected,
         objectifs_epargnes,
+        auth,
     } = usePage().props;
 
     const [periode, setPeriode] = useState(periodeSelected ?? "mois");

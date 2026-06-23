@@ -72,6 +72,7 @@ const ModalTransaction = ({ setOpenModal }) => {
             note: "",
         });
         setOpenModal(false);
+
         router.reload(0);
     };
 

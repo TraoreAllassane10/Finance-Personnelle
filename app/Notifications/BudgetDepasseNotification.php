@@ -2,10 +2,10 @@
 
 namespace App\Notifications;
 
-use App\Enums\TypeNotificationEnum;
 use App\Models\Budget;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -26,7 +26,7 @@ class BudgetDepasseNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -54,5 +54,16 @@ class BudgetDepasseNotification extends Notification implements ShouldQueue
             "url" => "/budgets",
             "message" => "Vous avez depassé le budget de {$this->budget->category->nom}.",
         ];
+    }
+
+    public function toBroadcast(object $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage([
+            "type" => "Budget_depasse",
+            "budget_id" => $this->budget->id,
+            "category_name" => $this->budget->category->nom,
+            "url" => "/budgets",
+            "message" => "Vous avez depassé le budget de {$this->budget->category->nom}.",
+        ]);
     }
 }

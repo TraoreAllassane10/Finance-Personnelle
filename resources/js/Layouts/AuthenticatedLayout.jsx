@@ -1,16 +1,13 @@
 import Header from "@/Components/Header";
 import { Sidebar } from "@/Components/Sidebar";
 import ModalTransaction from "@/Components/transaction/ModalTransaction";
-import { usePage } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function AuthenticatedLayout({ header, children }) {
-    const user = usePage().props.auth.user;
-
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="min-h-screen relative bg-gray-100">
+        <div className="min-h-screen relative bg-gray-200/70">
             <Sidebar />
 
             {/* Modal d'ajout et de modification de transaction */}

@@ -28,8 +28,6 @@ const Index = () => {
     const { categories, budgets, montantTotalBudget, montantTotalDepense } =
         usePage().props;
 
-    console.log(budgets);
-
     const [openModal, setOpenModal] = useState(false);
 
     // Calcul du montant restant

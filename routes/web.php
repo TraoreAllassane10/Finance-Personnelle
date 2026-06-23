@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompteEpargneController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EpargneController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ObjectifEpargneController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
@@ -75,11 +76,14 @@ Route::middleware('auth')->group(function () {
         Route::put('/transaction-recurrentes/{transaction}', 'update')->name('transaction.recurrente.update');
         Route::delete('/transaction-recurrentes/{transaction}', 'destroy')->name('transaction.recurrente.destroy');
         Route::get("/transaction-recurrentes/{transaction}/toogle-active", "toggleActive")->name("transaction.recurrente.toogle.active");
-        });
-
-    Route::get("/test", function () {
-        return response()->json('Ceci est un test');
     });
+
+    // Routes Notifications
+    Route::controller(NotificationController::class)->group(function () {
+        Route::get("notifications", "index")->name("notifications.index");
+        Route::get("notification/mark-as-read", "notificationMarkAsRead");
+    });
+
 
     Route::get("/parametres", function () {
         return Inertia::render('Parametre/Index');
