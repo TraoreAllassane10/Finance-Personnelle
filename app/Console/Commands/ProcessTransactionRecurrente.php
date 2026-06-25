@@ -38,7 +38,8 @@ class ProcessTransactionRecurrente extends Command
             foreach ($transactionRecurrentes as $recurrente) {
                 Transaction::create([
                     "type" => $recurrente->type,
-                    "date" => now(),
+                    // Je defini la date comme $recurrente->next_run_at pour permettre aux transactions executée en retard de garder la date à laquelle elle etait censé s'executer  
+                    "date" => Carbon::parse($recurrente->next_run_at),
                     "montant" => $recurrente->montant,
                     "description" => $recurrente->description,
                     "user_id" => $recurrente->user_id,
