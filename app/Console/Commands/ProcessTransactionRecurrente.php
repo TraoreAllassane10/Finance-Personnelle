@@ -4,9 +4,10 @@ namespace App\Console\Commands;
 
 use App\Models\Transaction;
 use App\Models\TransactionRecurrente;
+use App\Models\User;
+use App\Notifications\TransactionRecurrenteExecuteeNotification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
 class ProcessTransactionRecurrente extends Command
 {
@@ -36,7 +37,7 @@ class ProcessTransactionRecurrente extends Command
         if ($transactionRecurrentes) {
             // Création d'une transaction pour chaque transaction recurrente trouvée
             foreach ($transactionRecurrentes as $recurrente) {
-                Transaction::create([
+                $transaction = Transaction::create([
                     "type" => $recurrente->type,
                     // Je defini la date comme $recurrente->next_run_at pour permettre aux transactions executée en retard de garder la date à laquelle elle etait censé s'executer  
                     "date" => Carbon::parse($recurrente->next_run_at),
@@ -70,9 +71,11 @@ class ProcessTransactionRecurrente extends Command
                 $recurrente->update(
                     ["next_run_at" => $nextDate]
                 );
-            }
 
-            Log::info("Les transactions récurrentes exécutées avec succès");
+                // Notifier l'utilisateur de l'execution des transactions recurrentes
+                $user = User::find($transaction->user_id);
+                $user->notify(new TransactionRecurrenteExecuteeNotification($transaction));
+            }
         }
     }
 }

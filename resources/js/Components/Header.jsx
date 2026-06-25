@@ -23,6 +23,8 @@ const Header = ({ setOpenModal }) => {
         );
     }, []);
 
+
+
     // Recupération des notifications non lue pour l'affiche du point rouge
     const { getNotifications } = useNotification();
     useEffect(() => {

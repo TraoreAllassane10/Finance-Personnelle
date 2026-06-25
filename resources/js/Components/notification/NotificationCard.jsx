@@ -7,8 +7,7 @@ import NotificationItem from "./NotificationItem";
 const NotificationCard = ({ openNotification, user }) => {
     const [notifications, setNotifications] = useState([]);
 
-    const { getNotifications } =
-        useNotification();
+    const { getNotifications } = useNotification();
 
     // Recupération des notifications
     useEffect(() => {
@@ -31,7 +30,6 @@ const NotificationCard = ({ openNotification, user }) => {
         );
     }, []);
 
-
     return (
         <div className="absolute z-50 right-4">
             {openNotification && (
@@ -41,40 +39,45 @@ const NotificationCard = ({ openNotification, user }) => {
                     </CardHeader>
                     <Separator />
 
-                    {
-                    notifications.length > 0 ? ( notifications.map((notification) => (
-                        <>
-                            <CardContent>
-                                {/* Ce composant est conçu seulement pour les notifications de bugdet depassé 
+                    {notifications.length > 0 ? (
+                        notifications.map((notification) => (
+                            <>
+                                <CardContent>
+                                    {/* Ce composant est conçu seulement pour les notifications de bugdet depassé et transaction recurrente
                                 Si j'ajoute d'autres type de notification, il faut que je crée eux leur NotificationItem.
                                 Je peux controler l'affichage grace à notification.data.type
                             */}
-                                <NotificationItem
-                                    key={notification.id}
-                                    id={notification.id}
-                                    category_name={
-                                        notification.data
-                                            ? notification.data.category_name
-                                            : notification.category_name
-                                    }
-                                    message={
-                                        notification.data
-                                            ? notification.data.message
-                                            : notification.message
-                                    }
-                                    date={notification.created_at}
-                                    url={
-                                        notification.data
-                                            ? notification.data.url
-                                            : notification.url
-                                    }
-                                    className="pt-2"
-                                />
-                            </CardContent>
-                            <Separator className="latest:none" />
-                        </>
-                    ))) : (<span className="flex items-center justify-center p-4 text-xs text-muted-foreground">Aucune notification trouvée</span>)
-                   }
+                                    <NotificationItem
+                                        key={notification.id}
+                                        id={notification.id}
+                                        category_name={
+                                            notification.data
+                                                ? notification.data
+                                                      .category_name
+                                                : notification.category_name
+                                        }
+                                        message={
+                                            notification.data
+                                                ? notification.data.message
+                                                : notification.message
+                                        }
+                                        date={notification.created_at}
+                                        url={
+                                            notification.data
+                                                ? notification.data.url
+                                                : notification.url
+                                        }
+                                        className="pt-2"
+                                    />
+                                </CardContent>
+                                <Separator className="latest:none" />
+                            </>
+                        ))
+                    ) : (
+                        <span className="flex items-center justify-center p-4 text-xs text-muted-foreground">
+                            Aucune notification trouvée
+                        </span>
+                    )}
                 </Card>
             )}
         </div>
