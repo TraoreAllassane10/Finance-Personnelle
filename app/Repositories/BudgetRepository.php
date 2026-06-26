@@ -57,13 +57,30 @@ class BudgetRepository
         ]);
     }
 
-    public function budgetExiste(mixed $categoryId, int $mois, int $annee,)
+    public function budgetExiste(mixed $categoryId, int $mois, int $annee)
     {
         return Budget::where("user_id", Auth::user()->id)
             ->where('category_id', $categoryId)
             ->where('mois', $mois)
             ->where('annee', $annee)
             ->exists();
+    }
+
+    public function findBudget(mixed $budgetId)
+    {
+        return Budget::with(['category' => function ($query) {
+            $query->with(["transactions" => function ($query) {
+                $query->whereMonth('date', now()->month)
+                    ->whereYear('date', now()->year);
+            }])
+                ->withSum([
+                    "transactions as montant_depense" => function ($query) {
+                        $query->whereMonth('date', now()->month)
+                            ->whereYear('date', now()->year);
+                    }
+                ], "montant");
+        }])
+            ->find($budgetId);
     }
 
     public function delete(Budget $budget)

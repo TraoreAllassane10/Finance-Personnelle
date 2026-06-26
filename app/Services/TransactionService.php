@@ -2,14 +2,20 @@
 
 namespace App\Services;
 
+use App\Enums\TypeTransaction;
+use App\Models\Budget;
 use App\Models\Transaction;
+use App\Models\User;
+use App\Notifications\BudgetDepasseNotification;
 use App\Repositories\TransactionRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TransactionService
 {
     public function __construct(
-        protected TransactionRepository $transactionRepository
+        protected TransactionRepository $transactionRepository,
+        protected BudgetService $budgetService
     ) {}
 
     public function revenus(array|null $date, string|null $categorie)
@@ -55,7 +61,7 @@ class TransactionService
         return (int) $this->transactionRepository->montantTotalRevenuMoisDernier();
     }
 
-     // Recupere le montant total des depenses du mois dernier
+    // Recupere le montant total des depenses du mois dernier
     public function getMontantTotalDepenseMoisDernier()
     {
         return (int) $this->transactionRepository->montantTotalDepenseMoisDernier();
@@ -78,7 +84,42 @@ class TransactionService
     {
         $data['user_id'] = Auth::user()->id;
 
-        return $this->transactionRepository->create($data);
+        $transaction = $this->transactionRepository->create($data);
+
+        if ($transaction->type === TypeTransaction::DEPENSE->value) {
+            // Recuperer le budget de la categorie de la transaction cree
+            $budgetExiste = $this->budgetService->budgetExiste($transaction->category->id, now()->month, now()->year);
+
+            if ($budgetExiste) {
+                // ID de categorie
+                $categoryId = $transaction->category->id;
+
+                // Recuperation du budget ainsi le total depensé dans ce budget
+                $budget = Budget::with(['category' => function ($query) {
+                    $query->with(["transactions" => function ($query) {
+                        $query->whereMonth('date', now()->month)
+                            ->whereYear('date', now()->year);
+                    }])
+                        ->withSum([
+                            "transactions as montant_depense" => function ($query) {
+                                $query->whereMonth('date', now()->month)
+                                    ->whereYear('date', now()->year);
+                            }
+                        ], "montant");
+                }])
+                    ->where("category_id", $categoryId)
+                    ->first();
+
+                // Envoyer la notification si le montant alloué est depassé
+                if ($budget->category->montant_depense > $budget->montant_alloue){
+                    $user = User::find($budget->user_id);
+                    // Envoye de la notification dans la BD
+                    $user->notify(new BudgetDepasseNotification($budget));
+                }
+            }
+        }
+
+        return $transaction;
     }
 
     // Modifie une transaction

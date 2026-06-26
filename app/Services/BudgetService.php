@@ -25,6 +25,15 @@ class BudgetService
         return $this->budgetRepository->montantTotalDepense();
     }
 
+    public function budgetExiste(mixed $categoryId, int $mois, int $annee)
+    {
+        return $this->budgetRepository->budgetExiste($categoryId, $mois, $annee);
+    }
+
+    public function getBudget(mixed $budgetId) {
+        return $this->budgetRepository->findBudget($budgetId);
+    }
+
     public function createBudget(array $data)
     {
         $mois = now()->month;
