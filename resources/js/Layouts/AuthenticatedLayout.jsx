@@ -1,6 +1,7 @@
 import Header from "@/Components/Header";
 import { Sidebar } from "@/Components/Sidebar";
 import ModalTransaction from "@/Components/transaction/ModalTransaction";
+import { ChatWidget } from "@/features/AiAssistant";
 import { useState } from "react";
 
 export default function AuthenticatedLayout({ header, children }) {
@@ -17,6 +18,8 @@ export default function AuthenticatedLayout({ header, children }) {
                 <Header setOpenModal={setOpen} />
 
                 <div className="px-8 py-10">{children}</div>
+
+                <ChatWidget />
             </main>
         </div>
     );
