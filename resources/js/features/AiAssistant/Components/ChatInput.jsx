@@ -1,12 +1,31 @@
 import { SendHorizonal } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
+import { useChat } from "../hooks/useChat";
 
 const ChatInput = () => {
+    const [value, setValue] = useState("");
+
+    const { sendMessage } = useChat();
+
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        if (!value.trim()) {
+            return;
+        }
+
+        sendMessage(value);
+
+        setValue("");
+    }
+
     return (
         <footer className="border-t bg-white p-4">
-            <form className="flex items-center gap-3">
+            <form onSubmit={handleSubmit} className="flex items-center gap-3">
                 <input
                     type="text"
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
                     placeholder="Posez votre question..."
                     className="flex-1 rounded-xl border px-4 py-3 outline-none focus:border-blue-500"
                 />
