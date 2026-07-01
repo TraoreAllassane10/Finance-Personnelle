@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo, useState } from "react";
+import chatService from "../services/chatService";
 
 const ChatContext = createContext(null);
 
@@ -16,7 +17,7 @@ export function ChatProvider({ children }) {
     const [isTyping, setIsTyping] = useState(false);
 
     // envoyer un message
-    const sendMessage = (content) => {
+    const sendMessage = async (content) => {
         const message = {
             id: crypto.randomUUID(),
             role: "user",
@@ -25,6 +26,23 @@ export function ChatProvider({ children }) {
         };
 
         setMessages((prev) => [...prev, message]);
+
+        // On lance le chargement : typing
+        startTyping();
+
+        try {
+            const response = await chatService.sendMessage(content);
+
+            receiveMessage(response.message);
+
+        } catch (error) {
+            receiveMessage("Une erreur est seurvenue");
+
+            console.log(error);
+        }
+        finally {
+            stopTyping()
+        }
     };
 
     // Recevoir un message de l'assistant
@@ -36,18 +54,20 @@ export function ChatProvider({ children }) {
             createdAt: new Date(),
         };
 
+        console.log(content)
+
         setMessages((prev) => [...prev, message]);
     };
 
     // Lancer le chargement
     const startTyping = () => {
         setIsTyping(true);
-    }
+    };
 
     // Arreter le chargement
     const stopTyping = () => {
         setIsTyping(false);
-    }
+    };
 
     // Nettoyer la conversation
     const clearConversation = () => {

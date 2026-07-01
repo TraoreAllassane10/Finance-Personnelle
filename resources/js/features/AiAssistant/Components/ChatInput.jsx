@@ -7,14 +7,14 @@ const ChatInput = () => {
 
     const { sendMessage } = useChat();
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
         if (!value.trim()) {
             return;
         }
 
-        sendMessage(value);
+        await sendMessage(value);
 
         setValue("");
     }
