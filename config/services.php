@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'ai' => [
+        'provider' => env('AI_PROVIDER', 'openai')
+    ]
+
 ];
