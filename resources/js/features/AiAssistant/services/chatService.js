@@ -3,7 +3,7 @@ import axios from "axios";
 class ChatService {
     async sendMessage(message) {
         try {
-            const response = await axios.post("/api/chat", { message });
+            const response = await axios.post("/chat", { message });
 
             return response.data;
         } catch (error) {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
@@ -15,15 +16,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VersementController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
 
 Route::get('/', [AuthenticatedSessionController::class, 'create']);
 
@@ -83,6 +75,9 @@ Route::middleware('auth')->group(function () {
         Route::get("notifications", "index")->name("notifications.index");
         Route::get("notification/mark-as-read", "notificationMarkAsRead");
     });
+
+    // Routes Assistant AI
+    Route::post('/chat', ChatController::class);
 
 
     Route::get("/parametres", function () {

@@ -14,7 +14,7 @@ class ChatController extends Controller
         $request->validate([
             'message' => ['required', 'string'],
         ]);
-
+ 
         $response = $chatService->ask($request->user(), $request->message);
 
         return response()->json([

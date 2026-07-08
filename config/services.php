@@ -35,8 +35,8 @@ return [
         ],
     ],
 
-    // 'ai' => [
-    //     'provider' => env('AI_PROVIDER', 'openai')
-    // ]
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY')
+    ]
 
 ];

@@ -2,9 +2,10 @@
 
 namespace App\Services\IA;
 
+use App\Services\IA\contracts\AIProviderInterface;
 use OpenAI\Laravel\Facades\OpenAI;
 
-class OpenAIService
+class OpenAIService implements AIProviderInterface
 {
     public function chat(array $messages): string
     {
