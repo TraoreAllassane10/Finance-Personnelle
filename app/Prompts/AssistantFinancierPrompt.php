@@ -4,7 +4,7 @@ namespace App\Prompts;
 
 class AssistantFinancierPrompt
 {
-    public function content()
+    public static function content(): string
     {
         return <<<PROMPT
             Tu es un conseiller spécialisé en gestion de finances personnelles.
