@@ -61,7 +61,7 @@ class ChatService
 
             // Enregistrement de la reponse au message de l'utilisateur
             $user->messages()->create([
-                'role' => 'user',
+                'role' => 'assistant',
                 'content' => $response
             ]);
 
