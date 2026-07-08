@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Notifications\BudgetDepasseNotification;
 use App\Repositories\TransactionRepository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class TransactionService
 {

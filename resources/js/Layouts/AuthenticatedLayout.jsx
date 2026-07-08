@@ -1,7 +1,9 @@
 import Header from "@/Components/Header";
 import { Sidebar } from "@/Components/Sidebar";
 import ModalTransaction from "@/Components/transaction/ModalTransaction";
+import { ChatWidget } from "@/features/AiAssistant";
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 
 export default function AuthenticatedLayout({ header, children }) {
     const [open, setOpen] = useState(false);
@@ -11,12 +13,21 @@ export default function AuthenticatedLayout({ header, children }) {
             <Sidebar />
 
             {/* Modal d'ajout et de modification de transaction */}
-            {open && <ModalTransaction typeModal="ajout" setOpenModal={setOpen} />}
+            {open && (
+                <AnimatePresence>
+                    <ModalTransaction
+                        typeModal="ajout"
+                        setOpenModal={setOpen}
+                    />
+                </AnimatePresence>
+            )}
 
             <main className="lg:ml-[224px]">
                 <Header setOpenModal={setOpen} />
 
                 <div className="px-8 py-10">{children}</div>
+
+                <ChatWidget />
             </main>
         </div>
     );
